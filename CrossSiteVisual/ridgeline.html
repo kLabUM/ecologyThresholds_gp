@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Water Surface Elevation Ridgeline — Digital Water Lab</title>
+<style>
+  :root { color-scheme: dark; }
+  body {
+    margin: 0; padding: 18px 22px 28px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    background: #000000; color: #e6edf3;
+  }
+  h1 { font-size: 20px; margin: 0 0 3px; font-weight: 600; color: #e6edf3; }
+  .meta { font-size: 13px; color: #8b949e; margin-bottom: 14px; }
+  .controls-row {
+    display: flex; gap: 9px; align-items: center; margin-bottom: 8px;
+    font-size: 13px; flex-wrap: wrap;
+  }
+  .controls-row .label { color: #c9d1d9; margin-right: 2px; }
+  .controls-row button {
+    padding: 5px 12px; border: 1px solid #30363d; background: #161b22;
+    border-radius: 5px; cursor: pointer; font-size: 13px; color: #c9d1d9;
+  }
+  .controls-row button:hover { background: #1f2630; }
+  .controls-row button.active { background: #1f6feb; color: #ffffff; border-color: #1f6feb; }
+  .controls-row input[type="date"] {
+    font-size: 13px; padding: 4px 7px; border: 1px solid #30363d;
+    border-radius: 5px; color: #c9d1d9; background: #161b22;
+  }
+  .controls-row .divider { display: inline-block; width: 1px; height: 20px; background: #30363d; margin: 0 5px; }
+  .panel {
+    background: #0d1117; border-radius: 8px; padding: 8px 0;
+    position: relative; overflow: hidden; border: 1px solid #21262d; margin-top: 4px;
+  }
+  .panel-caption { font-size: 12px; color: #8b949e; padding: 8px 18px 4px; margin: 0; }
+  .legend { display: flex; gap: 16px; padding: 6px 18px; font-size: 12px; color: #c9d1d9; align-items: center; }
+  .legend .swatch { display: inline-block; width: 16px; height: 9px; border-radius: 2px; margin-right: 5px; vertical-align: middle; }
+  .loading, .error { padding: 44px; text-align: center; color: #8b949e; font-size: 14px; }
+  .error { color: #ff7b72; background: #2d1416; border-radius: 6px; margin: 16px; padding: 16px; text-align: left; }
+  #tooltip {
+    position: fixed; pointer-events: none; background: #161b22;
+    border: 1px solid #30363d; border-radius: 6px; padding: 7px 11px;
+    font-size: 12px; box-shadow: 0 4px 14px rgba(0,0,0,0.5);
+    display: none; z-index: 100; font-variant-numeric: tabular-nums; color: #e6edf3; max-width: 260px;
+  }
+  #tooltip .tt-site { font-weight: 600; margin-bottom: 2px; }
+  #tooltip .tt-name { color: #8b949e; font-size: 11px; margin-bottom: 4px; }
+  #tooltip .tt-value { font-size: 14px; }
+  #tooltip .tt-time { color: #8b949e; font-size: 11px; margin-top: 3px; }
+  .ridge-label-name { font-size: 14px; font-weight: 600; }   /* primary, on chip */
+  .ridge-label-id { font-size: 12px; fill: #8b949e; }         /* secondary, below */
+  .ridge-range { font-size: 13px; font-weight: 500; font-variant-numeric: tabular-nums; }
+  .col-header { font-size: 13px; font-weight: 600; fill: #c9d1d9; }
+  .ridge-row-bg { fill: transparent; cursor: crosshair; }
+  .ridge-row-bg:hover { fill: rgba(255,255,255,0.04); }
+  .axis-text { font-size: 12px; fill: #8b949e; }
+  .axis-line { stroke: #30363d; stroke-width: 0.6; }
+  .axis-tick { stroke: #30363d; stroke-width: 0.6; }
+  .hover-line { stroke: #f0883e; stroke-width: 2; stroke-dasharray: 5 3; opacity: 0; pointer-events: none; }
+</style>
+</head>
+<body>
+<h1>Water Surface Elevation Ridgeline — Digital Water Lab</h1>
+<div class="meta" id="meta">Connecting to InfluxDB…</div>
+
+<div class="controls-row">
+  <span class="label">Date range:</span>
+  <input type="date" id="start-date" />
+  <span style="color:#6e7681">→</span>
+  <input type="date" id="end-date" />
+  <button id="btn-apply">Apply</button>
+  <button id="btn-reset" title="Reset to last 30 days">⟲</button>
+  <span class="divider"></span>
+  <span class="label">Show:</span>
+  <button id="btn-show-all" class="active">All sites</button>
+  <button id="btn-show-main">Main stem only</button>
+</div>
+
+<div class="panel">
+  <p class="panel-caption" id="title-sub"></p>
+  <div class="legend">
+    <span><span class="swatch" style="width:54px;background:linear-gradient(to right,#c7e9b4,#7fcdbb,#41b6c4,#1d91c0,#225ea8)"></span>Main stem (upstream→downstream)</span>
+    <span id="legend-trib"><span class="swatch" style="background:#9fb3c8"></span>Tributary</span>
+  </div>
+  <div id="ridges"><div class="loading">Querying InfluxDB…</div></div>
+</div>
+
+<div id="tooltip"></div>
+
+<script>
+// Fixed display order, top → bottom (manually specified; no auto-sort).
+const SITES = [
+  "ARB034","ARB026","ARB077","ARB013","ARB017","ARB061","ARB107","ARB082",
+  "ARB083","ARB109","ARB012","ARB027","ARB028","ARB118","ARB025","ARB062",
+  "ARB018","ARB103","ARB063","ARB031","ARB120","ARB059","ARB112"
+];
+
+const MAIN_STEM = new Set([
+  "ARB034","ARB026","ARB013","ARB012","ARB027","ARB025","ARB031",
+  "ARB059","ARB109","ARB077","ARB112","ARB118","ARB120"
+]);
+
+// ─── Color system ────────────────────────────────────────────────────────
+// Main stem: ColorBrewer YlGnBu (trimmed), reed-green → teal → river-blue,
+// upstream→downstream. Tributaries: muted slate. On a black background the
+// ridge fill stays the gradient color and the top stroke is lightened so the
+// outline (and the matching elevation label) is crisp.
+function _hexToRgb(h) { h = h.replace('#', ''); return [parseInt(h.slice(0,2),16), parseInt(h.slice(2,4),16), parseInt(h.slice(4,6),16)]; }
+function _rgbToHex(rgb) { return '#' + rgb.map(v => Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0')).join(''); }
+function _lerp(a, b, t) { return a.map((v, i) => v + (b[i] - v) * t); }
+function _lighten(rgb, f) { return _lerp(rgb, [255,255,255], f); }
+// All chip labels are black for a consistent look across the gradient.
+const GRAD_STOPS = ['#c7e9b4', '#7fcdbb', '#41b6c4', '#1d91c0', '#225ea8'].map(_hexToRgb);
+function _ramp(stops, t) {
+  if (t <= 0) return stops[0];
+  if (t >= 1) return stops[stops.length - 1];
+  const seg = t * (stops.length - 1), i = Math.floor(seg);
+  return _lerp(stops[i], stops[i + 1], seg - i);
+}
+const TRIB_RGB = _hexToRgb('#9fb3c8');
+
+const SITE_COLORS = (() => {
+  const map = {};
+  const mainOrder = SITES.filter(s => MAIN_STEM.has(s));
+  const m = mainOrder.length;
+  mainOrder.forEach((s, i) => {
+    const rgb = _ramp(GRAD_STOPS, m > 1 ? i / (m - 1) : 0);
+    map[s] = { fill: _rgbToHex(rgb), fillOp: 0.85, stroke: _rgbToHex(_lighten(rgb, 0.30)), text: '#000000' };
+  });
+  SITES.filter(s => !MAIN_STEM.has(s)).forEach(s => {
+    map[s] = { fill: _rgbToHex(TRIB_RGB), fillOp: 0.55, stroke: _rgbToHex(_lighten(TRIB_RGB, 0.30)), text: '#000000' };
+  });
+  return map;
+})();
+
+// Elevation always shown in feet (stored internally in mm).
+const FT_PER_MM = 0.00328084;
+
+const state = {
+  show: 'all',           // 'all' | 'main'
+  startISO: null,
+  stopISO: null,
+  rawData: {},           // site_id -> [[t_ms, raw_mm], ...]
+  offsets: {},           // site_id -> offset_mm
+  elevations: {},        // site_id -> elevation_mm
+  names: {},
+  minT: null, maxT: null,
+  aggregateLabel: '1h'
+};
+
+// Smoothing is fixed: moving median over 6 points.
+const SMOOTH_WINDOW = 6;
+
+function pickAggregate(days) {
+  if (days <= 1)   return '5m';
+  if (days <= 7)   return '15m';
+  if (days <= 30)  return '1h';
+  if (days <= 90)  return '3h';
+  if (days <= 365) return '6h';
+  return '1d';
+}
+
+function buildDepthQuery() {
+  const startISO = state.startISO + 'T00:00:00Z';
+  const stopISO  = state.stopISO  + 'T23:59:59Z';
+  const days = (new Date(stopISO) - new Date(startISO)) / 86400000;
+  const win = pickAggregate(days);
+  state.aggregateLabel = win;
+  return `from(bucket: "depth")
+  |> range(start: ${startISO}, stop: ${stopISO})
+  |> filter(fn: (r) => r._measurement == "maxbotix_depth")
+  |> filter(fn: (r) => contains(value: r.site_id, set: ${JSON.stringify(SITES)}))
+  |> aggregateWindow(every: ${win}, fn: mean, createEmpty: false)
+  |> keep(columns: ["_time", "_value", "site_id"])`;
+}
+
+const nameQuery = `from(bucket: "meta")
+  |> range(start: -180d)
+  |> filter(fn: (r) => r._field == "gps")
+  |> filter(fn: (r) => contains(value: r.site_id, set: ${JSON.stringify(SITES)}))
+  |> last()
+  |> keep(columns: ["site_id", "site_name"])`;
+
+const siteConfigQuery = `from(bucket: "sites")
+  |> range(start: -365d)
+  |> filter(fn: (r) => r._field == "offset" or r._field == "elevation")
+  |> filter(fn: (r) => r._value > 0.0)
+  |> filter(fn: (r) => contains(value: r._measurement, set: ${JSON.stringify(SITES)}))
+  |> group(columns: ["_measurement", "_field"])
+  |> last()
+  |> keep(columns: ["_measurement", "_field", "_value"])`;
+
+function todayISO() { return new Date().toISOString().slice(0, 10); }
+function daysAgoISO(n) { const d = new Date(); d.setUTCDate(d.getUTCDate() - n); return d.toISOString().slice(0, 10); }
+
+function streambedMm(site) {
+  const o = state.offsets[site], e = state.elevations[site];
+  if (!isFinite(o) || !isFinite(e)) return NaN;
+  return e - o;
+}
+
+function fmtVal(v_mm, withUnit = true) {
+  if (!isFinite(v_mm)) return '—';
+  const s = (v_mm * FT_PER_MM).toFixed(2);
+  return withUnit ? `${s} ft` : s;
+}
+
+// Rolling median (the only smoother, window 6).
+function rollingMedian(arr, w) {
+  const n = arr.length, out = new Array(n).fill(NaN);
+  for (let i = 0; i < n; i++) {
+    const lo = Math.max(0, i - w + 1), slice = [];
+    for (let j = lo; j <= i; j++) if (isFinite(arr[j])) slice.push(arr[j]);
+    if (slice.length) {
+      slice.sort((a, b) => a - b);
+      const mid = slice.length >> 1;
+      out[i] = slice.length % 2 ? slice[mid] : (slice[mid - 1] + slice[mid]) / 2;
+    }
+  }
+  return out;
+}
+
+// ─── Load ───────────────────────────────────────────────────────────────────
+async function load() {
+  document.getElementById('ridges').innerHTML = '<div class="loading">Querying InfluxDB…</div>';
+  try {
+    const [depthResp, nameResp, configResp] = await Promise.all([
+      window.cowork.callMcpTool('mcp__influxdb__query_json', { query: buildDepthQuery() }),
+      window.cowork.callMcpTool('mcp__influxdb__query_json', { query: nameQuery }),
+      window.cowork.callMcpTool('mcp__influxdb__query_json', { query: siteConfigQuery })
+    ]);
+    const depthRecords  = parseRecords(depthResp);
+    const nameRecords   = parseRecords(nameResp);
+    const configRecords = parseRecords(configResp);
+
+    state.names = {};
+    nameRecords.forEach(r => { if (r.site_id && r.site_name) state.names[r.site_id] = r.site_name; });
+
+    state.offsets = {}; state.elevations = {};
+    configRecords.forEach(r => {
+      const sid = r._measurement, v = parseFloat(r._value);
+      if (!sid || !isFinite(v) || v <= 0) return;
+      if (r._field === 'offset')    state.offsets[sid]    = v;
+      if (r._field === 'elevation') state.elevations[sid] = v * 1000;
+    });
+
+    state.rawData = {};
+    SITES.forEach(s => { state.rawData[s] = []; });
+    let minT = Infinity, maxT = -Infinity;
+    depthRecords.forEach(r => {
+      if (!state.rawData[r.site_id]) return;
+      const t = new Date(r._time).getTime(), raw = parseFloat(r._value);
+      if (!isFinite(raw) || !isFinite(t)) return;
+      state.rawData[r.site_id].push([t, raw]);
+      if (t < minT) minT = t; if (t > maxT) maxT = t;
+    });
+    Object.values(state.rawData).forEach(arr => arr.sort((a, b) => a[0] - b[0]));
+    state.minT = isFinite(minT) ? minT : new Date(state.startISO).getTime();
+    state.maxT = isFinite(maxT) ? maxT : new Date(state.stopISO).getTime();
+
+    const sitesWithData = SITES.filter(s => state.rawData[s].length).length;
+    const sitesWithElev = SITES.filter(s => isFinite(state.elevations[s])).length;
+    document.getElementById('meta').textContent =
+      `${sitesWithData} of ${SITES.length} sites reporting · ${depthRecords.length.toLocaleString()} ${state.aggregateLabel}-aggregated points · ` +
+      `${sitesWithElev}/${SITES.length} have elevation config · ` +
+      `${new Date(state.minT).toLocaleDateString()} – ${new Date(state.maxT).toLocaleDateString()}`;
+
+    render();
+  } catch (e) {
+    console.error(e);
+    document.getElementById('ridges').innerHTML =
+      `<div class="error">Failed to load: ${escapeHtml((e && (e.message || String(e))) || 'unknown error')}</div>`;
+  }
+}
+
+function parseRecords(resp) {
+  let payload = resp;
+  if (typeof payload === 'string') { try { payload = JSON.parse(payload); } catch { return []; } }
+  if (payload && typeof payload === 'object') {
+    if (typeof payload.result === 'string') { try { return JSON.parse(payload.result); } catch { return []; } }
+    if (Array.isArray(payload.result)) return payload.result;
+    if (Array.isArray(payload)) return payload;
+    if (Array.isArray(payload.content)) {
+      const text = payload.content.find(c => c && c.type === 'text');
+      if (text && typeof text.text === 'string') {
+        try {
+          const inner = JSON.parse(text.text);
+          if (typeof inner.result === 'string') return JSON.parse(inner.result);
+          if (Array.isArray(inner.result)) return inner.result;
+          if (Array.isArray(inner)) return inner;
+        } catch { /* fallthrough */ }
+      }
+    }
+  }
+  return Array.isArray(payload) ? payload : [];
+}
+
+// ─── Render (per-site normalized elevation, anchored at streambed, median-6) ──
+function render() {
+  const panel = document.querySelector('.panel');
+  const ridges = document.getElementById('ridges');
+
+  const visibleSites = state.show === 'main' ? SITES.filter(s => MAIN_STEM.has(s)) : SITES.slice();
+
+  const smoothed = {};   // site -> [[t, v_mm], ...]
+  const perSite  = {};   // site -> { min, max }
+  visibleSites.forEach(s => {
+    const raw = state.rawData[s] || [];
+    const elevMm = state.elevations[s];
+    if (!raw.length || !isFinite(elevMm)) { smoothed[s] = []; perSite[s] = null; return; }
+    const ts = new Array(raw.length), vs = new Array(raw.length);
+    for (let i = 0; i < raw.length; i++) { ts[i] = raw[i][0]; vs[i] = elevMm - raw[i][1]; }
+    const sv = rollingMedian(vs, SMOOTH_WINDOW);
+    const filtered = [];
+    for (let i = 0; i < sv.length; i++) if (isFinite(sv[i])) filtered.push([ts[i], sv[i]]);
+    smoothed[s] = filtered;
+    if (filtered.length) {
+      let mn = Infinity, mx = -Infinity;
+      filtered.forEach(([t, v]) => { if (v < mn) mn = v; if (v > mx) mx = v; });
+      perSite[s] = { min: mn, max: mx };
+    } else perSite[s] = null;
+  });
+
+  document.getElementById('title-sub').textContent =
+    `water_elevation = sites.elevation − raw maxbotix · per-site normalized · ` +
+    `anchored at streambed (sites.elevation − sites.offset) · moving median, 6 pts` +
+    (state.show === 'main' ? ' · main stem only' : '');
+  document.getElementById('legend-trib').style.display = state.show === 'main' ? 'none' : '';
+
+  const W = Math.max(panel.clientWidth || 900, 800);
+  const labelW = 225, statsW = 140, sidePad = 16;
+  const plotW = W - labelW - statsW - sidePad * 2;
+  const rowSpacing = 40, ridgeH = 56;        // tight (fixed)
+  const topPad = 42, bottomAxis = 30;        // topPad leaves room for the column header
+  const H = topPad + visibleSites.length * rowSpacing + bottomAxis;
+
+  const minT = state.minT, maxT = state.maxT;
+  const tRange = (maxT - minT) || 1;
+  const xOfT = t => sidePad + labelW + ((t - minT) / tRange) * plotW;
+  const rangeX = sidePad + labelW + plotW + 8;
+  const dashX = rangeX + 50;   // fixed column for the range "–"; the title centers here
+
+  const rows = visibleSites.map((site, idx) => {
+    const baseY = topPad + idx * rowSpacing + ridgeH * 0.82;   // ridge baseline
+    const cy = baseY - ridgeH * 0.5;                           // vertical centre of the ridge band (for labels)
+    const data = smoothed[site] || [];
+    const name = state.names[site] || '';
+    const stats = perSite[site];
+    const palette = SITE_COLORS[site];
+
+    // Primary label = descriptive site name on a color chip matching this ridge;
+    // site ID small underneath. Both vertically centred on the ridge band so the
+    // label lines up with its curve. Names truncated to the label column.
+    const charW = 7.8;
+    const maxChars = Math.floor((labelW - 16) / charW);
+    const primary = name || site;
+    const dispName = primary.length > maxChars ? primary.slice(0, maxChars - 1) + '…' : primary;
+    const chipW = Math.round(dispName.length * charW + 22);  // extra end buffer
+    const labelGroup =
+      `<rect x="${sidePad - 5}" y="${cy - 18}" width="${chipW}" height="20" rx="3" fill="${palette.fill}" />` +
+      `<text class="ridge-label-name" x="${sidePad}" y="${cy - 4}" fill="${palette.text}">${escapeHtml(dispName)}</text>` +
+      `<text class="ridge-label-id" x="${sidePad}" y="${cy + 12}">${escapeHtml(site)}</text>`;
+
+    // Range rendered in three aligned pieces so every "–" sits in one column.
+    let rightGroup;
+    if (stats) {
+      const sbedMm = streambedMm(site);
+      const floorMm = isFinite(sbedMm) ? Math.min(sbedMm, stats.min) : stats.min;
+      const c = palette.stroke;
+      rightGroup =
+        `<text class="ridge-range" x="${dashX - 7}" y="${cy + 3}" text-anchor="end" fill="${c}">${escapeHtml(fmtVal(floorMm, false))}</text>` +
+        `<text class="ridge-range" x="${dashX}" y="${cy + 3}" text-anchor="middle" fill="${c}">–</text>` +
+        `<text class="ridge-range" x="${dashX + 7}" y="${cy + 3}" text-anchor="start" fill="${c}">${escapeHtml(fmtVal(stats.max))}</text>`;
+    } else {
+      rightGroup = `<text class="ridge-range" x="${dashX}" y="${cy + 3}" text-anchor="middle" style="font-style:italic;fill:#6e7681">no data</text>`;
+    }
+
+    let pathGroup = '';
+    if (data.length > 1) {
+      const sbedMm = streambedMm(site);
+      const vMin = isFinite(sbedMm) ? Math.min(sbedMm, stats.min) : stats.min;
+      let vMax = Math.max(stats.max, vMin + 1);
+      const vRange = (vMax - vMin) || 1;
+      const pts = data.map(([t, v]) => [xOfT(t), baseY - Math.max(0, (v - vMin) / vRange) * ridgeH]);
+      const lineD = pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p[0].toFixed(1)} ${p[1].toFixed(1)}`).join(' ');
+      const firstX = pts[0][0].toFixed(1), lastX = pts[pts.length - 1][0].toFixed(1);
+      const areaD = lineD + ` L ${lastX} ${baseY} L ${firstX} ${baseY} Z`;
+      // Ridge top line is black so overlapping ridges separate cleanly.
+      pathGroup =
+        `<path d="${areaD}" fill="${palette.fill}" fill-opacity="${palette.fillOp}" />` +
+        `<path d="${lineD}" stroke="#000000" stroke-width="1.4" fill="none" />`;
+    } else if (data.length === 1) {
+      pathGroup = `<circle cx="${xOfT(data[0][0]).toFixed(1)}" cy="${baseY.toFixed(1)}" r="2.5" fill="${palette.stroke}" />`;
+    }
+
+    const hoverRect =
+      `<rect class="ridge-row-bg" x="${sidePad + labelW}" y="${(baseY - ridgeH)}" ` +
+      `width="${plotW}" height="${ridgeH + 6}" data-site="${escapeHtml(site)}" />`;
+
+    return labelGroup + pathGroup + hoverRect + rightGroup;
+  }).join('');
+
+  // Title centered over the dash column of the elevation ranges below.
+  const colHeader =
+    `<text class="col-header" x="${dashX}" y="18" text-anchor="middle">Water Surface</text>` +
+    `<text class="col-header" x="${dashX}" y="33" text-anchor="middle">Elevation</text>`;
+
+  const axisY = topPad + visibleSites.length * rowSpacing + 8;
+  const nTicks = 6;
+  let axisTicks = '';
+  for (let i = 0; i < nTicks; i++) {
+    const t = minT + tRange * (i / (nTicks - 1));
+    const x = xOfT(t);
+    const lbl = new Date(t).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const anchor = i === 0 ? 'start' : i === nTicks - 1 ? 'end' : 'middle';
+    axisTicks +=
+      `<line class="axis-tick" x1="${x}" y1="${axisY}" x2="${x}" y2="${axisY + 4}" />` +
+      `<text class="axis-text" x="${x}" y="${axisY + 16}" text-anchor="${anchor}">${lbl}</text>`;
+  }
+  const axisGroup =
+    `<line class="axis-line" x1="${sidePad + labelW}" y1="${axisY}" x2="${sidePad + labelW + plotW}" y2="${axisY}" />` + axisTicks;
+
+  const hoverLine = `<line id="hover-line" class="hover-line" x1="0" y1="${topPad}" x2="0" y2="${axisY}" />`;
+
+  ridges.innerHTML =
+    `<svg id="ridgeline-svg" width="${W}" height="${H}" style="display:block;">` +
+    colHeader + rows + axisGroup + hoverLine + `</svg>`;
+
+  attachHover(smoothed);
+}
+
+function attachHover(smoothed) {
+  const tooltip = document.getElementById('tooltip');
+  const svg = document.getElementById('ridgeline-svg');
+  const hoverLine = document.getElementById('hover-line');
+  svg.querySelectorAll('rect.ridge-row-bg').forEach(rect => {
+    rect.addEventListener('mousemove', (e) => {
+      const site = rect.getAttribute('data-site');
+      const data = smoothed[site] || [];
+      if (!data.length) { tooltip.style.display = 'none'; hoverLine.style.opacity = 0; return; }
+      const svgRect = svg.getBoundingClientRect();
+      const x = e.clientX - svgRect.left;
+      const rectX = parseFloat(rect.getAttribute('x')), rectW = parseFloat(rect.getAttribute('width'));
+      const tFrac = Math.max(0, Math.min(1, (x - rectX) / rectW));
+      const tTarget = state.minT + (state.maxT - state.minT) * tFrac;
+      let lo = 0, hi = data.length - 1;
+      while (lo < hi) { const mid = (lo + hi) >> 1; if (data[mid][0] < tTarget) lo = mid + 1; else hi = mid; }
+      let idx = lo;
+      if (idx > 0 && Math.abs(data[idx - 1][0] - tTarget) < Math.abs(data[idx][0] - tTarget)) idx -= 1;
+      const [tHit, vHit] = data[idx];
+      const hitX = rectX + ((tHit - state.minT) / (state.maxT - state.minT)) * rectW;
+      hoverLine.setAttribute('x1', hitX); hoverLine.setAttribute('x2', hitX); hoverLine.style.opacity = 0.95;
+      const name = state.names[site] || '';
+      const color = SITE_COLORS[site].stroke;
+      const tag = MAIN_STEM.has(site) ? 'main stem' : 'tributary';
+      tooltip.innerHTML =
+        `<div class="tt-site" style="color:${color}">${escapeHtml(name || site)} <span style="font-size:10px;color:#8b949e;font-weight:400">${escapeHtml(site)} · ${tag}</span></div>` +
+        `<div class="tt-value" style="color:${color}">${escapeHtml(fmtVal(vHit))}</div>` +
+        `<div class="tt-time">${new Date(tHit).toLocaleString()}</div>`;
+      tooltip.style.display = 'block';
+      const ttRect = tooltip.getBoundingClientRect();
+      let tx = e.clientX + 14, ty = e.clientY - 10;
+      if (tx + ttRect.width > window.innerWidth - 8) tx = e.clientX - ttRect.width - 14;
+      if (ty + ttRect.height > window.innerHeight - 8) ty = e.clientY - ttRect.height - 10;
+      tooltip.style.left = tx + 'px'; tooltip.style.top = ty + 'px';
+    });
+    rect.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; hoverLine.style.opacity = 0; });
+  });
+}
+
+function escapeHtml(s) {
+  if (s == null) return '';
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function setActive(group, activeId) {
+  group.forEach(id => { const el = document.getElementById(id); if (el) el.classList.toggle('active', id === activeId); });
+}
+
+// ─── Controls ───────────────────────────────────────────────────────────────
+document.getElementById('btn-show-all').addEventListener('click', () => {
+  state.show = 'all'; setActive(['btn-show-all','btn-show-main'], 'btn-show-all'); render();
+});
+document.getElementById('btn-show-main').addEventListener('click', () => {
+  state.show = 'main'; setActive(['btn-show-all','btn-show-main'], 'btn-show-main'); render();
+});
+document.getElementById('btn-apply').addEventListener('click', () => {
+  const s = document.getElementById('start-date').value, e = document.getElementById('end-date').value;
+  if (!s || !e) { alert('Pick both a start and end date.'); return; }
+  if (s > e) { alert('Start date must be on or before end date.'); return; }
+  state.startISO = s; state.stopISO = e; load();
+});
+document.getElementById('btn-reset').addEventListener('click', () => {
+  state.startISO = daysAgoISO(30); state.stopISO = todayISO();
+  document.getElementById('start-date').value = state.startISO;
+  document.getElementById('end-date').value = state.stopISO;
+  load();
+});
+window.addEventListener('resize', () => { if (state.minT != null) render(); });
+
+// ─── Init ─────────────────────────────────────────────────────────────────
+state.startISO = daysAgoISO(30);
+state.stopISO  = todayISO();
+document.getElementById('start-date').value = state.startISO;
+document.getElementById('end-date').value   = state.stopISO;
+load();
+</script>
+</body>
+</html>

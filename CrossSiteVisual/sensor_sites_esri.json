@@ -1,0 +1,238 @@
+{
+  "geometryType": "esriGeometryPoint",
+  "spatialReference": {
+    "wkid": 4326
+  },
+  "fields": [
+    {
+      "name": "Site",
+      "type": "esriFieldTypeString"
+    },
+    {
+      "name": "Label",
+      "type": "esriFieldTypeString"
+    }
+  ],
+  "features": [
+    {
+      "geometry": {
+        "x": -83.47098147,
+        "y": 42.64495705
+      },
+      "attributes": {
+        "Site": "ARB034",
+        "Site_Label": "S1"
+      }
+    },
+    {
+      "geometry": {
+        "x": -83.5041176,
+        "y": 42.5692068
+      },
+      "attributes": {
+        "Site": "ARB026",
+        "Site_Label": "S2"
+      }
+    },
+    {
+      "geometry": {
+        "x": -83.67580785,
+        "y": 42.5131874
+      },
+      "attributes": {
+        "Site": "ARB077",
+        "Site_Label": "S3"
+      }
+    },
+    {
+      "geometry": {
+        "x": -83.690148,
+        "y": 42.513582
+      },
+      "attributes": {
+        "Site": "ARB013",
+        "Site_Label": "S4"
+      }
+    },
+    {
+      "geometry": {
+        "x": -83.709214,
+        "y": 42.516711
+      },
+      "attributes": {
+        "Site": "ARB017",
+        "Site_Label": "S5"
+      }
+    },
+    {
+      "geometry": {
+        "x": -83.744123,
+        "y": 42.468771
+      },
+      "attributes": {
+        "Site": "ARB061",
+        "Site_Label": "S6"
+      }
+    },
+    {
+      "geometry": {
+        "x": -83.80219,
+        "y": 42.49762
+      },
+      "attributes": {
+        "Site": "ARB107",
+        "Site_Label": "S7"
+      }
+    },
+    {
+      "geometry": {
+        "x": -83.82178,
+        "y": 42.45305
+      },
+      "attributes": {
+        "Site": "ARB082",
+        "Site_Label": "S8"
+      }
+    },
+    {
+      "geometry": {
+        "x": -83.87978742,
+        "y": 42.42297735
+      },
+      "attributes": {
+        "Site": "ARB083",
+        "Site_Label": "S9"
+      }
+    },
+    {
+      "geometry": {
+        "x": -83.90774183,
+        "y": 42.41550448
+      },
+      "attributes": {
+        "Site": "ARB109",
+        "Site_Label": "S10"
+      }
+    },
+    {
+      "geometry": {
+        "x": -83.9112202,
+        "y": 42.3871931
+      },
+      "attributes": {
+        "Site": "ARB012",
+        "Site_Label": "S11"
+      }
+    },
+    {
+      "geometry": {
+        "x": -83.801396,
+        "y": 42.324472
+      },
+      "attributes": {
+        "Site": "ARB027",
+        "Site_Label": "S12"
+      }
+    },
+    {
+      "geometry": {
+        "x": -83.796116,
+        "y": 42.317638
+      },
+      "attributes": {
+        "Site": "ARB028",
+        "Site_Label": "S13"
+      }
+    },
+    {
+      "geometry": {
+        "x": -83.75542024,
+        "y": 42.30753054
+      },
+      "attributes": {
+        "Site": "ARB118",
+        "Site_Label": "S14"
+      }
+    },
+    {
+      "geometry": {
+        "x": -83.73317,
+        "y": 42.287704
+      },
+      "attributes": {
+        "Site": "ARB025",
+        "Site_Label": "S15"
+      }
+    },
+    {
+      "geometry": {
+        "x": -83.73620826,
+        "y": 42.29090561
+      },
+      "attributes": {
+        "Site": "ARB062",
+        "Site_Label": "S16"
+      }
+    },
+    {
+      "geometry": {
+        "x": -83.711235,
+        "y": 42.242009
+      },
+      "attributes": {
+        "Site": "ARB018",
+        "Site_Label": "S17"
+      }
+    },
+    {
+      "geometry": {
+        "x": -83.66399,
+        "y": 42.273328
+      },
+      "attributes": {
+        "Site": "ARB063",
+        "Site_Label": "S18"
+      }
+    },
+    {
+      "geometry": {
+        "x": -83.61293938,
+        "y": 42.24912601
+      },
+      "attributes": {
+        "Site": "ARB031",
+        "Site_Label": "S19"
+      }
+    },
+    {
+      "geometry": {
+        "x": -83.55673,
+        "y": 42.20663
+      },
+      "attributes": {
+        "Site": "ARB120",
+        "Site_Label": "S20"
+      }
+    },
+    {
+      "geometry": {
+        "x": -83.42519,
+        "y": 42.18762
+      },
+      "attributes": {
+        "Site": "ARB059",
+        "Site_Label": "S21"
+      }
+    },
+    {
+      "geometry": {
+        "x": -83.29528136,
+        "y": 42.09443165
+      },
+      "attributes": {
+        "Site": "ARB112",
+        "Site_Label": "S22"
+      }
+    }
+  ]
+}
