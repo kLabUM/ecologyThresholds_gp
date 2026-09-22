@@ -1,0 +1,83 @@
+{
+ "rows": 30369,
+ "implausible_removed": 897,
+ "spikes_removed": 385,
+ "coverage_of_10min_grid": 0.6557022919475426,
+ "daily_wobble_peak_to_trough_cm": 2.34917501365135,
+ "period": [
+  "2025-06-05",
+  "2026-09-02"
+ ],
+ "site": "ARB112",
+ "offset_mm": 6705.6,
+ "note": "sensor 258 m above the first section, below Flat Rock dam; the offset tag 5943.6 before 8 June 2026 is a tag error, the range is continuous",
+ "along_sensor_m": -258.0,
+ "readings_without_stage_at_time": 0,
+ "tie": {
+  "slope_cm_per_100m": 2.1798036658537967,
+  "residual_sd_cm": 2.3333020308333663,
+  "n_transects": 13,
+  "session_offsets_m": {
+   "2026-06-05": 175.55252022527765,
+   "2026-06-10": 175.67358081287,
+   "2026-06-15": 175.94003783551054,
+   "2026-06-17": 175.83965053813102,
+   "2026-06-22": 175.45386908783607,
+   "2026-08-05": 175.20908962176475,
+   "2026-08-06": 175.2532704911056
+  },
+  "offset_spread_sd_m": 0.2781108896230036,
+  "meaning": "WSE_rtk - stage_sensor = offset(day) - slope * (along - along_sensor); a constant offset across days means the sensor level transfers to the sections; its spread is the tie's error"
+ },
+ "bed_check_rtk_minus_rod_cm": {
+  "median": 6.748185343852242e-09,
+  "sd": 10.131697701679837
+ },
+ "reference_stage_m": 0.5096000000000004,
+ "law": {
+  "best": [
+   -0.2,
+   0.5
+  ],
+  "CRPS_best": 0.3862691350296217,
+  "CRPS_none": 0.3990119734809334,
+  "set_within_0.01": [
+   [
+    -0.2,
+    0.5
+   ],
+   [
+    -0.3,
+    0.5
+   ],
+   [
+    -0.3,
+    0.75
+   ],
+   [
+    0.0,
+    0.75
+   ],
+   [
+    -0.1,
+    1.0
+   ],
+   [
+    0.1,
+    0.75
+   ],
+   [
+    0.1,
+    0.5
+   ]
+  ],
+  "stage_range_survey_days_m": [
+   0.27355000000000035,
+   0.8031500000000004
+  ],
+  "stage_range_record_m": [
+   0.14260000000000037,
+   1.9726000000000004
+  ]
+ }
+}

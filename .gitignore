@@ -1,21 +1,14 @@
-# Virtual environment
+# environments and caches
 .venv/
 venv/
-env/
-
-# Python cache
 __pycache__/
 *.py[cod]
-*.egg-info/
-
-# Jupyter
 .ipynb_checkpoints/
-
-# Generated outputs
-complete_data_export.csv
-gp_spatial_heatmap_results.csv
-
-# OS / editor
 .DS_Store
-Thumbs.db
 .vscode/
+
+# regenerable outputs too large to commit (run_all.sh rebuilds them in minutes)
+reach_velocity/data_clean/step6_section_draws.npz
+reach_velocity/data_clean/stage_clean_*.csv
+reach_velocity/data_clean/reach_*_section_series.csv
+reach_velocity/data_clean/reach_*_stage_10min.csv

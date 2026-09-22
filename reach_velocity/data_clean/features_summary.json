@@ -1,0 +1,43 @@
+{
+  "features": [
+    "along_m",
+    "across_m",
+    "rel_across",
+    "dist_bank_m",
+    "width_m",
+    "bed_m",
+    "h_ref_m",
+    "rel_depth",
+    "lateral_bed_slope_abs",
+    "section_mean_depth_m",
+    "section_width_m",
+    "curvature_1_per_m",
+    "outer_bank_score",
+    "wake_flag"
+  ],
+  "spearman": {
+    "along_m": 0.006,
+    "across_m": 0.133,
+    "rel_across": 0.115,
+    "dist_bank_m": 0.588,
+    "width_m": 0.096,
+    "bed_m": -0.103,
+    "h_ref_m": 0.103,
+    "rel_depth": 0.3,
+    "lateral_bed_slope_abs": -0.194,
+    "section_mean_depth_m": -0.372,
+    "section_width_m": 0.175,
+    "curvature_1_per_m": 0.015,
+    "outer_bank_score": -0.226,
+    "wake_flag": -0.279
+  },
+  "A_by_substrate": {
+    "cobble": 0.141,
+    "gravel": 0.134,
+    "not noted": 0.143,
+    "sand": 0.106,
+    "silt": 0.033,
+    "vegetation": 0.076,
+    "woody debris": 0.076
+  }
+}

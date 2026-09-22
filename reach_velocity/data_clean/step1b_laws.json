@@ -1,0 +1,27 @@
+{
+  "linear": {
+    "params": [
+      0.30658498304769344,
+      0.5130092193775507
+    ],
+    "residual_sd_m_s": 0.008154918514297576,
+    "gp_kernel": "0.611**2 * Matern(length_scale=0.149, nu=1.5) + WhiteKernel(noise_level=0.683)"
+  },
+  "manning_2_3": {
+    "params": [
+      0.2886098654275954,
+      0.6256243720288295
+    ],
+    "residual_sd_m_s": 0.007746389219781113,
+    "gp_kernel": "0.515**2 * Matern(length_scale=0.104, nu=1.5) + WhiteKernel(noise_level=0.755)"
+  },
+  "power_free": {
+    "params": [
+      0.29865641683189953,
+      0.6013717605090467,
+      0.7484928978895378
+    ],
+    "residual_sd_m_s": 0.007600696702921084,
+    "gp_kernel": "0.494**2 * Matern(length_scale=0.0967, nu=1.5) + WhiteKernel(noise_level=0.783)"
+  }
+}

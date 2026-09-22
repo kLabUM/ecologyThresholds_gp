@@ -1,0 +1,28 @@
+{
+ "beam_angle_deg": 25.0,
+ "factor": 0.42261826174069944,
+ "n_2h": 1213,
+ "period": [
+  "2025-05-30",
+  "2025-09-13"
+ ],
+ "stage_range_m": [
+  0.6639933685610112,
+  1.2038565872783946
+ ],
+ "level_ratio_record_over_field_median": 0.9080420799804226,
+ "level_ratio_iqr": [
+  0.8447834286245913,
+  0.9630793256286501
+ ],
+ "implied_beam_angle_if_level_matched_deg": 22.56648112967554,
+ "MAE_m_s": 0.027137714341900075,
+ "bias_m_s": -0.024191031803681665,
+ "coverage90": 1.0,
+ "log_ratio_sd_over_season": 0.10115394612659136,
+ "MAE_above_1.0_m": 0.031203867096141234,
+ "coverage90_above_1.0_m": 1.0,
+ "n_above_1.0_m": 180,
+ "field_logA_at_cell": -1.6190749937806324,
+ "field_logA_sd_at_cell": 0.2403926359180576
+}

@@ -1,0 +1,113 @@
+{
+  "reach": "Upper",
+  "gauge": "Huron River near Hamburg (04172000), 6 km downstream",
+  "rows_by_type": {
+    "Transect": 1002,
+    "Other": 161,
+    "Thalweg": 3,
+    "NaN": 2
+  },
+  "BT_transects_set_aside": {
+    "transects": [],
+    "rows": 0,
+    "why": "one reading per point at 0.4 of the depth, elevations 7 m above the reach's surface (another datum or no fix)"
+  },
+  "transect_filter": {
+    "rows": 1002,
+    "with velocity, height and depth": 973,
+    "velocity >= 0": 944,
+    "height not above the water surface": 943
+  },
+  "z0_m": 0.00794328234724282,
+  "z0_within_5pct_of_min_m": [
+    0.004466835921509635,
+    0.012589254117941675
+  ],
+  "profiles_in_z0_fit": 186,
+  "locations": {
+    "n": 224,
+    "a_zero_standing": 3,
+    "a_median": 0.04497793926859748,
+    "a_sd_median": 0.01060450198392204,
+    "fit_r2_median": 0.7207665833445125
+  },
+  "geometry": {
+    "reach_length_m": 7668.927027151037,
+    "max_offset_from_centreline_m": 22.604365603091573,
+    "corr_rel_across_vs_across": 0.6649229980163838,
+    "width_m_median": 21.507406307531323
+  },
+  "slope": {
+    "cm_per_100m": 5.863010501911958,
+    "se_cm_per_100m": 1.220595422502329,
+    "from_good_transects": 18,
+    "days": [
+      "2026-06-03",
+      "2026-06-04",
+      "2026-06-11",
+      "2026-06-24",
+      "2026-07-13",
+      "2026-07-27"
+    ],
+    "resid_sd_cm": 2.191017366358151,
+    "along_ref_m": 6960.755622401526
+  },
+  "rating": {
+    "stage_vs_lnQ_slope_m": 0.39450847355009394,
+    "intercept_m": 260.66395521808687,
+    "residual_sd_cm": 19.6867275155777,
+    "n_days": 6,
+    "Q_range_cfs": [
+      73.7,
+      213.0
+    ],
+    "stage_range_m": [
+      262.3928602251404,
+      263.0032428575275
+    ],
+    "corr_stage_lnQ": 0.640501009212818
+  },
+  "transects": {
+    "n": 28,
+    "rtk_good": 18,
+    "tied_total": 21,
+    "untied": [
+      "0810-T01",
+      "0810-T02",
+      "0810-T03",
+      "0812-T01",
+      "0819-T01",
+      "0819-T02",
+      "0819-T03"
+    ],
+    "days_all": [
+      "2026-06-03",
+      "2026-06-04",
+      "2026-06-05",
+      "2026-06-11",
+      "2026-06-24",
+      "2026-07-13",
+      "2026-07-27",
+      "2026-08-10",
+      "2026-08-12",
+      "2026-08-19"
+    ],
+    "days_good": [
+      "2026-06-03",
+      "2026-06-04",
+      "2026-06-11",
+      "2026-06-24",
+      "2026-07-13",
+      "2026-07-27"
+    ]
+  },
+  "substrate_counts": {
+    "not noted": 103,
+    "sand": 50,
+    "gravel": 39,
+    "silt": 26,
+    "cobble": 4,
+    "woody debris": 2
+  },
+  "wake_flagged": 4
+}

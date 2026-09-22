@@ -1,0 +1,5 @@
+reach,n,reach_mean_CRPS,full_6_features,no_section_depth,geometry_only_rel_across_dist_bank_rel_depth,position_only_along_across,position_plus_rel_depth
+Middle,257,0.465,0.348,0.382,0.329,0.401,0.389
+Upper,221,0.378,0.429,0.450,0.404,0.420,0.430
+Lower,111,0.536,0.370,0.395,0.449,0.411,0.461
+Upper core (>6700 m),162,0.398,0.439,0.463,0.427,0.449,0.472

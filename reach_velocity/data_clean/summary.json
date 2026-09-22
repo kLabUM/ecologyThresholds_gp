@@ -1,0 +1,132 @@
+{
+  "notes": {
+    "surveys_raw_rows": {
+      "2025": 1195,
+      "2026": 2363
+    },
+    "middle_rows_by_type": {
+      "Transect": 1381,
+      "Other": 196,
+      "Nest": 87,
+      "Thalweg": 20,
+      "NaN": 1
+    },
+    "transect_filter": {
+      "rows": 1381,
+      "with velocity and height": 1361,
+      "velocity >= 0": 1287,
+      "height not above the water surface": 1286,
+      "named entry errors removed": 1
+    },
+    "dropped_types": {
+      "Other": 196,
+      "Thalweg": 20
+    },
+    "stage_rows": {
+      "total": 34383,
+      "implausible_removed": 124,
+      "spikes_removed": 20
+    },
+    "stage_period": {
+      "2025": [
+        "2025-05-30",
+        "2025-10-04"
+      ],
+      "2026": [
+        "2026-04-01",
+        "2026-09-01"
+      ]
+    },
+    "stage_used_for_readings": "stage_m from series_10min.csv (05 + 06)",
+    "readings_without_stage": 0,
+    "adcp_source": "series_10min.csv (smoothed, 10-min grid)",
+    "adcp": {
+      "rows": 11611,
+      "period": [
+        "2025-05-30",
+        "2025-09-13"
+      ],
+      "median_step_min": 10.0,
+      "velocity_range_ms": [
+        0.035,
+        0.22
+      ]
+    },
+    "usgs_04174500": {
+      "rows": 465
+    },
+    "usgs_04172000": {
+      "rows": 538
+    },
+    "usgs_04174040": {
+      "rows": 534
+    }
+  },
+  "by_year": {
+    "2025": {
+      "survey_days": 9,
+      "transects": 12,
+      "locations": 183,
+      "readings": 972,
+      "readings_per_location": [
+        1,
+        4.0,
+        25
+      ],
+      "height_m_range": [
+        0.024384000000000003,
+        0.816864
+      ],
+      "water_depth_m_median": 0.48768000000000006,
+      "velocity_ms_median_iqr": [
+        0.140208,
+        0.0762,
+        0.24079200000000003
+      ],
+      "stage_m_range_on_survey_days": [
+        0.7920617113350978,
+        1.0923739905391232
+      ],
+      "days": [
+        "2025-05-30",
+        "2025-06-03",
+        "2025-06-06",
+        "2025-06-10",
+        "2025-07-09",
+        "2025-07-14",
+        "2025-07-16",
+        "2025-07-21",
+        "2025-07-23"
+      ]
+    },
+    "2026": {
+      "survey_days": 2,
+      "transects": 8,
+      "locations": 77,
+      "readings": 313,
+      "readings_per_location": [
+        1,
+        4.0,
+        5
+      ],
+      "height_m_range": [
+        0.06096000000000001,
+        0.9144000000000001
+      ],
+      "water_depth_m_median": 0.56388,
+      "velocity_ms_median_iqr": [
+        0.24079200000000003,
+        0.112776,
+        0.38709600000000005
+      ],
+      "stage_m_range_on_survey_days": [
+        0.7390684114575363,
+        0.9519080582072892
+      ],
+      "days": [
+        "2026-06-18",
+        "2026-06-25"
+      ]
+    }
+  }
+}

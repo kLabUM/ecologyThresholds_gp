@@ -1,0 +1,34 @@
+{
+  "z0_m": 0.01122018454301964,
+  "z0_within_5pct_of_min_m": [
+    0.00707945784384138,
+    0.01584893192461114
+  ],
+  "profiles_in_z0_fit": 160,
+  "transfer_check": {
+    "n_profiles": 124,
+    "MAE_m_s": 0.02961245494392126,
+    "bias_m_s": -0.004456672094841409,
+    "r": 0.9591531402196083
+  },
+  "centreline_orientation": "native direction is downstream",
+  "duplicate_positions": 2,
+  "locations": 260,
+  "shallower_than_1ft": 47,
+  "inverted_profiles": 0,
+  "single_reading_locations": 73,
+  "still_locations": 3,
+  "far_from_centreline_over_40m": 0,
+  "latlon_vs_stateplane_over_20m": 161,
+  "latlon_missing": 0,
+  "fit_r2_quartiles": [
+    0.42155168765633744,
+    0.7459723327444747,
+    0.8789223279529544
+  ],
+  "v_1ft_range_m_s": [
+    0.0,
+    0.6468012359399695
+  ],
+  "v_1ft_sd_median_m_s": 0.02961245494392126
+}

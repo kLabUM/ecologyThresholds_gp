@@ -1,0 +1,37 @@
+{
+  "n_train_2h": 1213,
+  "stage_range_train_m": [
+    0.6639933685610112,
+    1.2038565872783946
+  ],
+  "best_kernel_blocked_crps": "Matern32+linear",
+  "full_fit_kernels": {
+    "Matern32": "1.38**2 * Matern(length_scale=1.29, nu=1.5) + WhiteKernel(noise_level=0.0299)",
+    "Matern32+linear": "0.123**2 * Matern(length_scale=0.142, nu=1.5) + 0.939**2 * DotProduct(sigma_0=0.001) + WhiteKernel(noise_level=0.0294)"
+  },
+  "thinning_daily_medians": {
+    "MAE": 0.006799981787957281,
+    "RMSE": 0.008569126891581257,
+    "CRPS": 0.005027380195795289,
+    "coverage95": 0.7815333882934872,
+    "mean_sd": 0.0057622923762507315,
+    "NLPD": -3.095257463662351,
+    "R2": 0.9524494150918263,
+    "n": 1213
+  },
+  "hysteresis": {
+    "rising_mean_resid_mm_s": -3.95677946477319,
+    "falling_mean_resid_mm_s": 1.3551380748402488,
+    "n_rising": 183,
+    "n_falling": 192,
+    "monthly_mean_resid_mm_s": {
+      "5": -7.52444377587655,
+      "6": -5.784763060094987,
+      "7": 4.033497707570581,
+      "8": 1.202377679809969,
+      "9": -3.9700679782391424
+    }
+  },
+  "share_2026_stage_above_training_max": 0.16797110174593619,
+  "share_2026_stage_below_training_min": 0.001806140878988561
+}

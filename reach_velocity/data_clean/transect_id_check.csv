@@ -1,0 +1,5 @@
+date,transect,point,along_m,group_median_along,off_own_line_m,nearest_other_transect,dist_to_other_line_m,name_prefix_mismatch,coords_duplicated_across_dates,verdict
+2025-07-09,AT07,AT0711,130.4,131.0,0.6,AT06,26.7,False,True,coordinates seen on another date
+2025-07-09,AT07,AT0710,130.7,131.0,0.3,AT06,26.5,False,True,coordinates seen on another date
+2025-07-14,AT07,AT0711,130.4,130.5,0.1,AT06,26.7,False,True,coordinates seen on another date
+2025-07-14,AT07,AT0710,130.7,130.5,0.1,AT06,26.5,False,True,coordinates seen on another date

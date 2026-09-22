@@ -1,0 +1,94 @@
+{
+ "n_nests": 59,
+ "nest_calibrated_thresholds_m_s": {
+  "q50": {
+   "value": 0.1632828168121946,
+   "ci90": [
+    0.1094461164688362,
+    0.2108149394776949
+   ]
+  },
+  "q75": {
+   "value": 0.24894013964743167,
+   "ci90": [
+    0.1642416895807205,
+    0.332642646604142
+   ]
+  },
+  "q90": {
+   "value": 0.3467710659086116,
+   "ci90": [
+    0.2620744128789011,
+    0.41852845429904273
+   ]
+  }
+ },
+ "share_of_nests_below_0.2": 0.6101694915254238,
+ "selection_model": {
+  "velocity alone": {
+   "velocity (m/s)": {
+    "coef_per_sd": -0.8313842452869298,
+    "ci90": [
+     -1.1391639066117747,
+     -0.5893939796412724
+    ],
+    "per_unit": -5.063414328272454
+   }
+  },
+  "bank distance alone": {
+   "bank distance (m)": {
+    "coef_per_sd": -1.0972643172759602,
+    "ci90": [
+     -1.5229810211422996,
+     -0.6996399452171538
+    ],
+    "per_unit": -0.16652544883920367
+   }
+  },
+  "velocity + bank distance": {
+   "velocity (m/s)": {
+    "coef_per_sd": -0.13650025144452982,
+    "ci90": [
+     -0.5495769594922,
+     0.21760542056015253
+    ],
+    "per_unit": -0.8313332047066767
+   },
+   "bank distance (m)": {
+    "coef_per_sd": -1.0158253900549803,
+    "ci90": [
+     -1.5965336967495414,
+     -0.5391782070357671
+    ],
+    "per_unit": -0.1541659346410889
+   }
+  },
+  "velocity + bank distance + depth": {
+   "velocity (m/s)": {
+    "coef_per_sd": -0.8788781616220435,
+    "ci90": [
+     -1.8764451088954672,
+     -0.004537362631235933
+    ],
+    "per_unit": -5.35266851830584
+   },
+   "bank distance (m)": {
+    "coef_per_sd": -1.1885859640115108,
+    "ci90": [
+     -1.7825421323493114,
+     -0.7036241674247595
+    ],
+    "per_unit": -0.18038480612617552
+   },
+   "depth (m)": {
+    "coef_per_sd": 0.8867805110259268,
+    "ci90": [
+     0.2808042676786349,
+     1.4001224017783351
+    ],
+    "per_unit": 4.345625382750334
+   }
+  }
+ },
+ "note": "coefficients are log-odds of use per standard deviation of the covariate (sd: velocity (m/s) 0.16, bank distance (m) 6.59, depth (m) 0.20); 20 available cells per nest at the nest's own stage; day-cluster bootstrap, 9 days"
+}

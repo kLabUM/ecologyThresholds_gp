@@ -1,0 +1,105 @@
+{
+  "reach": "Lower",
+  "gauge": "Huron River at Ann Arbor (04174500), 42 km upstream, three dams between",
+  "rows_by_type": {
+    "Transect": 557,
+    "Other": 74
+  },
+  "BT_transects_set_aside": {
+    "transects": [
+      "0709-BT01",
+      "0730-BT01",
+      "0813-BT01"
+    ],
+    "rows": 40,
+    "why": "one reading per point at 0.4 of the depth, elevations 7 m above the reach's surface (another datum or no fix)"
+  },
+  "transect_filter": {
+    "rows": 517,
+    "with velocity, height and depth": 501,
+    "velocity >= 0": 471,
+    "height not above the water surface": 471
+  },
+  "z0_m": 0.005623413251903491,
+  "z0_within_5pct_of_min_m": [
+    0.003981071705534973,
+    0.00794328234724282
+  ],
+  "profiles_in_z0_fit": 95,
+  "locations": {
+    "n": 114,
+    "a_zero_standing": 3,
+    "a_median": 0.08072876784407142,
+    "a_sd_median": 0.012672291353103783,
+    "fit_r2_median": 0.7999558996482703
+  },
+  "geometry": {
+    "reach_length_m": 795.2542410095998,
+    "max_offset_from_centreline_m": 25.37087508670292,
+    "corr_rel_across_vs_across": 0.9539117797265816,
+    "width_m_median": 39.12790982828367
+  },
+  "slope": {
+    "cm_per_100m": 4.95077613209105,
+    "se_cm_per_100m": 1.9971432347085822,
+    "from_good_transects": 10,
+    "days": [
+      "2026-06-05",
+      "2026-06-15",
+      "2026-06-17",
+      "2026-06-22"
+    ],
+    "resid_sd_cm": 2.254946222404295,
+    "along_ref_m": 175.33266377414634
+  },
+  "rating": {
+    "stage_vs_lnQ_slope_m": 0.4927411139077764,
+    "intercept_m": 173.277133608372,
+    "residual_sd_cm": 30.699792555690024,
+    "n_days": 7,
+    "Q_range_cfs": [
+      110.0,
+      519.0
+    ],
+    "stage_range_m": [
+      175.51509240343697,
+      176.6357279203681
+    ],
+    "corr_stage_lnQ": 0.7315782781580685
+  },
+  "transects": {
+    "n": 15,
+    "rtk_good": 13,
+    "tied_total": 13,
+    "untied": [
+      "0806-T01",
+      "0806-T02"
+    ],
+    "days_all": [
+      "2026-06-05",
+      "2026-06-10",
+      "2026-06-15",
+      "2026-06-17",
+      "2026-06-22",
+      "2026-08-05",
+      "2026-08-06"
+    ],
+    "days_good": [
+      "2026-06-05",
+      "2026-06-10",
+      "2026-06-15",
+      "2026-06-17",
+      "2026-06-22",
+      "2026-08-05",
+      "2026-08-06"
+    ]
+  },
+  "substrate_counts": {
+    "not noted": 48,
+    "gravel": 48,
+    "sand": 8,
+    "silt": 6,
+    "cobble": 4
+  },
+  "wake_flagged": 0
+}

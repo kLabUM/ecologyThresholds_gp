@@ -1,0 +1,21 @@
+block,item,value,how set
+Readings to one number,vertical profile,v(z) = a ln(z / z0); readings at z >= 3 cm and v > 5 mm/s,fixed form
+,roughness scale z0,"11.2 mm for the reach (flat between 7 and 16 mm), from 160 profiles with three or more readings","fitted, pooled grid search"
+,amplitude a per location,257 locations with a > 0; per-location sd from the spread of the readings' implied a (median 0.09 relative),fitted per location
+Stage record,sensor,"ultrasonic range every 10 min; daytime sensor pattern removed against the night line, median filtered; 2 h means for the series",processing
+,stage error in the chain,"1.5 cm, one draw per time shared by every section",assumed
+Stage law,form,"a = A (stage - h0)^gamma, one law for the reach",fixed form
+,primary pair,"h0 = 0.45 m, gamma = 1.0 (best day-out CRPS)",chosen on a grid
+,law set drawn in the chain,"every grid pair within 0.01 CRPS of the best with h0 below 0.66 m: (0.45, 1.0), (0.35, 1.25), (0.55, 0.75), (0.35, 1.0), (0.45, 0.75), (0.65, 0.5), (0.55, 0.5)",uniform over the set
+Spatial model,target,"log A, A = a / (stage - h0)^gamma",
+,inputs,"along the reach, relative position across, distance to the nearer bank, relative depth in the section, section mean depth, lateral bed slope",measured
+,mean,"weighted least squares on an intercept, six substrate classes from the notes and a wake flag",fitted
+,kernel,ARD Matern 3/2 plus a white nugget; per-point noise fixed from the readings' spread,"fitted by marginal likelihood, 2 to 3 restarts"
+,fitted scales,"amplitude sd 0.84, nugget sd 0.12 (log); length scales: along 159 m, relative across 2.2, bank distance 16 m, relative depth 0.42, section mean depth 0.18 m, lateral slope 0.52",fitted
+Uncertainty chain,field,one joint Gaussian process draw over every point of every section,posterior
+,discrepancy,"inflation 1.056 from held-out days (95% coverage before inflation 0.946, n 257); total 0.187 in log, split into a reach-level part 0.098 (one draw per reach) and a point-level part 0.159",calibrated
+,bed,"RTK cross-sections on the sensor datum through per-session offsets (one water-surface slope of 5 cm per 100 m, residual 1.3 cm, 11 sessions); 6 cm per point in the chain",measured; error assumed
+,roughness,"z0 drawn between 7 and 16 mm, one per draw; a rescaled through the readings' typical height (0.25 m)",assumed range
+,draws,"100 per two-hourly stage for the series (3,106 stages), 300 for the rating curves",setting
+Map (illustration only),bed between sections,"Gaussian process on the RTK sections and bank points (scales 117 m along, 29 m across, nugget 5 cm); 2 m grid inside the mapped bank lines",fitted
+Ecological number,definition,"share of the wetted width below 0.2 m/s on the depth-averaged velocity (alternative: 0.10 m above the bed); width-weighted within a section, length-weighted over the 20 sections; wetted width ends at the outermost surveyed points","choice, to be tied to the ecology"

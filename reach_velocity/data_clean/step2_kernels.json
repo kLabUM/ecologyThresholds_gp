@@ -1,0 +1,66 @@
+{
+  "coords": {
+    "scales": {
+      "amp_sd": 0.7435911896824384,
+      "nugget_sd": 0.19006963447512604,
+      "along_m": 33.586516475219945,
+      "rel_across": 0.6503500313959012
+    },
+    "kernel": "1.04**2 * Matern(length_scale=[0.186, 1.12], nu=1.5) + WhiteKernel(noise_level=0.0701)",
+    "mean_coefs": {
+      "intercept": -1.9730104738825647
+    }
+  },
+  "full features": {
+    "scales": {
+      "amp_sd": 0.7987845448887073,
+      "nugget_sd": 0.10364737676696524,
+      "along_m": 112.70818689867781,
+      "rel_across": 2.2363514188681806,
+      "dist_bank_m": 18.461010014826243,
+      "rel_depth": 0.7141366329717543,
+      "section_mean_depth_m": 0.17867671179310265,
+      "lateral_bed_slope_abs": 0.4796512479346775
+    },
+    "kernel": "1.11**2 * Matern(length_scale=[0.624, 3.84, 2.74, 3.27, 2.22, 15.6], nu=1.5) + WhiteKernel(noise_level=0.0209)",
+    "mean_coefs": {
+      "intercept": -1.9730104738825647
+    }
+  },
+  "full features + notes": {
+    "scales": {
+      "amp_sd": 0.6181774936357105,
+      "nugget_sd": 0.19359114778276587,
+      "along_m": 119.9214744178044,
+      "rel_across": 2.0837909489323274,
+      "dist_bank_m": 14.994090942824844,
+      "rel_depth": 0.583190738928043,
+      "section_mean_depth_m": 0.103919856107512,
+      "lateral_bed_slope_abs": 0.7249703822117896
+    },
+    "kernel": "0.98**2 * Matern(length_scale=[0.664, 3.58, 2.22, 2.67, 1.29, 23.6], nu=1.5) + WhiteKernel(noise_level=0.0941)",
+    "mean_coefs": {
+      "intercept": -1.8875376697834922,
+      "sub_cobble": -0.07844820492788812,
+      "sub_gravel": -0.23216763224653358,
+      "sub_sand": -0.5147280498652589,
+      "sub_silt": -1.1415240345625635,
+      "sub_vegetation": -0.13148508191357575,
+      "sub_woody debris": 0.243550180676177,
+      "wake_flag": -0.6170093741322629
+    }
+  },
+  "june25 full features": {
+    "scales": {
+      "amp_sd": 0.8670366070860068,
+      "nugget_sd": 0.004775536504368825,
+      "along_m": 175.70327540987822,
+      "rel_across": 4.329158676683002,
+      "dist_bank_m": 25.924452500177733,
+      "rel_depth": 1.7226854462915302,
+      "section_mean_depth_m": 3.589085527923749,
+      "lateral_bed_slope_abs": 1.9946903534253728
+    },
+    "kernel": "1.82**2 * Matern(length_scale=[4.39, 6.98, 4.11, 7.24, 50, 50], nu=1.5) + WhiteKernel(noise_level=0.0001)"
+  }
+}

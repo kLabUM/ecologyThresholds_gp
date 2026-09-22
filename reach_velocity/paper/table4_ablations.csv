@@ -1,0 +1,13 @@
+kind,variant,CRPS,sections_better_than_full,wilcoxon_p_vs_full
+features,bank distance only,0.2989,15.0,0.1429
+features,"geometry only (rel_across, dist_bank, rel_depth)",0.3103,12.0,0.7012
+features,full (6),0.3168,0.0,
+features,"position only (along, across)",0.3248,10.0,0.7562
+features,no section depth,0.3541,8.0,0.0583
+features,position + rel_depth,0.3573,6.0,0.0328
+features,reach mean,0.4363,2.0,0.0
+kernel,"Matern 3/2, 1 restarts",0.3168,,
+kernel,"Matern 3/2, 3 restarts",0.3169,,
+kernel,"Matern 3/2, 6 restarts",0.3169,,
+kernel,"Matern 5/2, 3 restarts",0.3213,,
+kernel,"squared exponential, 3 restarts",0.3408,,

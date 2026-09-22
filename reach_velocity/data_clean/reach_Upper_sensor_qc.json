@@ -1,0 +1,110 @@
+{
+ "rows": 26454,
+ "implausible_removed": 0,
+ "spikes_removed": 0,
+ "coverage_of_10min_grid": 0.9963928759299616,
+ "daily_wobble_peak_to_trough_cm": 0.7236927405650406,
+ "period": [
+  "2026-03-01",
+  "2026-09-02"
+ ],
+ "site": "ARB017",
+ "offset_mm": 1587.5,
+ "note": "sensor on the river 1.4 km from the nearest section, mid-reach",
+ "along_sensor_m": 2219.0,
+ "readings_without_stage_at_time": 0,
+ "tie": {
+  "slope_cm_per_100m": 5.793358059510476,
+  "residual_sd_cm": 1.79968443131162,
+  "n_transects": 18,
+  "session_offsets_m": {
+   "2026-06-03": 264.9579095229548,
+   "2026-06-04": 264.9512178333143,
+   "2026-06-11": 265.1588629328918,
+   "2026-06-24": 265.2643375093108,
+   "2026-07-13": 264.8218961372618,
+   "2026-07-27": 264.8400252774958
+  },
+  "offset_spread_sd_m": 0.17695787304208357,
+  "meaning": "WSE_rtk - stage_sensor = offset(day) - slope * (along - along_sensor); a constant offset across days means the sensor level transfers to the sections; its spread is the tie's error"
+ },
+ "bed_check_rtk_minus_rod_cm": {
+  "median": 0.27552775418243636,
+  "sd": 17.636882253859884
+ },
+ "reference_stage_m": 0.3904500000000001,
+ "law": {
+  "best": [
+   -0.09,
+   1.25
+  ],
+  "CRPS_best": 0.41945974608121817,
+  "CRPS_none": 0.4209052973000597,
+  "set_within_0.01": [
+   [
+    -0.09,
+    1.25
+   ],
+   [
+    0.01,
+    1.0
+   ],
+   [
+    -0.19,
+    0.75
+   ],
+   [
+    -0.09,
+    0.75
+   ],
+   [
+    0.01,
+    0.75
+   ],
+   [
+    -0.09,
+    1.0
+   ],
+   [
+    -0.19,
+    1.25
+   ],
+   [
+    0.11,
+    0.75
+   ],
+   [
+    -0.09,
+    0.5
+   ],
+   [
+    -0.19,
+    0.5
+   ],
+   [
+    -0.19,
+    1.0
+   ],
+   [
+    0.01,
+    0.5
+   ],
+   [
+    0.11,
+    0.5
+   ],
+   [
+    0.21,
+    0.5
+   ]
+  ],
+  "stage_range_survey_days_m": [
+   0.2965,
+   0.4828
+  ],
+  "stage_range_record_m": [
+   0.2555,
+   1.0875
+  ]
+ }
+}
