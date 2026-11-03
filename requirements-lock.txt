@@ -1,4 +1,4 @@
-﻿anyio==4.15.1
+anyio==4.15.1
 argon2-cffi==25.1.0
 argon2-cffi-bindings==26.1.0
 arrow==1.4.0
@@ -104,7 +104,7 @@ stack-data==0.6.3
 terminado==0.18.1
 threadpoolctl==3.6.0
 tinycss2==1.5.1
-tornado==6.5.8
+tornado==6.6
 traitlets==5.16.1
 typing_extensions==4.16.0
 tzdata==2026.3
