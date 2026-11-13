@@ -1,4 +1,4 @@
-﻿anyio==4.15.1
+anyio==4.15.1
 argon2-cffi==25.1.0
 argon2-cffi-bindings==26.1.0
 arrow==1.4.0
@@ -99,7 +99,7 @@ scipy==1.17.1
 Send2Trash==2.1.0
 shapely==2.1.2
 six==1.17.0
-soupsieve==2.9.2
+soupsieve==4.0
 stack-data==0.6.3
 terminado==0.18.1
 threadpoolctl==3.6.0
