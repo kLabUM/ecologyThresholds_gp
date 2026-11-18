@@ -598,6 +598,14 @@ Paired differences over all 56 sections: C minus A -0.024 +/- 0.008 (C better in
 
 **Not yet done.** Nothing is switched over: the Middle's paper numbers still rest on A. Switching to C needs the PI's decision; it changes the inputs to steps 2 to 7 at the Middle and to `27_`/`38_` at the other reaches, and it makes the bank distance stage-dependent at prediction time (the edges at the sensor's water level each 2 hours), which is new code in the chain.
 
+## Entry 29. 18 November 2026. Where the old bank lines came from, made reproducible (`44_banklines_survey.py`)
+
+**What was missing.** The bank lines, channel polygons and main-stem centrelines in `data_raw/` (set A of entries 27 and 28) were copied from the main branch's `mapping/` folder when this folder was made, but the code that wrote them was not. It is `dataSorting.ipynb` on the main branch at commit 2346281 (18 September 2026): the three files in `data_raw/` are byte-identical to `mapping/` at that commit, and later commits on main changed both the notebook and the lines (for example the current main lines differ from these by up to 7 m at the Middle and 34 m at the Lower).
+
+**What was done.** `44_banklines_survey.py` carries over the notebook's cells that decide the lines (1 and 2: the survey rows by section; 6: the ADCP's 5-hour medians as Middle rows; 7: one row per visit measured at 1 ft in water at least 1 ft deep, measured values only; 10 and 11: the main-stem centreline from the river network and each point's offset and distance along it; 12: the northing trims, Upper 365,000, Middle 321,000, Lower 220,000 ft, applied after the centreline; 13: bank points placed on their transects, the edges as curves along the reach, smoothed 300 ft, kept 2 ft outside the survey and pushed out to every point). The upstream-depth columns and the plots, which do not touch the lines, are left out; the notebook's GeoJSON and CSV round trips are kept because they decide how dates and points without coordinates are read. The river network is now in `data_raw/Huron_RiverSystem.geojson`.
+
+**Check** (`data_clean/banklines_survey/summary.json`): from `data_raw/` alone it reproduces all three reaches' bank lines and centrelines exactly (largest Hausdorff distance 0.0 m). Upper: 20 of 29 noted bank points placed, median width 68 ft, 4.63 acres; Middle: 17 of 21 (one rejected as inside the survey), 149 ft, 8.20 acres; Lower: 13 of 16, 108 ft, 7.34 acres; no survey point outside.
+
 ## Where we stand, and how this differs from the original approach (21 September 2026)
 
 Written before any spatial model is fitted, so that the data and the assumptions are agreed first. "Original" means the notebooks as committed on 18 September 2026 and the analysis in `paper_analysis/` that was built on them.

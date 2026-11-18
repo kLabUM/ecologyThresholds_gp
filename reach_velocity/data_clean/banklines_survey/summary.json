@@ -1,0 +1,53 @@
+{
+ "Upper": {
+  "bank_points": 29,
+  "bank_points_placed": 20,
+  "bank_points_rejected": 0,
+  "margin_ft": {
+   "left": 13.32926754347618,
+   "right": 8.095665726008324
+  },
+  "median_width_ft": 68.1,
+  "acres": 4.63,
+  "points_outside": 0,
+  "in_water_points": 286,
+  "reproduces_data_raw_m": {
+   "bank_lines_max_hausdorff": 0.0,
+   "centerline_hausdorff": 0.0
+  }
+ },
+ "Middle": {
+  "bank_points": 21,
+  "bank_points_placed": 17,
+  "bank_points_rejected": 1,
+  "margin_ft": {
+   "left": 10.108914757989396,
+   "right": 12.292865350162273
+  },
+  "median_width_ft": 149.2,
+  "acres": 8.2,
+  "points_outside": 0,
+  "in_water_points": 794,
+  "reproduces_data_raw_m": {
+   "bank_lines_max_hausdorff": 0.0,
+   "centerline_hausdorff": 0.0
+  }
+ },
+ "Lower": {
+  "bank_points": 16,
+  "bank_points_placed": 13,
+  "bank_points_rejected": 0,
+  "margin_ft": {
+   "left": 15.187647969025996,
+   "right": 18.58843202535698
+  },
+  "median_width_ft": 108.4,
+  "acres": 7.34,
+  "points_outside": 0,
+  "in_water_points": 161,
+  "reproduces_data_raw_m": {
+   "bank_lines_max_hausdorff": 0.0,
+   "centerline_hausdorff": 0.0
+  }
+ }
+}

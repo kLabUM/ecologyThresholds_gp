@@ -23,6 +23,8 @@ This folder is a complete, reproducible analysis: a season-long velocity record 
 | `30_`, `31_`, `34_`, `33_`, `35_`, `36_` | feature and kernel ablations; the ADCP re-read and single-beam test; nest-calibrated thresholds and the selection model; the Bayesian suitability; the explanatory figure | `step2_*_ablation.csv`, `adcp_*.json`, `nest_*.json/csv` |
 | `41_`, `29_`, `32_`, `40_` | the variables figure, the paper's F1 to F5, the tables, the methods document (docx and md), all from saved outputs | `paper/` |
 | `27_`, `28_`, `37_`, `38_`, `39_` | the other two reaches (paused; not in `run_all.sh`) | `reach_*`, `step8_*`, figures 08 to 16 |
+| `44_banklines_survey.py` | the origin of `data_raw/bank_lines_*`, `channel_extent_*`, `centerline_union_*`: the main branch's dataSorting.ipynb (commit 2346281) carried over; checks that it reproduces them exactly | `data_clean/banklines_survey/` |
+| `banklines_3dep.py`, `43_bankline_comparison.py` | bank lines from USGS 3DEP plus the survey (sets B and C) and the comparison under the rule in logbook entry 27 | `data_clean/bankcmp/`, figures 18 |
 
 ## Rules that keep the analysis honest
 

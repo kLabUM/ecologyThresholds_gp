@@ -3,7 +3,7 @@
     python 43_bankline_comparison.py build    # the sets and the visual check (figures/18_bankline_sets.png)
     python 43_bankline_comparison.py score    # sections held out under A, B and C; the rule applied
 
-A: the old lines. B: surveyed edges (1 m out) with the 3DEP edges between them. C: stage-dependent edges at each survey
+A: the old lines (made by 44_banklines_survey.py, the original notebook code). B: surveyed edges (1 m out) with the 3DEP edges between them. C: stage-dependent edges at each survey
 day's sensor water level, with 20 draws of their uncertainty (lidar error, survey-to-lidar gap, the sensor tie).
 Inputs: data_raw/3dep_bank_transects_{r}.csv, bank_lines_{r}.geojson, centerline_union_{r}.geojson; data_clean point tables.
 Outputs (data_clean/bankcmp/): sets_{r}.npz, banks_B_{r}.geojson, banks_C_{r}_{date}.geojson, anchors_{r}.csv, summary_build.json;

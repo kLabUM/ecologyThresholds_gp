@@ -145,6 +145,7 @@ def along_interp(st, an, col):
 
 # ---------------------------------------------------------------- the three sets ---
 def set_A(reach):
+    """The old lines, as written by 44_banklines_survey.py (the main branch's dataSorting.ipynb at commit 2346281)."""
     return gpd.read_file(RAW / f"bank_lines_{reach}.geojson").to_crs(CRS_FT)
 
 
