@@ -1,0 +1,91 @@
+{
+ "Upper": {
+  "transects": 115,
+  "flat_water_transects": 110,
+  "notes": {
+   "3DEP flat water": 110,
+   "no flat water (not hydro-flattened)": 5
+  },
+  "width_median_m": 12.0,
+  "width_p10_p90_m": [
+   8.0,
+   19.6
+  ],
+  "lidar_water_level_median_m": 262.77,
+  "new": {
+   "transect_ends": 40,
+   "transect_end_to_bank_median_m": 3.16,
+   "transect_end_to_bank_p90_m": 8.95,
+   "survey_points_outside_polygon": 114,
+   "survey_points": 287,
+   "area_acres": 3.75
+  },
+  "old": {
+   "transect_ends": 40,
+   "transect_end_to_bank_median_m": 2.89,
+   "transect_end_to_bank_p90_m": 5.4,
+   "survey_points_outside_polygon": 0,
+   "survey_points": 287,
+   "area_acres": 4.62
+  }
+ },
+ "Middle": {
+  "transects": 82,
+  "flat_water_transects": 82,
+  "notes": {
+   "3DEP flat water": 82
+  },
+  "width_median_m": 70.0,
+  "width_p10_p90_m": [
+   54.1,
+   80.9
+  ],
+  "lidar_water_level_median_m": 255.04,
+  "new": {
+   "transect_ends": 40,
+   "transect_end_to_bank_median_m": 13.92,
+   "transect_end_to_bank_p90_m": 25.33,
+   "survey_points_outside_polygon": 0,
+   "survey_points": 426,
+   "area_acres": 13.53
+  },
+  "old": {
+   "transect_ends": 40,
+   "transect_end_to_bank_median_m": 6.19,
+   "transect_end_to_bank_p90_m": 14.0,
+   "survey_points_outside_polygon": 0,
+   "survey_points": 426,
+   "area_acres": 8.7
+  }
+ },
+ "Lower": {
+  "transects": 117,
+  "flat_water_transects": 116,
+  "notes": {
+   "3DEP flat water": 116,
+   "pond (flat beyond the transect)": 1
+  },
+  "width_median_m": 39.5,
+  "width_p10_p90_m": [
+   33.6,
+   58.8
+  ],
+  "lidar_water_level_median_m": 177.07,
+  "new": {
+   "transect_ends": 36,
+   "transect_end_to_bank_median_m": 10.06,
+   "transect_end_to_bank_p90_m": 23.15,
+   "survey_points_outside_polygon": 0,
+   "survey_points": 186,
+   "area_acres": 12.11
+  },
+  "old": {
+   "transect_ends": 36,
+   "transect_end_to_bank_median_m": 5.59,
+   "transect_end_to_bank_p90_m": 13.75,
+   "survey_points_outside_polygon": 0,
+   "survey_points": 186,
+   "area_acres": 9.02
+  }
+ }
+}
