@@ -577,6 +577,27 @@ The analysis moved into `reach_velocity/`, a folder that needs nothing outside i
 
 **The rule.** For each reach and each set, the GP (each reach's primary stage law, the six FULL inputs, notes in the mean) is fitted with one surveyed section held out at a time. Scores: CRPS of ln A per point and the share of points inside the 90% band, averaged per section. The sets are compared section by section across all three reaches (paired differences, their mean and standard error). A difference smaller than one paired standard error is a tie; a tie goes to the set that keeps the surveyed points inside the channel; if that does not separate them, the PI decides and the reason is written here. One set is chosen for all three reaches; an exception for one reach needs a physical reason recorded before the scores are seen. The scores of the sets not chosen are reported. Nothing is switched over until the PI has seen the results.
 
+## Entry 28. 18 November 2026. Bank lines: the scores, and what the rule picks (`43_bankline_comparison.py score`)
+
+**The sets** (figure 18_bankline_sets, signed off by the PI before scoring): built as written in entry 27. Surveyed points outside the lines (0.5 m tolerance): A 6, 16 and 4 (Upper, Middle, Lower); B and C none (C on each point's own survey day). At the Upper the canopy rule set the lidar aside at 90 of 115 stations, so C there is mostly the surveyed edges.
+
+**The scores** (figure 18_bankline_scores; `data_clean/bankcmp/scores_sections.csv`, `paired.csv`). CRPS of ln A with each section held out, mean of section scores, and the share of points inside the 90% band:
+
+| reach | A old | B hybrid | C stage-dependent |
+|---|---|---|---|
+| Upper | 0.450 (0.79) | 0.421 (0.83) | 0.405 (0.86) |
+| Middle | 0.314 (0.88) | 0.331 (0.85) | 0.310 (0.88) |
+| Lower | 0.357 (0.83) | 0.365 (0.79) | 0.335 (0.84) |
+| all 56 sections | 0.376 (0.83) | 0.374 (0.83) | 0.352 (0.86) |
+
+Paired differences over all 56 sections: C minus A -0.024 +/- 0.008 (C better in 41 sections), C minus B -0.022 +/- 0.005 (43), B minus A -0.003 +/- 0.011 (a tie). By reach, C beats A at the Upper (-0.046 +/- 0.017) and the Lower (-0.021 +/- 0.009) and ties it at the Middle (-0.004 +/- 0.012); C beats B at all three.
+
+**The rule's answer: C**, by more than one paired standard error against both A and B over all three reaches; no tie-break was needed. Its coverage is also the closest to 0.90 at every reach.
+
+**Is it the lines or the extra uncertainty?** A check outside the rule: C's best-estimate lines alone, without the twenty draws, score 0.407, 0.312 and 0.344 (coverage 0.82, 0.85, 0.80). So most of the gain over A comes from the geometry; the draws mostly lift the coverage toward 0.90 at a small further gain in CRPS.
+
+**Not yet done.** Nothing is switched over: the Middle's paper numbers still rest on A. Switching to C needs the PI's decision; it changes the inputs to steps 2 to 7 at the Middle and to `27_`/`38_` at the other reaches, and it makes the bank distance stage-dependent at prediction time (the edges at the sensor's water level each 2 hours), which is new code in the chain.
+
 ## Where we stand, and how this differs from the original approach (21 September 2026)
 
 Written before any spatial model is fitted, so that the data and the assumptions are agreed first. "Original" means the notebooks as committed on 18 September 2026 and the analysis in `paper_analysis/` that was built on them.
