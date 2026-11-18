@@ -16,7 +16,8 @@ warnings.filterwarnings("ignore"); t0 = time.time(); log = lambda *a: (print(f"[
 ROOT = Path(__file__).resolve().parents[1]; HERE = Path(__file__).resolve().parent; D = HERE / "data_clean"; F = HERE / "figures"; RAW = HERE / "data_raw"; MAP = RAW
 FT = 0.3048; ZMIN, VMIN = 0.03, 0.005; SUBS = ["cobble", "gravel", "sand", "silt", "vegetation", "woody debris"]
 GOOD_SCATTER_M = 0.15; TIE_MAX_M = 0.20   # a transect's surface is 'good' when its points agree to this; a rating-derived surface is 'tied' when its uncertainty is below this
-REACHES = {"Upper": {"band": (340000, 1e9), "gauge": "04172000", "gauge_name": "Huron River near Hamburg (04172000), 6 km downstream"},
+# Upper: the southern ~1 km only (Northing below 365,000 ft); the August transects further upstream were exploratory and are left out
+REACHES = {"Upper": {"band": (340000, 365000), "gauge": "04172000", "gauge_name": "Huron River near Hamburg (04172000), 6 km downstream"},
            "Lower": {"band": (-1e9, 255000), "gauge": "04174500", "gauge_name": "Huron River at Ann Arbor (04174500), 42 km upstream, three dams between"}}
 raw = pd.read_csv(RAW / "26_ecohydroData.csv", dtype=str); raw.columns = [c.strip() for c in raw.columns]
 for c in ["Total water depth", "Depth", "Velocity", "Northing", "Easting", "Elevation"]: raw[c] = pd.to_numeric(raw[c], errors="coerce")

@@ -1,4 +1,4 @@
-"""The two new MaxBotix records (Upper ARB017, Lower ARB112) diagnosed the way the Middle's was (02_stage_diagnose.py, entry 3):
+"""The two new MaxBotix records (Upper ARB013, Lower ARB112) diagnosed the way the Middle's was (02_stage_diagnose.py, entry 3):
 the raw record, the within-day pattern on dry days by month (the sensor's daytime artefact), the night against the afternoon,
 the spikes and implausible readings, and the offset tags. Nothing is cleaned here. Output: figures/16_other_sensors_diagnose.png"""
 import numpy as np, pandas as pd
@@ -9,7 +9,7 @@ from pathlib import Path
 F = Path(__file__).resolve().parent / "figures"
 INK, INK2, AXIS, GRID, BLUE, ORANGE, RED, NIGHT = "#0b0b0b", "#52514e", "#c3c2b7", "#e1e0d9", "#2a78d6", "#eb6834", "#c0392b", "#dcdcf5"
 plt.rcParams.update({"font.family": "sans-serif", "font.sans-serif": ["Helvetica", "Arial", "DejaVu Sans"], "font.size": 8, "axes.edgecolor": AXIS, "axes.linewidth": 0.6, "grid.color": GRID, "grid.linewidth": 0.5, "legend.frameon": False, "savefig.dpi": 200, "axes.facecolor": "#fcfcfb"})
-SENS = {"Upper (ARB017)": ([str(RAW / "26_depthSensorData_Upper.csv")], 1587.5), "Lower (ARB112)": ([str(RAW / "25_depthSensorData_Lower.csv"), str(RAW / "26_depthSensorData_Lower.csv")], 6705.6)}
+SENS = {"Upper (ARB013)": ([str(RAW / "26_depthSensorData_Upper.csv")], 3048.0), "Lower (ARB112)": ([str(RAW / "25_depthSensorData_Lower.csv"), str(RAW / "26_depthSensorData_Lower.csv")], 6705.6)}
 fig = plt.figure(figsize=(18, 11)); gs = fig.add_gridspec(2, 4, wspace=0.3, hspace=0.45, width_ratios=[2.2, 1, 1, 1])
 for i, (name, (files, off)) in enumerate(SENS.items()):
     d = pd.concat([pd.read_csv(f, skiprows=3) for f in files]); d = d[d["_field"] == "value"].copy(); d["t"] = pd.to_datetime(d["_time"], utc=True); d["range_mm"] = d["_value"].astype(float); d["off_tag"] = d.offset.astype(float); d = d.sort_values("t").drop_duplicates("t")

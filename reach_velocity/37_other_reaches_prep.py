@@ -1,5 +1,5 @@
-"""Step 9a. The Upper and Lower reaches with their own stage sensors (MaxBotix ARB017 on the Upper, ARB112 on the Lower; files added to
-data/ on 15 and 18 September 2026). Sensor cleaning the Middle's way (implausible readings out, spikes against a 6 h rolling median out,
+"""Step 9a. The Upper and Lower reaches with their own stage sensors (MaxBotix ARB013 on the Upper, ARB112 on the Lower; Lower files added to
+data/ on 15 and 18 September 2026, the Upper record replaced on 18 November 2026). Sensor cleaning the Middle's way (implausible readings out, spikes against a 6 h rolling median out,
 10-min grid, 3 h median; the daily wobble is measured and reported, not removed), stage at each reading's time, the RTK water surface tied
 to the sensor per session (one slope), the bed on the sensor datum, features at a reference stage, and the day-out grid over (h0, gamma).
 Outputs: data_clean/reach_{r}_stage_10min.csv, reach_{r}_points_sensor.csv, reach_{r}_tie.csv, reach_{r}_law_grid.csv, reach_{r}_sensor_qc.json, figures/14_other_reaches_sensor_prep.png"""
@@ -11,8 +11,18 @@ import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt; impor
 from gpcore import *; from uncertainty import *
 warnings.filterwarnings("ignore"); t0 = time.time(); log = lambda *a: (print(f"[{time.time()-t0:5.0f}s]", *a), sys.stdout.flush())
 FT = 0.3048; TZ = "America/Detroit"
-CFG = {"Upper": {"files": [str(RAW / "26_depthSensorData_Upper.csv")], "offset_mm": 1587.5, "site": "ARB017", "along_sensor_m": 2219.0, "note": "sensor on the river 1.4 km from the nearest section, mid-reach"},
-       "Lower": {"files": [str(RAW / "25_depthSensorData_Lower.csv"), str(RAW / "26_depthSensorData_Lower.csv")], "offset_mm": 6705.6, "site": "ARB112", "along_sensor_m": -258.0, "note": "sensor 258 m above the first section, below Flat Rock dam; the offset tag 5943.6 before 8 June 2026 is a tag error, the range is continuous"}}
+CFG = {"Upper": {"files": [str(RAW / "26_depthSensorData_Upper.csv")], "offset_mm": 3048.0, "site": "ARB013", "lat_lon": (42.51365577, -83.68990820), "note": "sensor on the main stem upstream of the surveyed stretch (record replaced 18 Nov 2026: ARB013, offset tag 3048 mm)"},
+       "Lower": {"files": [str(RAW / "25_depthSensorData_Lower.csv"), str(RAW / "26_depthSensorData_Lower.csv")], "offset_mm": 6705.6, "site": "ARB112", "lat_lon": None, "along_sensor_m": -258.0, "note": "sensor 258 m above the first section, below Flat Rock dam; the offset tag 5943.6 before 8 June 2026 is a tag error, the range is continuous"}}
+def sensor_along_m(reach, lat_lon, pts):
+    """The sensor's position along the reach centreline (m, same origin as the points' along_m), from its coordinates."""
+    import geopandas as gpd
+    from shapely.geometry import Point
+    from shapely.ops import linemerge
+    from pyproj import Transformer
+    cl = gpd.read_file(RAW / f"centerline_union_{reach}.geojson"); u = cl.geometry.union_all() if hasattr(cl.geometry, "union_all") else cl.geometry.unary_union; line = u if u.geom_type == "LineString" else linemerge(u)
+    x, y = Transformer.from_crs(4326, cl.crs, always_xy=True).transform(lat_lon[1], lat_lon[0]); p0 = pts.iloc[0]
+    origin = line.project(Point(p0.Easting, p0.Northing)) - p0.along_m / FT   # the points' along_m origin, in the line's units (ft)
+    return float((line.project(Point(x, y)) - origin) * FT), float(line.distance(Point(x, y)) * FT)
 def clean_stage(files, offset_mm):
     d = pd.concat([pd.read_csv(f, skiprows=3) for f in files]); d = d[d["_field"] == "value"].copy(); d["time_utc"] = pd.to_datetime(d["_time"], utc=True); d["stage_raw_m"] = (offset_mm - d["_value"].astype(float)) / 1000
     d = d.sort_values("time_utc").drop_duplicates("time_utc").set_index("time_utc"); n0 = len(d); ok = d.stage_raw_m.between(0.05, 3.0); d = d[ok]; n1 = len(d)
@@ -32,8 +42,11 @@ INK, INK2, AXIS, GRID, BLUE, ORANGE, GREEN, DARK, MUTED = "#0b0b0b", "#52514e", 
 plt.rcParams.update({"font.family": "sans-serif", "font.sans-serif": ["Helvetica", "Arial", "DejaVu Sans"], "font.size": 8, "axes.edgecolor": AXIS, "axes.linewidth": 0.6, "grid.color": GRID, "grid.linewidth": 0.5, "legend.frameon": False, "savefig.dpi": 200, "axes.facecolor": "#fcfcfb"})
 fig = plt.figure(figsize=(18, 10)); gs = fig.add_gridspec(2, 4, wspace=0.3, hspace=0.45, width_ratios=[2, 1, 1, 1])
 for i, (reach, cfg) in enumerate(CFG.items()):
-    g, qc = clean_stage(cfg["files"], cfg["offset_mm"]); g.to_csv(D / f"reach_{reach}_stage_10min.csv"); sm = g.stage_m.dropna(); qc.update({"site": cfg["site"], "offset_mm": cfg["offset_mm"], "note": cfg["note"], "along_sensor_m": cfg["along_sensor_m"]})
-    pts = pd.read_csv(D / f"reach_{reach}_points.csv"); pts["time_utc"] = pts.location_id.map(tloc); pts["stage_m"] = [stage_at(sm, t) for t in pts.time_utc]; pts["stage_day_median_m"] = pts.date.map(sm.groupby(sm.index.date).median().rename(index=str))
+    g, qc = clean_stage(cfg["files"], cfg["offset_mm"]); g.to_csv(D / f"reach_{reach}_stage_10min.csv"); sm = g.stage_m.dropna(); qc.update({"site": cfg["site"], "offset_mm": cfg["offset_mm"], "note": cfg["note"], "along_sensor_m": cfg.get("along_sensor_m")})
+    pts = pd.read_csv(D / f"reach_{reach}_points.csv")
+    if cfg.get("lat_lon"):
+        cfg["along_sensor_m"], off_line = sensor_along_m(reach, cfg["lat_lon"], pts); qc.update({"along_sensor_m": cfg["along_sensor_m"], "sensor_offset_from_centreline_m": off_line, "sensor_lat_lon": list(cfg["lat_lon"])})
+    pts["time_utc"] = pts.location_id.map(tloc); pts["stage_m"] = [stage_at(sm, t) for t in pts.time_utc]; pts["stage_day_median_m"] = pts.date.map(sm.groupby(sm.index.date).median().rename(index=str))
     pts["stage_m"] = pts.stage_m.fillna(pts.stage_day_median_m); qc["readings_without_stage_at_time"] = int(pts.stage_m.isna().sum())
     # ---- the tie: RTK water surface against the sensor, one offset per session (day) and one slope, on the transects with a good fix
     T = pd.read_csv(D / f"reach_{reach}_transects.csv"); T["stage_m"] = [float(pts[pts.transect == t].stage_m.median()) for t in T.transect]; good = T[T.rtk_good & T.stage_m.notna()].copy(); good["diff"] = good.wse_rtk_m - good.stage_m; good["dx"] = good.along_m - cfg["along_sensor_m"]

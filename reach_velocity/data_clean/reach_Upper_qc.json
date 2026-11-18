@@ -2,10 +2,9 @@
   "reach": "Upper",
   "gauge": "Huron River near Hamburg (04172000), 6 km downstream",
   "rows_by_type": {
-    "Transect": 1002,
-    "Other": 161,
-    "Thalweg": 3,
-    "NaN": 2
+    "Transect": 770,
+    "Other": 138,
+    "Thalweg": 3
   },
   "BT_transects_set_aside": {
     "transects": [],
@@ -13,33 +12,33 @@
     "why": "one reading per point at 0.4 of the depth, elevations 7 m above the reach's surface (another datum or no fix)"
   },
   "transect_filter": {
-    "rows": 1002,
-    "with velocity, height and depth": 973,
-    "velocity >= 0": 944,
-    "height not above the water surface": 943
+    "rows": 770,
+    "with velocity, height and depth": 749,
+    "velocity >= 0": 732,
+    "height not above the water surface": 732
   },
-  "z0_m": 0.00794328234724282,
+  "z0_m": 0.00707945784384138,
   "z0_within_5pct_of_min_m": [
-    0.004466835921509635,
-    0.012589254117941675
+    0.0035481338923357532,
+    0.01122018454301964
   ],
-  "profiles_in_z0_fit": 186,
+  "profiles_in_z0_fit": 145,
   "locations": {
-    "n": 224,
+    "n": 165,
     "a_zero_standing": 3,
-    "a_median": 0.04497793926859748,
-    "a_sd_median": 0.01060450198392204,
-    "fit_r2_median": 0.7207665833445125
+    "a_median": 0.04945984345974665,
+    "a_sd_median": 0.010099448918184916,
+    "fit_r2_median": 0.710827105134475
   },
   "geometry": {
-    "reach_length_m": 7668.927027151037,
-    "max_offset_from_centreline_m": 22.604365603091573,
-    "corr_rel_across_vs_across": 0.6649229980163838,
-    "width_m_median": 21.507406307531323
+    "reach_length_m": 907.8222641147786,
+    "max_offset_from_centreline_m": 22.60436560309157,
+    "corr_rel_across_vs_across": 0.8300841632815352,
+    "width_m_median": 20.323020752298206
   },
   "slope": {
     "cm_per_100m": 5.863010501911958,
-    "se_cm_per_100m": 1.220595422502329,
+    "se_cm_per_100m": 1.2205954225008668,
     "from_good_transects": 18,
     "days": [
       "2026-06-03",
@@ -49,12 +48,12 @@
       "2026-07-13",
       "2026-07-27"
     ],
-    "resid_sd_cm": 2.191017366358151,
-    "along_ref_m": 6960.755622401526
+    "resid_sd_cm": 2.1910173663585244,
+    "along_ref_m": 199.6508593652681
   },
   "rating": {
-    "stage_vs_lnQ_slope_m": 0.39450847355009394,
-    "intercept_m": 260.66395521808687,
+    "stage_vs_lnQ_slope_m": 0.39450847355011615,
+    "intercept_m": 260.6639552180868,
     "residual_sd_cm": 19.6867275155777,
     "n_days": 6,
     "Q_range_cfs": [
@@ -65,21 +64,13 @@
       262.3928602251404,
       263.0032428575275
     ],
-    "corr_stage_lnQ": 0.640501009212818
+    "corr_stage_lnQ": 0.6405010092128182
   },
   "transects": {
-    "n": 28,
+    "n": 21,
     "rtk_good": 18,
     "tied_total": 21,
-    "untied": [
-      "0810-T01",
-      "0810-T02",
-      "0810-T03",
-      "0812-T01",
-      "0819-T01",
-      "0819-T02",
-      "0819-T03"
-    ],
+    "untied": [],
     "days_all": [
       "2026-06-03",
       "2026-06-04",
@@ -87,10 +78,7 @@
       "2026-06-11",
       "2026-06-24",
       "2026-07-13",
-      "2026-07-27",
-      "2026-08-10",
-      "2026-08-12",
-      "2026-08-19"
+      "2026-07-27"
     ],
     "days_good": [
       "2026-06-03",
@@ -102,12 +90,12 @@
     ]
   },
   "substrate_counts": {
-    "not noted": 103,
-    "sand": 50,
-    "gravel": 39,
-    "silt": 26,
+    "not noted": 92,
+    "gravel": 26,
+    "silt": 21,
+    "sand": 20,
     "cobble": 4,
     "woody debris": 2
   },
-  "wake_flagged": 4
+  "wake_flagged": 3
 }
