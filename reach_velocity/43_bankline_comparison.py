@@ -105,10 +105,118 @@ def figure_sets(R):
     json.dump(summ, open(OUT / "summary_build.json", "w"), indent=1); return summ
 
 
+# ---------------------------------------------------------------- scoring (after sign-off) ---
+def model_points(reach):
+    """The GP's point table with each reach's primary stage law applied (as in 20_/38_)."""
+    from gpcore import load_points, with_target
+    if reach == "Middle":
+        import uncertainty as U
+        df = load_points().merge(pd.read_csv(D / "locations.csv")[["location_id", "Easting", "Northing"]], on="location_id")
+        h0, gam = U.LAW_RIDGE[0]
+    else:
+        df = pd.read_csv(D / f"reach_{reach}_chain_points.csv"); h0, gam = json.load(open(D / f"reach_{reach}_chain_summary.json"))["law"]["primary"]
+    return with_target(df, ("stage", gam, h0)).reset_index(drop=True)
+
+
+def lines_from(reach, z, st, neg, pos, old):
+    return B.offsets_to_lines(reach, st, neg, pos, old)
+
+
+def section_out(d):
+    """Leave one section out; returns mu, sd (GP sd combined with the point's own sd, as in 38_)."""
+    from gpcore import Model
+    MU, SD = np.full(len(d), np.nan), np.full(len(d), np.nan)
+    for t in sorted(d.transect.unique()):
+        te = (d.transect == t).to_numpy(); m = Model(n_restarts=1).fit(d[~te]); mu, sd = m.predict(d[te])
+        MU[te], SD[te] = mu, np.sqrt(sd ** 2 + d.sd_y.to_numpy()[te] ** 2)
+    return MU, SD
+
+
+def _A(m, s):
+    return m * (2 * norm.cdf(m / s) - 1) + 2 * s * norm.pdf(m / s)
+
+
+def mixture_scores(y, MU, SD):
+    """CRPS and PIT of an equal-weight Gaussian mixture per point; MU, SD are (draws, points)."""
+    k = MU.shape[0]; w = 1.0 / k
+    e1 = w * _A(y[None, :] - MU, SD).sum(0)
+    e2 = sum(w * w * _A(MU[i] - MU[j], np.sqrt(SD[i] ** 2 + SD[j] ** 2)) for i in range(k) for j in range(k))
+    pit = (w * norm.cdf((y[None, :] - MU) / SD)).sum(0)
+    return e1 - 0.5 * e2, pit
+
+
+def score_reach(reach, log):
+    d = model_points(reach); z = np.load(OUT / f"sets_{reach}.npz", allow_pickle=True)
+    st = pd.DataFrame(z["st"], columns=list(z["st_cols"])); old = B.set_A(reach); days = list(z["days"])
+    banksB = gpd.read_file(OUT / f"banks_B_{reach}.geojson")
+    res = {}
+    for arm, banks in (("A", old), ("B", banksB)):
+        dd = d.copy(); dd[["dist_bank_m", "width_m", "rel_across"]] = B.bank_features(dd, banks)[["dist_bank_m", "width_m", "rel_across"]]
+        mu, sd = section_out(dd); zz = (dd.y.to_numpy() - mu) / sd
+        crps = sd * (zz * (2 * norm.cdf(zz) - 1) + 2 * norm.pdf(zz) - 1 / np.sqrt(np.pi)); res[arm] = (crps, norm.cdf(zz), mu, sd); log(f"  {reach} {arm}: CRPS {crps.mean():.3f}")
+    MU, SD = [], []
+    for k in range(B.N_DRAWS):
+        dd = d.copy()
+        for dy in sorted(dd.date.unique()):
+            m_ = (dd.date == dy).to_numpy(); j = days.index(dy); neg, pos = z["Cdraws"][k, j, 0], z["Cdraws"][k, j, 1]
+            dd.loc[m_, ["dist_bank_m", "width_m", "rel_across"]] = B.bank_features(dd[m_], B.offsets_to_lines(reach, st, neg, pos, old))[["dist_bank_m", "width_m", "rel_across"]].to_numpy()
+        mu, sd = section_out(dd); MU.append(mu); SD.append(sd); log(f"  {reach} C draw {k + 1}/{B.N_DRAWS}")
+    MU, SD = np.array(MU), np.array(SD); crps, pit = mixture_scores(d.y.to_numpy(), MU, SD); res["C"] = (crps, pit, MU.mean(0), np.sqrt(SD.var(0) + 0) )
+    rows = []
+    for arm, (crps, pit, *_ ) in res.items():
+        rows.append(pd.DataFrame({"reach": reach, "set": arm, "location_id": d.location_id, "transect": d.transect, "crps": crps, "pit": pit,
+                                  "in90": (pit >= 0.05) & (pit <= 0.95)}))
+    return pd.concat(rows)
+
+
+def decide(P):
+    S = P.groupby(["reach", "set", "transect"]).agg(crps=("crps", "mean"), in90=("in90", "mean"), n=("crps", "size")).reset_index()
+    S.to_csv(OUT / "scores_sections.csv", index=False)
+    W = S.pivot_table(index=["reach", "transect"], columns="set", values="crps")
+    rows = []
+    for a, b in (("B", "A"), ("C", "A"), ("C", "B")):
+        for scope, w in [("all three", W)] + [(r, W.loc[r]) for r in REACHES]:
+            dif = (w[a] - w[b]).dropna(); rows.append({"pair": f"{a} - {b}", "scope": scope, "sections": int(len(dif)), "mean_diff": float(dif.mean()),
+                                                     "se": float(dif.std(ddof=1) / np.sqrt(len(dif))), "better_in_sections": int((dif < 0).sum())})
+    pr = pd.DataFrame(rows); pr["tie"] = pr.mean_diff.abs() < pr.se; pr.to_csv(OUT / "paired.csv", index=False)
+    tot = S.groupby("set").agg(crps=("crps", "mean"), in90=("in90", "mean")); per = S.groupby(["reach", "set"]).agg(crps=("crps", "mean"), in90=("in90", "mean"))
+    return S, pr, tot, per
+
+
+def figure_scores(S, pr, tot, per):
+    fig, axs = plt.subplots(1, 3, figsize=(17, 5.2)); COL = {"A": "#ea580c", "B": "#15803d", "C": "#2563eb"}
+    ax = axs[0]; x = np.arange(len(REACHES)); w = 0.26
+    for k, s in enumerate("ABC"):
+        v = [per.loc[(r, s), "crps"] for r in REACHES]; ax.bar(x + (k - 1) * w, v, w, color=COL[s], label=s)
+        for xi, vi in zip(x + (k - 1) * w, v): ax.text(xi, vi + 0.005, f"{vi:.3f}", ha="center", fontsize=8)
+    ax.set_xticks(x); ax.set_xticklabels(REACHES); ax.set_ylabel("CRPS of ln A, sections held out (lower is better)"); ax.legend(frameon=False, title="bank lines"); ax.set_title("Mean of section scores", loc="left")
+    ax = axs[1]
+    for k, s in enumerate("ABC"):
+        v = [per.loc[(r, s), "in90"] for r in REACHES]; ax.bar(x + (k - 1) * w, v, w, color=COL[s])
+    ax.axhline(0.9, color="#1f2937", lw=1, ls="--"); ax.set_ylim(0, 1); ax.set_xticks(x); ax.set_xticklabels(REACHES); ax.set_ylabel("share of points inside the 90% band"); ax.set_title("Coverage (target 0.90)", loc="left")
+    ax = axs[2]; q = pr[pr.scope == "all three"].reset_index(drop=True)
+    ax.errorbar(q.mean_diff, np.arange(len(q)), xerr=q.se, fmt="o", color="#1f2937", capsize=4)
+    for i, r in q.iterrows(): ax.text(r.mean_diff, i + 0.18, f"{r.mean_diff:+.3f} +/- {r.se:.3f}" + (" (tie)" if r.tie else ""), ha="center", fontsize=9)
+    ax.axvline(0, color="#9ca3af", lw=1); ax.set_yticks(range(len(q))); ax.set_yticklabels(q.pair); ax.set_ylim(-0.6, len(q) - 0.4)
+    ax.set_xlabel("paired difference in section CRPS (negative: first set better)"); ax.set_title(f"All three reaches, {int(q.sections.iloc[0])} sections, mean +/- 1 se", loc="left")
+    fig.suptitle("Bank-line sets scored under the rule in logbook entry 27 (each section held out in turn)", fontsize=12)
+    fig.tight_layout(); fig.savefig(F / "18_bankline_scores.png", dpi=160); plt.close(fig)
+
+
 if __name__ == "__main__":
     mode = sys.argv[1] if len(sys.argv) > 1 else "build"
     if mode == "build":
         R = {r: build(r) for r in REACHES}
         print(json.dumps(figure_sets(R), indent=1))
     elif mode == "score":
-        raise SystemExit("scoring runs after the PI signs off the sets (logbook entry 27)")
+        import time
+        T0 = time.time(); log = lambda m: print(f"[{time.time() - T0:6.0f}s] {m}", flush=True)
+        parts = []
+        for r in (sys.argv[2:] or REACHES):
+            f = OUT / f"scores_points_{r}.csv"
+            if not f.exists(): score_reach(r, log).to_csv(f, index=False)
+            parts.append(pd.read_csv(f))
+        P = pd.concat(parts); P.to_csv(OUT / "scores_points.csv", index=False)
+        if set(P.reach) == set(REACHES):
+            S, pr, tot, per = decide(P); figure_scores(S, pr, tot, per)
+            print(per.round(3).to_string()); print(tot.round(3).to_string()); print(pr.round(4).to_string())
