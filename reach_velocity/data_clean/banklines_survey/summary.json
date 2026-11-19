@@ -11,9 +11,10 @@
   "acres": 4.63,
   "points_outside": 0,
   "in_water_points": 286,
-  "reproduces_data_raw_m": {
-   "bank_lines_max_hausdorff": 0.0,
-   "centerline_hausdorff": 0.0
+  "reproduces_september_copies": {
+   "bank_lines": true,
+   "centerline_union": true,
+   "channel_extent": true
   }
  },
  "Middle": {
@@ -28,9 +29,10 @@
   "acres": 8.2,
   "points_outside": 0,
   "in_water_points": 794,
-  "reproduces_data_raw_m": {
-   "bank_lines_max_hausdorff": 0.0,
-   "centerline_hausdorff": 0.0
+  "reproduces_september_copies": {
+   "bank_lines": true,
+   "centerline_union": true,
+   "channel_extent": true
   }
  },
  "Lower": {
@@ -45,9 +47,10 @@
   "acres": 7.34,
   "points_outside": 0,
   "in_water_points": 161,
-  "reproduces_data_raw_m": {
-   "bank_lines_max_hausdorff": 0.0,
-   "centerline_hausdorff": 0.0
+  "reproduces_september_copies": {
+   "bank_lines": true,
+   "centerline_union": true,
+   "channel_extent": true
   }
  }
 }

@@ -4,7 +4,7 @@ record is a near-bed value: at 0.73 to 0.77 m of stage it reads what the neighbo
 that profile's column mean. Its stage response is then re-fitted with the surveyed depth under both readings. Output: adcp_recheck.json"""
 import json, numpy as np, pandas as pd
 from gpcore import *
-Z0 = json.load(open(D / "field_qc.json"))["z0_m"]; H0 = 0.45
+Z0 = json.load(open(D / "field_qc.json"))["z0_m"]; from uncertainty import PRIMARY; H0 = PRIMARY[0]
 ad = pd.read_csv(D / "adcp.csv"); loc = pd.read_csv(D / "locations.csv"); near = loc.assign(d=np.hypot(loc.x_m, loc.y_m)).nsmallest(3, "d")
 bed_adcp = float(near.bed_rtk_sensor_datum_m.iloc[0]); x = np.log(np.clip(ad.stage_m - H0, 0.02, None)); v = ad.velocity_ms.values; ok = v > 0.005
 h = ad.stage_m - bed_adcp; a_col = v / (np.log(np.clip(h, np.e * Z0, None) / Z0) - 1)

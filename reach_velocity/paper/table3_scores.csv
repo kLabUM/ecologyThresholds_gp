@@ -1,26 +1,26 @@
 test,quantity,value
-"Section held out (20 folds, 257 points)",CRPS of log A: six features + notes / bank distance alone / reach mean,0.307 / 0.320 / 0.414
-,MAE of log A: six features + notes / reach mean,0.417 / 0.567
+"Section held out (20 folds, 257 points)",CRPS of log A: six features + notes / bank distance alone / reach mean,0.311 / 0.316 / 0.414
+,MAE of log A: six features + notes / reach mean,0.425 / 0.567
 ,"95% band coverage, six features + notes",0.93
-,random ten-fold CRPS for the same three models (the cautionary comparison),0.280 / 0.315 / 0.412
-"Day held out (11 folds, 257 points)","CRPS of log a: stage law (0.45, 1.0) / local depth^0.5 / no law",0.309 / 0.329 / 0.394
-,CRPS across the law set (seven pairs),0.309 to 0.318
+,random ten-fold CRPS for the same three models (the cautionary comparison),0.283 / 0.314 / 0.412
+"Day held out (11 folds, 257 points)","CRPS of log a: stage law (0.45, 0.75) / local depth^0.5 / no law",0.321 / 0.328 / 0.373
+,CRPS across the law set (8 pairs),0.321 to 0.325
 ,day level: sd of the held-out day means before / after the law (log),0.34 / 0.17
-"Readings on held-out days (1,208 readings)",MAE / mean absolute deviation of the readings (m/s),0.082 / 0.119
-,95% band coverage,0.88
-,below or above 0.2 m/s called right / base rate,76% / 58%
-Sections on held-out days (20),measured section mean velocity inside the 90% band,"100% (MAE 0.048 m/s, median relative error 18%)"
+"Readings on held-out days (1,208 readings)",MAE / mean absolute deviation of the readings (m/s),0.084 / 0.119
+,95% band coverage,0.85
+,below or above 0.2 m/s called right / base rate,74% / 58%
+Sections on held-out days (20),measured section mean velocity inside the 90% band,"100% (MAE 0.055 m/s, median relative error 24%)"
 ,measured share below 0.2 m/s inside the 90% band,95% (MAE 12 points)
-"ADCP through 2025 (shape check, level fitted)",MAE of the law c (stage - 0.45) against the 10-min record,8 mm/s
-,sd of the log ratio over the season,0.110
+"ADCP through 2025 (shape check, level fitted)",MAE of the law c (stage - 0.45)^0.75 against the 10-min record,14 mm/s
+,sd of the log ratio over the season,0.169
 ,its own exponent on (stage - 0.45) at the surveyed depth: point / column reading,1.25 / 1.12
-Continuity (measured),20 section discharges from 11 days on one rating,"Q = 28 (stage - 0.45)^1.70 m3/s, 7% scatter"
-,"same-day sections, max/min of the measured discharge","1.11, 1.12, 1.03, 1.11, 1.10"
-"Continuity (modelled, common stage)",sd of log Q across the 20 sections at 0.70 / 0.90 / 1.30 m,0.135 / 0.092 / 0.140
-Reach share below 0.2 m/s at 0.90 m,sections (width- and length-weighted) / map with margins to the bank line,0.342 / 0.378
-,90% band half-width inside the surveyed range (points),7.6
-Season medians,2025 record / hours inside the surveyed range,41% / 36% (65% of hours)
-,2026 record / hours inside the surveyed range,34% / 34% (50% of hours)
-,May 2026 (extrapolated: 24% of its hours above the range),"24% [18, 32]"
-Nests (59 in wet cells),AUC of nests against the wet channel: field velocity / bank distance / place factor / depth,0.72 / 0.76 / 0.74 / 0.50
-,field velocity within bank-distance strata (+-2 m),0.53 (p = 0.20)
+Continuity (measured),20 section discharges from 11 days on one rating,"Q = 28 (stage - 0.45)^1.70 m3/s, 6% scatter"
+,"same-day sections, max/min of the measured discharge","1.10, 1.11, 1.01, 1.11, 1.10"
+"Continuity (modelled, common stage)",sd of log Q across the 20 sections at 0.70 / 0.90 / 1.30 m,0.143 / 0.113 / 0.137
+Reach share below 0.2 m/s at 0.90 m,sections (width- and length-weighted) / map with margins to the bank line,0.362 / 0.480
+,90% band half-width inside the surveyed range (points),7.7
+Season medians,2025 record / hours inside the surveyed range,45% / 39% (65% of hours)
+,2026 record / hours inside the surveyed range,35% / 35% (50% of hours)
+,May 2026 (extrapolated: 24% of its hours above the range),"23% [18, 30]"
+Nests (59 in wet cells),AUC of nests against the wet channel: field velocity / bank distance / place factor / depth,0.63 / 0.69 / 0.66 / 0.45
+,field velocity within bank-distance strata (+-2 m),0.45 (p = 0.00)

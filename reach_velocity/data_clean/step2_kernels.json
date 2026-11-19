@@ -1,66 +1,66 @@
 {
   "coords": {
     "scales": {
-      "amp_sd": 0.7435911896824384,
-      "nugget_sd": 0.19006963447512604,
-      "along_m": 33.586516475219945,
-      "rel_across": 0.6503500313959012
+      "amp_sd": 0.7634830525710402,
+      "nugget_sd": 0.1401384729431645,
+      "along_m": 30.103027929848086,
+      "rel_across": 0.6176624188246309
     },
-    "kernel": "1.04**2 * Matern(length_scale=[0.186, 1.12], nu=1.5) + WhiteKernel(noise_level=0.0701)",
+    "kernel": "1.06**2 * Matern(length_scale=[0.167, 1.05], nu=1.5) + WhiteKernel(noise_level=0.0381)",
     "mean_coefs": {
-      "intercept": -1.9730104738825647
+      "intercept": -1.9730104738825636
     }
   },
   "full features": {
     "scales": {
-      "amp_sd": 0.7987845448887073,
-      "nugget_sd": 0.10364737676696524,
-      "along_m": 112.70818689867781,
-      "rel_across": 2.2363514188681806,
-      "dist_bank_m": 18.461010014826243,
-      "rel_depth": 0.7141366329717543,
-      "section_mean_depth_m": 0.17867671179310265,
-      "lateral_bed_slope_abs": 0.4796512479346775
+      "amp_sd": 0.7831152392090113,
+      "nugget_sd": 0.09731565170712887,
+      "along_m": 111.20641855653255,
+      "rel_across": 2.1569184651524735,
+      "dist_bank_m": 17.25298886375977,
+      "rel_depth": 0.776618589015411,
+      "section_mean_depth_m": 0.15768853582106368,
+      "lateral_bed_slope_abs": 0.46608389907726155
     },
-    "kernel": "1.11**2 * Matern(length_scale=[0.624, 3.84, 2.74, 3.27, 2.22, 15.6], nu=1.5) + WhiteKernel(noise_level=0.0209)",
+    "kernel": "1.09**2 * Matern(length_scale=[0.615, 3.66, 2.57, 3.56, 1.96, 15.2], nu=1.5) + WhiteKernel(noise_level=0.0184)",
     "mean_coefs": {
-      "intercept": -1.9730104738825647
+      "intercept": -1.9730104738825636
     }
   },
   "full features + notes": {
     "scales": {
-      "amp_sd": 0.6181774936357105,
-      "nugget_sd": 0.19359114778276587,
-      "along_m": 119.9214744178044,
-      "rel_across": 2.0837909489323274,
-      "dist_bank_m": 14.994090942824844,
-      "rel_depth": 0.583190738928043,
-      "section_mean_depth_m": 0.103919856107512,
-      "lateral_bed_slope_abs": 0.7249703822117896
+      "amp_sd": 0.66590278688757,
+      "nugget_sd": 0.22480233667043234,
+      "along_m": 163.1357262154588,
+      "rel_across": 2.6028840539124474,
+      "dist_bank_m": 20.45146147900688,
+      "rel_depth": 0.7095811571923057,
+      "section_mean_depth_m": 0.10653327230912497,
+      "lateral_bed_slope_abs": 0.5116090123593323
     },
-    "kernel": "0.98**2 * Matern(length_scale=[0.664, 3.58, 2.22, 2.67, 1.29, 23.6], nu=1.5) + WhiteKernel(noise_level=0.0941)",
+    "kernel": "1.06**2 * Matern(length_scale=[0.903, 4.42, 3.04, 3.25, 1.32, 16.7], nu=1.5) + WhiteKernel(noise_level=0.127)",
     "mean_coefs": {
-      "intercept": -1.8875376697834922,
-      "sub_cobble": -0.07844820492788812,
-      "sub_gravel": -0.23216763224653358,
-      "sub_sand": -0.5147280498652589,
-      "sub_silt": -1.1415240345625635,
-      "sub_vegetation": -0.13148508191357575,
-      "sub_woody debris": 0.243550180676177,
+      "intercept": -1.8875376697834916,
+      "sub_cobble": -0.07844820492788784,
+      "sub_gravel": -0.2321676322465335,
+      "sub_sand": -0.514728049865259,
+      "sub_silt": -1.141524034562562,
+      "sub_vegetation": -0.1314850819135757,
+      "sub_woody debris": 0.24355018067617704,
       "wake_flag": -0.6170093741322629
     }
   },
   "june25 full features": {
     "scales": {
-      "amp_sd": 0.8670366070860068,
+      "amp_sd": 0.7281600221896184,
       "nugget_sd": 0.004775536504368825,
-      "along_m": 175.70327540987822,
-      "rel_across": 4.329158676683002,
-      "dist_bank_m": 25.924452500177733,
-      "rel_depth": 1.7226854462915302,
-      "section_mean_depth_m": 3.589085527923749,
-      "lateral_bed_slope_abs": 1.9946903534253728
+      "along_m": 2001.6558984413555,
+      "rel_across": 9.682224235692207,
+      "dist_bank_m": 22.95024394893633,
+      "rel_depth": 1.4143202095671443,
+      "section_mean_depth_m": 0.24908275236900448,
+      "lateral_bed_slope_abs": 1.9946903534521387
     },
-    "kernel": "1.82**2 * Matern(length_scale=[4.39, 6.98, 4.11, 7.24, 50, 50], nu=1.5) + WhiteKernel(noise_level=0.0001)"
+    "kernel": "1.52**2 * Matern(length_scale=[50, 15.5, 3.51, 5.94, 3.47, 50], nu=1.5) + WhiteKernel(noise_level=0.0001)"
   }
 }

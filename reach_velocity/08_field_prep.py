@@ -51,7 +51,7 @@ tc = loc.dropna(subset=["v_1ft_from_others", "v_measured_near_1ft"]); qc["transf
 loc["v_1ft_sd"] = loc.v_1ft_sd.fillna(qc["transfer_check"]["MAE_m_s"])   # single-reading locations get the pooled transfer error
 loc["shallower_than_1ft"] = loc.water_depth_m < Z_REF; loc["inverted_profile"] = loc.a < 0; loc["extrapolated_up"] = (loc.h_max_m < 0.15) & (loc.n_used > 0)
 # ---------------------------------------------------------------- 2. reach coordinates
-cl = gpd.read_file(RAW / "centerline_union_Middle.geojson"); cl = cl.to_crs("ESRI:102690") if (cl.crs is None or cl.crs.is_geographic) else cl
+cl = gpd.read_file(HERE / "data_clean" / "banklines_survey" / "centerline_union_Middle.geojson"); cl = cl.to_crs("ESRI:102690") if (cl.crs is None or cl.crs.is_geographic) else cl
 u = cl.geometry.union_all() if hasattr(cl.geometry, "union_all") else cl.geometry.unary_union
 line = u if u.geom_type == "LineString" else linemerge(u)
 if line.geom_type != "LineString": line = max(line.geoms, key=lambda g: g.length); qc["centreline"] = "MultiLineString: longest part used"
@@ -74,9 +74,7 @@ loc = loc[cols].sort_values(["date", "transect", "along_m", "across_m"]).reset_i
 INK, INK2, AXIS, GRID, BLUE, ORANGE, C25, C26 = "#0b0b0b", "#52514e", "#c3c2b7", "#e1e0d9", "#2a78d6", "#eb6834", "#2a78d6", "#1a9e74"
 plt.rcParams.update({"font.family": "sans-serif", "font.sans-serif": ["Helvetica", "Arial", "DejaVu Sans"], "font.size": 8, "axes.edgecolor": AXIS, "axes.linewidth": 0.6, "grid.color": GRID, "grid.linewidth": 0.5, "legend.frameon": False, "savefig.dpi": 200, "axes.facecolor": "#fcfcfb"})
 fig = plt.figure(figsize=(14, 12)); gs = fig.add_gridspec(5, 6, hspace=0.75, wspace=0.35)
-ax = fig.add_subplot(gs[:, :2]); bk = gpd.read_file(RAW / "bank_lines_Middle.geojson"); bk = bk.to_crs("ESRI:102690") if (bk.crs is None or bk.crs.is_geographic) else bk
-for geom in bk.geometry:
-    for g_ in (geom.geoms if hasattr(geom, "geoms") else [geom]): xs, ys = np.array(g_.coords).T; ax.plot((xs - ADCP_E) * FT, (ys - ADCP_N) * FT, color="#b9b8b0", lw=0.8)
+ax = fig.add_subplot(gs[:, :2])   # no bank lines here: bank set C needs this script's locations.csv (entry 30); the maps from 19_ on draw it
 xs, ys = np.array(line.coords).T; ax.plot((xs - ADCP_E) * FT, (ys - ADCP_N) * FT, color="#6f6e68", lw=0.9, ls="--")
 sc = ax.scatter(loc.x_m, loc.y_m, c=loc.v_1ft, cmap="Blues", vmin=0, vmax=0.6, s=16, edgecolor=INK, lw=0.2, zorder=4); ax.scatter(loc.x_m[loc.shallower_than_1ft], loc.y_m[loc.shallower_than_1ft], facecolor="none", edgecolor=ORANGE, s=40, lw=0.8, zorder=5, label="shallower than 1 ft")
 ax.scatter([0], [0], marker="*", s=150, color=ORANGE, edgecolor="white", lw=0.6, zorder=6); fig.colorbar(sc, ax=ax, shrink=0.4, pad=0.02).set_label("velocity at 1 ft above the bed (m/s)")

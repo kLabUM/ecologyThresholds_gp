@@ -1,16 +1,16 @@
 {
  "nearest_profile": "2026-06-18|0618-T01|0618-10",
  "distance_m": 1.6673389124033915,
- "bed_at_adcp_sensor_datum_m": -0.0429641202764496,
- "water_depth_over_adcp_at_0.75_m": 0.7929641202764496,
+ "bed_at_adcp_sensor_datum_m": -0.0429641202766485,
+ "water_depth_over_adcp_at_0.75_m": 0.7929641202766485,
  "h0_previously_fitted_m": 0.55,
  "adcp_mean_at_0.73_to_0.77_m_s": 0.07470473833097595,
  "neighbour_profile_amplitude_a": 0.0741046079940697,
  "neighbour_column_mean_m_s": 0.23546073830944872,
  "log_law_height_where_v_equals_adcp_m": 0.0307476254139013,
  "adcp_exponent_on_stage_minus_0.45": {
-  "point reading (v proportional to a)": 1.2519484174740505,
-  "column reading with the surveyed depth": 1.1186100444198779
+  "point reading (v proportional to a)": 1.2519484174740512,
+  "column reading with the surveyed depth": 1.1186100444199172
  },
  "field_A_at_adcp_over_record": {
   "note": "the field's A at the ADCP position against the record's implied A under the point reading at 3 cm; the ratio is what an instrument model has to explain"

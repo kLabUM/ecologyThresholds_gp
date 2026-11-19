@@ -3,11 +3,12 @@ F1 site, data, target. F2 the conveyance field and how well it is known. F3 one 
 F4 spatial rating curves for two seasons. F5 the ecological number and the nests."""
 import json, sys, warnings
 from pathlib import Path
+from uncertainty import PRIMARY   # the primary stage law, read from the saved law grid (entry 30)
 import numpy as np, pandas as pd, geopandas as gpd
 import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt; import matplotlib.dates as mdates; from matplotlib.colors import ListedColormap
 warnings.filterwarnings("ignore")
 ROOT = Path(__file__).resolve().parents[1]; HERE = Path(__file__).resolve().parent; D = HERE / "data_clean"; RAW = HERE / "data_raw"; P = HERE / "paper"; P.mkdir(exist_ok=True)
-FT = 0.3048; ADCP_E, ADCP_N = 13244857.0, 319995.5; H0, GAM = 0.45, 1.0; Z0 = json.load(open(D / "field_qc.json"))["z0_m"]; THR = 0.20; SURVEYED = (0.74, 1.09)
+FT = 0.3048; ADCP_E, ADCP_N = 13244857.0, 319995.5; H0, GAM = PRIMARY; Z0 = json.load(open(D / "field_qc.json"))["z0_m"]; THR = 0.20; SURVEYED = (0.74, 1.09)
 INK, INK2, AXIS, GRID, BLUE, ORANGE, GREEN, DARK, MUTED, BEIGE = "#0b0b0b", "#52514e", "#b9b8ae", "#e4e3dc", "#2a78d6", "#eb6834", "#1a9e74", "#0d366b", "#898781", "#e9e5dc"
 C25, C26 = BLUE, ORANGE
 plt.rcParams.update({"font.family": "sans-serif", "font.sans-serif": ["Helvetica", "Arial", "DejaVu Sans"], "font.size": 7, "axes.titlesize": 7.5, "axes.labelsize": 7, "xtick.labelsize": 6.5, "ytick.labelsize": 6.5, "legend.fontsize": 6.5, "axes.edgecolor": AXIS, "axes.linewidth": 0.5, "grid.color": GRID, "grid.linewidth": 0.4, "legend.frameon": False, "axes.facecolor": "white", "axes.titlelocation": "left", "xtick.major.size": 2, "ytick.major.size": 2, "axes.titlepad": 3})
@@ -19,7 +20,7 @@ def vbar_at(logA, bed, stage):
 loc = pd.read_csv(D / "locations.csv"); loc = loc[loc.a > 0].copy(); loc["A"] = loc.a / np.clip(loc.stage_m - H0, 0.02, None) ** GAM
 rd = pd.read_csv(D / "readings_transect.csv"); ser = pd.read_csv(D / "series_10min.csv", parse_dates=["time_utc"]); ser["time_utc"] = pd.to_datetime(ser.time_utc, utc=True)
 grid = pd.read_csv(D / "grid.csv"); sec_along = loc.groupby("transect").along_m.median().sort_values(); order = sec_along.index.tolist()
-bk = gpd.read_file(RAW / "bank_lines_Middle.geojson"); banks = [(np.array(g.coords)[:, 0] - ADCP_E) * FT for g in bk.geometry], [(np.array(g.coords)[:, 1] - ADCP_N) * FT for g in bk.geometry]
+bk = gpd.read_file(D / "banks_c" / "C_Middle_reference.geojson"); banks = [(np.array(g.coords)[:, 0] - ADCP_E) * FT for g in bk.geometry], [(np.array(g.coords)[:, 1] - ADCP_N) * FT for g in bk.geometry]   # bank set C at the reference stage 0.90 m (19_, entry 30)
 def draw_banks(ax, lw=0.5): [ax.plot(x, y, color="#8a877f", lw=lw) for x, y in zip(*banks)]
 def draw_sections(ax, lw=0.5, color=INK, alpha=0.7):
     for t, g in loc.groupby("transect"): g = g.sort_values("across_m"); ax.plot(g.x_m, g.y_m, color=color, lw=lw, alpha=alpha)
@@ -48,14 +49,14 @@ ax.set_xlabel("velocity (m/s)"); ax.set_ylabel("height above the bed (m)"); ax.s
 for k, (col, lab, ttl) in enumerate([("a", "log a, the amplitude on its day", "Before: the day's stage\nis in the target"), ("A", "log A = log a − log(stage − 0.45)", "After: the conveyance,\na property of the place")]):
     ax = fig.add_subplot(gs[1, 1 + k]); dm = loc.groupby("date").agg(st=("stage_m", "median"), med=(col, lambda v: np.log(v).median()), lo=(col, lambda v: np.log(v).quantile(.25)), hi=(col, lambda v: np.log(v).quantile(.75)), yr=("year", "first"))
     for d, r in dm.iterrows(): ax.errorbar(r.st, r.med, yerr=[[r.med - r.lo], [r.hi - r.med]], fmt="o", ms=3.5, color=C25 if r.yr == 2025 else C26, elinewidth=0.7, capsize=0)
-    if col == "a": xx = np.linspace(0.72, 1.11, 30); ax.plot(xx, np.log(xx - H0) + dm.med.mean() - np.mean(np.log(dm.st - H0)), color=INK, lw=0.6, ls="--"); ax.text(0.86, -3.45, "dashed: a = A (stage − 0.45)", fontsize=6.2)
+    if col == "a": xx = np.linspace(0.72, 1.11, 30); ax.plot(xx, GAM * np.log(xx - H0) + dm.med.mean() - GAM * np.mean(np.log(dm.st - H0)), color=INK, lw=0.6, ls="--"); ax.text(0.86, -3.45, f"dashed: a = A (stage − {H0})^{GAM:g}", fontsize=6.2)
     ax.set_xlabel("stage on the survey day (m)"); ax.set_ylabel(lab); ax.set_title(ttl); ax.grid(True); ax.set_axisbelow(True); ax.set_ylim(-3.6, -1.2); letter(ax, "de"[k])
 save(fig, "F1_site_data_target")
 # ================= F2: what is learned (the field is at-a-station geometry, and its held-out error)
 fig = plt.figure(figsize=(7.1, 5.8)); gs = fig.add_gridspec(2, 2, hspace=0.5, wspace=0.32, width_ratios=[1, 1])
 fe = pd.read_csv(D / "features.csv"); fe = fe[fe.A > 0]; fe["A_law"] = loc.set_index("location_id").A.reindex(fe.location_id).values
 ax = fig.add_subplot(gs[0, 0]); sc = ax.scatter(fe.dist_bank_m, fe.A_law, c=fe.section_mean_depth_m, cmap="viridis", s=12, edgecolor=INK, lw=0.2); cb = fig.colorbar(sc, ax=ax, shrink=0.7, pad=0.02); cb.set_label("section mean depth at 0.90 m (m)", fontsize=6.5); cb.ax.tick_params(labelsize=6)
-ax.set_yscale("log"); ax.set_xlabel("distance to the nearer bank (m)"); ax.set_ylabel("place factor A (m/s per m of stage above 0.45 m)"); ab = pd.read_csv(D / "step2_feature_ablation.csv").set_index("features"); ax.set_title("The place factor A against bank distance\n(alone it predicts a held-out section as well as six features)"); ax.grid(True, which="both"); ax.set_axisbelow(True); letter(ax, "a")
+ax.set_yscale("log"); ax.set_xlabel("distance to the nearer bank (m)"); ax.set_ylabel(f"place factor A (m/s per (m of stage above {H0} m)^{GAM:g})"); ab = pd.read_csv(D / "step2_feature_ablation.csv").set_index("features"); ax.set_title("The place factor A against bank distance\n(alone it predicts a held-out section as well as six features)"); ax.grid(True, which="both"); ax.set_axisbelow(True); letter(ax, "a")
 pr_all = pd.read_csv(D / "step2_predictions.csv"); pr_all = pr_all[pr_all.scheme == "transect_out"]; m2 = pd.read_csv(D / "step2_metrics.csv"); m_to = m2[m2.scheme == "transect_out"].set_index("model"); m_rf = m2[m2.scheme == "random_10fold"].set_index("model")
 ax = fig.add_subplot(gs[0, 1]); tsec = "AT0401"; pf = pr_all[(pr_all.model == "full features + notes") & (pr_all.transect == tsec)].merge(loc[["location_id", "across_m"]], on="location_id").sort_values("across_m"); pm = pr_all[(pr_all.model == "reach mean") & (pr_all.transect == tsec)].merge(loc[["location_id", "across_m"]], on="location_id").sort_values("across_m")
 ax.fill_between(pf.across_m, pf.mu - 1.96 * pf.sd, pf.mu + 1.96 * pf.sd, color=BLUE, alpha=0.2, lw=0, label="six features, 95% band"); ax.plot(pf.across_m, pf.mu, color=BLUE, lw=1.2); ax.plot(pm.across_m, pm.mu, color=MUTED, lw=1, ls="--", label="reach mean"); ax.scatter(pf.across_m, pf.y, s=16, color=INK, zorder=4, label="measured")
@@ -69,8 +70,8 @@ cb = fig.colorbar(sc, ax=ax, shrink=0.75, pad=0.02); cb.set_label("place factor 
 save(fig, "F2_conveyance_field")
 # ================= F3: identification of the stage law, and closure
 fig = plt.figure(figsize=(7.1, 5.8)); gs = fig.add_gridspec(2, 2, hspace=0.5, wspace=0.32)
-ax = fig.add_subplot(gs[0, 0]); off = pd.read_csv(D / "step3_day_offsets.csv"); o = off[off.law == "none"].copy(); xx = np.linspace(0.72, 1.11, 40); lawc = np.log(xx - H0) - np.mean(np.log(o.stage_m - H0)) + o.offset_log.mean(); after = o.offset_log - (np.log(o.stage_m - H0) - np.mean(np.log(o.stage_m - H0)) + o.offset_log.mean())
-ax.plot(xx, lawc, color=INK, lw=0.8, ls="--", label="the law: a = A (stage − 0.45 m)")
+ax = fig.add_subplot(gs[0, 0]); off = pd.read_csv(D / "step3_day_offsets.csv"); o = off[off.law == "none"].copy(); xx = np.linspace(0.72, 1.11, 40); lawc = GAM * np.log(xx - H0) - GAM * np.mean(np.log(o.stage_m - H0)) + o.offset_log.mean(); after = o.offset_log - (np.log(o.stage_m - H0) - np.mean(np.log(o.stage_m - H0)) + o.offset_log.mean())
+ax.plot(xx, lawc, color=INK, lw=0.8, ls="--", label=f"the law: a = A (stage − {H0} m)^{GAM:g}")
 for _, r in o.iterrows(): ax.scatter(r.stage_m, r.offset_log, s=24, color=C25 if r.year == 2025 else C26, edgecolor=INK, lw=0.3, zorder=3)
 ax.scatter(o.stage_m, after, s=20, facecolor="white", edgecolor=INK2, lw=0.6, zorder=3, label="after the law")
 ax.set_xlabel("stage on the survey day (m)"); ax.set_ylabel("day held out: mean residual of log a"); ax.set_title(f"Each day held out: the day level before the law\n(filled, sd {o.offset_log.std(ddof=1):.2f}) and after it (open, sd {after.std(ddof=1):.2f})"); ax.legend(loc="upper left"); ax.grid(True); ax.set_axisbelow(True); letter(ax, "a")
@@ -128,6 +129,6 @@ ax.fill_between(ec.stage_m, ec.E_lo * 100, ec.E_hi * 100, color=DARK, alpha=0.18
 ax.axvspan(*SURVEYED, color=GRID, alpha=0.6, lw=0); ax.axvspan(SURVEYED[1], 1.36, facecolor="none", hatch="////", edgecolor=GRID, lw=0); ax.text(0.755, 3, "surveyed range", fontsize=6, color=INK2); ax.text(1.12, 3, "extrapolated", fontsize=6, color=INK2)
 ax.set_xlabel("stage at the sensor (m)"); ax.set_ylabel("percent of the reach's wetted width"); ax.set_title("The ecological rating curve: habitat against stage\n(about 8 points of slow water lost per 10 cm of stage)"); ax.legend(loc="upper right", fontsize=6); ax.grid(True); ax.set_axisbelow(True); ax.set_ylim(0, 100); ax.set_xlim(0.65, 1.36); letter(ax, "c")
 ax = fig.add_subplot(gs[1, 1]); from scipy.stats import norm; xx = np.linspace(-13, 4, 400); vc = nb["velocity_coef_per_m_s"]
-for lab, (m_, s_), c in [("prior: USFWS 1983 spawning curve, weak", vc["prior"], MUTED), ("the 59 nests alone", vc["data_alone"], GREEN), ("posterior", vc["posterior"], DARK)]: ax.plot(xx, norm.pdf(xx, m_, s_), color=c, lw=1.4, label=f"{lab}: {m_:.1f} ± {s_:.1f}")
+for lab, (m_, s_), c in [("prior: USFWS 1983 spawning curve, weak", vc["prior"], MUTED), (f"the {json.load(open(D / 'nest_bayes.json'))['n_used']} nests alone", vc["data_alone"], GREEN), ("posterior", vc["posterior"], DARK)]: ax.plot(xx, norm.pdf(xx, m_, s_), color=c, lw=1.4, label=f"{lab}: {m_:.1f} ± {s_:.1f}")
 ax.axvline(0, color=INK, lw=0.5); ax.set_xlabel("velocity effect on nest use (log-odds per m/s, at the same bank distance and depth)"); ax.set_ylabel("density"); ax.set_title(f"The rule learned from the fish: a published curve\nupdated by the nests (half use at {nb['v50_m_s_posterior']['median']:.2f} m/s [{nb['v50_m_s_posterior']['ci90'][0]:.2f}, {nb['v50_m_s_posterior']['ci90'][1]:.2f}])"); ax.legend(fontsize=6); ax.grid(True); ax.set_axisbelow(True); letter(ax, "d")
 save(fig, "F5_ecological_number")

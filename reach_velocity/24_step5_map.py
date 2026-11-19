@@ -1,7 +1,9 @@
 """Step 5. From the sections to the reach: the bed between transects (GP on the RTK cross-sections and the bank points),
 the channel grid, the conveyance field queried on the grid, velocity and the share below a threshold at chosen stages,
 and where the bands are wide. Numbers still come from the sections; this is the map with its uncertainty.
-Outputs: grid.csv, step5_reach_totals.csv, figures/05_step5_map.png"""
+Bank lines: set C (entry 30); the grid fills C's channel at the highest stage of the record; grid.csv carries the bank features and
+the field at the reference stage, grid_levels.npz the same on the 5 cm stage grid (read by 26_, 33_, 35_, 36_ at each nest's stage).
+Outputs: grid.csv, grid_levels.npz, step5_reach_totals.csv, figures/05_step5_map.png"""
 import json, sys, time, warnings
 import numpy as np, pandas as pd, geopandas as gpd
 from shapely.geometry import Point
@@ -15,10 +17,11 @@ warnings.filterwarnings("ignore"); t0 = time.time(); log = lambda *a: (print(f"[
 RAW = HERE / "data_raw"; FT = 0.3048; ADCP_E, ADCP_N = 13244857.0, 319995.5; STAGE_REF = 0.90; THR = 0.20; STAGES = [0.75, 0.90, 1.10]
 df = load_points(); df["bed_m"] = df.bed_rtk_sensor_datum_m.fillna(df.bed_elev_m)
 # ---- geometry: centreline, banks, channel polygon
-cl = gpd.read_file(RAW / "centerline_union_Middle.geojson"); cl = cl.to_crs("ESRI:102690") if (cl.crs is None or cl.crs.is_geographic) else cl
+cl = gpd.read_file(D / "banklines_survey" / "centerline_union_Middle.geojson"); cl = cl.to_crs("ESRI:102690") if (cl.crs is None or cl.crs.is_geographic) else cl
 u = cl.geometry.union_all() if hasattr(cl.geometry, "union_all") else cl.geometry.unary_union; line = u if u.geom_type == "LineString" else linemerge(u)
-bk = gpd.read_file(RAW / "bank_lines_Middle.geojson"); bk = bk.to_crs("ESRI:102690") if (bk.crs is None or bk.crs.is_geographic) else bk; left, right = bk[bk.bank == "left"].geometry.iloc[0], bk[bk.bank == "right"].geometry.iloc[0]
-ext = gpd.read_file((RAW / "channel_extent_Middle.geojson") if (RAW / "channel_extent_Middle.geojson").exists() else (ROOT / "mapping" / "channel_extent_Middle.geojson")); ext = ext.to_crs("ESRI:102690") if (ext.crs is None or ext.crs.is_geographic) else ext; poly = ext.geometry.iloc[0]
+SF = banks_for("Middle"); REC = pd.read_csv(D / "series_10min.csv").stage_m; REC_MAX = float(REC.max())   # bank set C (entry 30)
+bk = SF.lines(STAGE_REF); left, right = bk[bk.bank == "left"].geometry.iloc[0], bk[bk.bank == "right"].geometry.iloc[0]   # drawn on the maps: C at the reference stage
+poly = SF.outline(REC_MAX)   # the grid covers C's channel at the highest stage of the record (19_ writes it as banks_c/C_outline_Middle.geojson); cells dry at lower water drop out by the wet test
 d_adcp = line.project(Point(ADCP_E, ADCP_N))
 def proj(e, n):
     pt = Point(e, n); d = line.project(pt); q = line.interpolate(d); d1, d2 = max(d - 5, 0), min(d + 5, line.length); t = np.array(line.interpolate(d2).coords[0]) - np.array(line.interpolate(d1).coords[0]); t /= np.linalg.norm(t); off = np.array([e - q.x, n - q.y])
@@ -34,8 +37,8 @@ lsb = gpb.kernel_.k1.k2.length_scale * sxb; log(f"bed GP: along scale {lsb[0]:.0
 minx, miny, maxx, maxy = poly.bounds; step = 2.0 / FT; gx, gy = np.meshgrid(np.arange(minx, maxx, step), np.arange(miny, maxy, step)); gx, gy = gx.ravel(), gy.ravel()
 inside = np.array([poly.contains(Point(x, y)) for x, y in zip(gx, gy)]); gx, gy = gx[inside], gy[inside]; P = np.array([proj(x, y) for x, y in zip(gx, gy)])
 grid = pd.DataFrame({"x_m": (gx - ADCP_E) * FT, "y_m": (gy - ADCP_N) * FT, "along_m": P[:, 0], "across_m": P[:, 1]}); grid = grid[(grid.along_m > df.along_m.min() - 15) & (grid.along_m < df.along_m.max() + 15)].reset_index(drop=True)
-pts = [Point(x / FT + ADCP_E, y / FT + ADCP_N) for x, y in zip(grid.x_m, grid.y_m)]; grid["dist_left"] = [left.distance(p) * FT for p in pts]; grid["dist_right"] = [right.distance(p) * FT for p in pts]
-grid["dist_bank_m"] = grid[["dist_left", "dist_right"]].min(axis=1); grid["rel_across"] = (grid.dist_right - grid.dist_left) / (grid.dist_left + grid.dist_right)
+grid["Easting"], grid["Northing"] = grid.x_m / FT + ADCP_E, grid.y_m / FT + ADCP_N
+grid["dist_bank_m"], grid["rel_across"], grid["width_m"] = SF.features(grid.Easting, grid.Northing, STAGE_REF)   # at the reference stage; grid_levels.npz has them on the stage grid
 mb, sb = gpb.predict((grid[["along_m", "across_m"]].values - mxb) / sxb, return_std=True); grid["bed_m"] = mb * zb_s + zb_m; grid["bed_sd_m"] = sb * zb_s
 grid["h_ref_m"] = np.clip(STAGE_REF - grid.bed_m, 0, None); abin = (grid.along_m // 10) * 10; grid["rel_depth"] = grid.h_ref_m / grid.groupby(abin).h_ref_m.transform("max").replace(0, np.nan); grid["rel_depth"] = grid.rel_depth.fillna(0)
 sec = df.groupby("transect").agg(along=("along_m", "median"), smd=("section_mean_depth_m", "first")).sort_values("along"); grid["section_mean_depth_m"] = np.interp(grid.along_m, sec.along, sec.smd)
@@ -43,7 +46,12 @@ grid["lateral_bed_slope_abs"] = float(df.lateral_bed_slope_abs.median())
 for c in NOTE_COLS: grid[c] = float(df[c].mean())   # the grid carries the population share of each note, not the 'nothing noted' class, so the map's mean matches the surveyed points
 log(f"grid: {len(grid)} cells of 2 m inside the channel polygon, along {grid.along_m.min():.0f} to {grid.along_m.max():.0f} m")
 # ---- the conveyance field on the grid
-ch = Chain(df); m = ch.models[ch.primary]; muA, sdA = m.predict(grid); grid["logA"], grid["logA_sd"] = muA, sdA
+ch = Chain(df, banks=banks_for("Middle")); m = ch.models[ch.primary]; muA, sdA = m.predict(grid); grid["logA"], grid["logA_sd"] = muA, sdA   # at the reference stage
+# the field on the stage grid (C's best estimate, primary law): what the nest scripts read at each nest's stage
+LV = SF.grid(float(REC.min()), REC_MAX); GL = {"levels": LV, "logA": [], "logA_sd": [], "dist_bank_m": [], "rel_across": []}
+for lv in LV:
+    dist, rel, wid = SF.features(grid.Easting, grid.Northing, lv); mu, sd = m.predict(grid.assign(dist_bank_m=dist, rel_across=rel)); GL["logA"].append(mu); GL["logA_sd"].append(sd); GL["dist_bank_m"].append(dist); GL["rel_across"].append(rel)
+np.savez_compressed(D / "grid_levels.npz", **{k: np.asarray(v) for k, v in GL.items()}); log(f"field on the stage grid: {len(LV)} levels, {LV[0]:.2f} to {LV[-1]:.2f} m")
 # nearest transect distance for each cell (how far from data)
 grid["dist_to_transect_m"] = [float(np.min(np.abs(sec.along.values - a))) for a in grid.along_m]
 grid.to_csv(D / "grid.csv", index=False); log(f"field on the grid: median sd of log A {np.median(sdA):.2f}; on transects {np.median(sdA[grid.dist_to_transect_m < 3]):.2f}, between (> 15 m) {np.median(sdA[grid.dist_to_transect_m > 15]):.2f}")

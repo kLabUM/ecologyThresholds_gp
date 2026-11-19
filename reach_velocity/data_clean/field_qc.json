@@ -9,7 +9,7 @@
     "n_profiles": 124,
     "MAE_m_s": 0.02961245494392126,
     "bias_m_s": -0.004456672094841409,
-    "r": 0.9591531402196083
+    "r": 0.9591531402196085
   },
   "centreline_orientation": "native direction is downstream",
   "duplicate_positions": 2,

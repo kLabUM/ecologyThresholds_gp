@@ -5,7 +5,9 @@
 
 A: the old lines (made by 44_banklines_survey.py, the original notebook code). B: surveyed edges (1 m out) with the 3DEP edges between them. C: stage-dependent edges at each survey
 day's sensor water level, with 20 draws of their uncertainty (lidar error, survey-to-lidar gap, the sensor tie).
-Inputs: data_raw/3dep_bank_transects_{r}.csv, bank_lines_{r}.geojson, centerline_union_{r}.geojson; data_clean point tables.
+Inputs: data_raw/3dep_bank_transects_{r}.csv; data_clean/banklines_survey/ (44_: set A and the centreline); data_clean point tables.
+This is the record of the comparison (entry 28). The model uses C through banklines_3dep.StageFeatures (entry 30), whose push-out rule
+adds the points of lower-water days; the C files here keep each day's own points, as scored.
 Outputs (data_clean/bankcmp/): sets_{r}.npz, banks_B_{r}.geojson, banks_C_{r}_{date}.geojson, anchors_{r}.csv, summary_build.json;
 score: scores_points.csv, scores_sections.csv, paired.csv, decision.json, figures/18_bankline_scores.png"""
 import json, sys, warnings

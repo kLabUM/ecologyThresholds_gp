@@ -46,7 +46,7 @@ def run(reach):
     crps_none = scores(np.concatenate(Y), np.concatenate(MU), np.concatenate(SD))["CRPS"]; out["law"] = {"primary": primary, "set": ridge, "CRPS_best": float(best.CRPS), "CRPS_none": float(crps_none), "L_range_survey": [float(d.L_m.min()), float(d.L_m.max())], "L_range_record": [float(np.polyval(b, sm.min())), float(np.polyval(b, sm.max()))]}
     log(f"   law in L: best {primary} CRPS {best.CRPS:.3f} vs none {crps_none:.3f}; set of {len(ridge)}")
     # ---- the chain: transect-out with the law, calibration, section-level day-out coverage
-    ch = Chain(d, primary=primary, ridge=ridge, n_restarts=2); dl = with_target(d, ("stage", primary[1], primary[0])); Y, MU, SD = [], [], []
+    ch = Chain(d, primary=primary, ridge=ridge, n_restarts=2, banks=banks_for(reach)); dl = with_target(d, ("stage", primary[1], primary[0])); Y, MU, SD = [], [], []
     for t in sorted(dl.transect.unique()):
         te = dl[dl.transect == t]; m = Model(n_restarts=1).fit(dl[dl.transect != t]); mu, sd = m.predict(te); Y.append(te.y.values); MU.append(mu); SD.append(np.sqrt(sd ** 2 + te.sd_y.values ** 2))
     Y, MU, SD = map(np.concatenate, (Y, MU, SD)); rm = float(np.average(dl.y, weights=1 / dl.sd_y ** 2)); s_to = scores(Y, MU, SD); s_rm = scores(Y, np.full(len(Y), rm), np.full(len(Y), float(dl.y.std())))
@@ -56,7 +56,7 @@ def run(reach):
     for dy in sorted(d.date.unique()):
         tr_ = d[d.date != dy]
         if len(tr_) < 20 or tr_.date.nunique() < 3: continue
-        ch_d = Chain(tr_, primary=primary, ridge=ridge, n_restarts=1)
+        ch_d = Chain(tr_, primary=primary, ridge=ridge, n_restarts=1, banks=banks_for(reach))
         for t in [t for t in order if secs[t].date.iloc[0] == dy]:
             p = secs[t]; L = float(p.L_m.median()); s1 = sample_reach(ch_d, [L], {t: p}, n=300, seed=21, threshold=THR); w = width_weights(p); h = p.water_depth_m.values; vb = p.a.values * (np.log(np.clip(h, np.e * z0, None) / z0) - 1)
             cov_rows.append({"section": t, "date": dy, "L_m": L, "mean_v_measured": float(np.sum(vb * w) / w.sum()), "mean_v_med": float(np.nanmedian(s1["mean_v"][t])), "mean_v_lo": float(np.nanquantile(s1["mean_v"][t], .05)), "mean_v_hi": float(np.nanquantile(s1["mean_v"][t], .95))})

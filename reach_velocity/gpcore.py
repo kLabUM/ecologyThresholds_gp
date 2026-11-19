@@ -11,7 +11,7 @@ SD_H = 0.06; SUBS = ["cobble", "gravel", "sand", "silt", "vegetation", "woody de
 FULL = ["along_m", "rel_across", "dist_bank_m", "rel_depth", "section_mean_depth_m", "lateral_bed_slope_abs"]
 Z0 = json.load(open(D / "field_qc.json"))["z0_m"]
 def load_points():
-    fe = pd.read_csv(D / "features.csv"); lc = pd.read_csv(D / "locations.csv")[["location_id", "a", "water_depth_m", "stage_m", "stage_raw_m", "x_m", "y_m", "across_m", "bed_rtk_sensor_datum_m", "bed_elev_m", "point"]]
+    fe = pd.read_csv(D / "features.csv"); lc = pd.read_csv(D / "locations.csv")[["location_id", "a", "water_depth_m", "stage_m", "stage_raw_m", "x_m", "y_m", "across_m", "bed_rtk_sensor_datum_m", "bed_elev_m", "point", "Easting", "Northing"]]
     df = fe.drop(columns=["across_m"]).merge(lc, on="location_id"); df = df[df.a > 0].reset_index(drop=True)
     q = pd.read_csv(D / "usgs_daily.csv"); df["Q_cfs"] = df.date.map(q.set_index("date").discharge_cfs)
     for s in SUBS: df[f"sub_{s}"] = (df.substrate == s).astype(float)

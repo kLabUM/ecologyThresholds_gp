@@ -7,6 +7,7 @@ from pathlib import Path
 import numpy as np, pandas as pd
 ROOT = Path(__file__).resolve().parents[1]; HERE = Path(__file__).resolve().parent; OUT = HERE / "data_clean"; OUT.mkdir(exist_ok=True)
 RAW = HERE / "data_raw" if (HERE / "data_raw").exists() else ROOT / "data"   # a copy of the raw files lives next to the logbook
+import provenance; provenance.check()   # every line or polygon file in the folder has a script that writes it (entry 30); stops here otherwise
 FT = 0.3048
 NORTHING_BAND = (280000, 323000)          # the field lead's rule for 'Middle' (State Plane MI South, ft)
 STAGE_DATUM_MM = 7313.2                   # sensor mount height above the bed datum, mm (offset tag in the 2025/2026 files)

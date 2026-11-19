@@ -10,11 +10,11 @@ from scipy.spatial import cKDTree
 from sklearn.linear_model import LogisticRegression
 import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
 from gpcore import *; from uncertainty import *
-rng = np.random.default_rng(0); Z0 = json.load(open(D / "field_qc.json"))["z0_m"]; H0 = 0.45
-df = load_points(); df["bed_m"] = df.bed_rtk_sensor_datum_m.fillna(df.bed_elev_m); ch = Chain(df)
-grid = pd.read_csv(D / "grid.csv"); nests = pd.read_csv(D / "step7_nests.csv"); nests = nests.dropna(subset=["v_pred_ms"]).reset_index(drop=True); tree = cKDTree(grid[["x_m", "y_m"]].values); cell = grid.iloc[tree.query(nests[["x_m", "y_m"]].values)[1]].reset_index(drop=True)
+rng = np.random.default_rng(0); Z0 = json.load(open(D / "field_qc.json"))["z0_m"]; H0, GAM = PRIMARY   # the primary stage law (uncertainty.law_set, entry 30)
+df = load_points(); df["bed_m"] = df.bed_rtk_sensor_datum_m.fillna(df.bed_elev_m); ch = Chain(df, banks=banks_for("Middle"))
+grid = pd.read_csv(D / "grid.csv"); nests = pd.read_csv(D / "step7_nests.csv"); nests = nests.dropna(subset=["v_pred_ms"]).reset_index(drop=True); tree = cKDTree(grid[["x_m", "y_m"]].values); cell = grid.iloc[tree.query(nests[["x_m", "y_m"]].values)[1]].reset_index(drop=True); cix = tree.query(nests[["x_m", "y_m"]].values)[1]; GLV = GridLevels()   # the field and bank distance at each nest's own stage (bank set C, entry 30)
 def vbar(logA, bed, st):
-    h = np.clip(st - bed, 0, None); a = np.exp(logA) * np.clip(st - H0, 0.02, None); return np.where(h > np.e * Z0, a * (np.log(np.clip(h, np.e * Z0, None) / Z0) - 1), np.nan), h
+    h = np.clip(st - bed, 0, None); a = np.exp(logA) * np.clip(st - H0, 0.02, None) ** GAM; return np.where(h > np.e * Z0, a * (np.log(np.clip(h, np.e * Z0, None) / Z0) - 1), np.nan), h
 # ---- (1) nest-calibrated thresholds with day-cluster bootstrap
 days = nests.date.values; udays = np.unique(days); qs = [0.5, 0.75, 0.9]
 def quant(v): return {f"q{int(q*100)}": float(np.quantile(v, q)) for q in qs}
@@ -34,8 +34,8 @@ curves = pd.DataFrame(rows); curves.to_csv(D / "nest_thresholds_curves.csv", ind
 # ---- (2) used against available: logistic selection model with velocity, bank distance and depth; availability sampled at each nest's own stage
 X_used = []; X_avail = []; cl_used = []; cl_avail = []
 for i, r in nests.iterrows():
-    st = r.stage_use; vg, hg = vbar(grid.logA.values, grid.bed_m.values, st); ok = ~np.isnan(vg); c = cell.iloc[i]; vc, hc = vbar(c.logA, c.bed_m, st)
-    X_used.append([float(vc), c.dist_bank_m, float(hc)]); cl_used.append(r.date); pick = rng.choice(np.where(ok)[0], 20, replace=False); X_avail += [[vg[j], grid.dist_bank_m.values[j], hg[j]] for j in pick]; cl_avail += [r.date] * 20
+    st = r.stage_use; gA, gD = GLV.at(st); vg, hg = vbar(gA, grid.bed_m.values, st); ok = ~np.isnan(vg); c = cell.iloc[i]; vc, hc = vbar(gA[cix[i]], c.bed_m, st)
+    X_used.append([float(vc), gD[cix[i]], float(hc)]); cl_used.append(r.date); pick = rng.choice(np.where(ok)[0], 20, replace=False); X_avail += [[vg[j], gD[j], hg[j]] for j in pick]; cl_avail += [r.date] * 20
 X = np.array(X_used + X_avail); y = np.r_[np.ones(len(X_used)), np.zeros(len(X_avail))]; cl = np.array(cl_used + cl_avail); names = ["velocity (m/s)", "bank distance (m)", "depth (m)"]
 mu_, sd_ = X.mean(0), X.std(0); Xs = (X - mu_) / sd_
 def fit(Xs_, y_, cols): m = LogisticRegression(C=10.0, max_iter=1000).fit(Xs_[:, cols], y_); return m.coef_[0]

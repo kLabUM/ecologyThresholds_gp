@@ -11,8 +11,8 @@
  "site": "ARB013",
  "offset_mm": 3048.0,
  "note": "sensor on the main stem upstream of the surveyed stretch (record replaced 18 Nov 2026: ARB013, offset tag 3048 mm)",
- "along_sensor_m": -6790.722100499875,
- "sensor_offset_from_centreline_m": 5.930755012570798,
+ "along_sensor_m": -6790.722100495869,
+ "sensor_offset_from_centreline_m": 5.930755011341881,
  "sensor_lat_lon": [
   42.51365577,
   -83.6899082
@@ -20,31 +20,35 @@
  "readings_without_stage_at_time": 0,
  "tie": {
   "slope_cm_per_100m": 5.814252425011546,
-  "residual_sd_cm": 1.7807339368812423,
+  "residual_sd_cm": 1.7807339368960444,
   "n_transects": 18,
   "session_offsets_m": {
-   "2026-06-03": 266.28005421222815,
-   "2026-06-04": 266.27892518956406,
-   "2026-06-11": 266.4861748136582,
-   "2026-06-24": 266.4654534833712,
-   "2026-07-13": 265.9231859365808,
-   "2026-07-27": 265.98675688149547
+   "2026-06-03": 266.2800542121774,
+   "2026-06-04": 266.2789251895129,
+   "2026-06-11": 266.48617481360225,
+   "2026-06-24": 266.4654534833153,
+   "2026-07-13": 265.92318593652925,
+   "2026-07-27": 265.9867568814438
   },
-  "offset_spread_sd_m": 0.23621642751013935,
+  "offset_spread_sd_m": 0.23621642750843497,
   "meaning": "WSE_rtk - stage_sensor = offset(day) - slope * (along - along_sensor); a constant offset across days means the sensor level transfers to the sections; its spread is the tie's error"
  },
  "bed_check_rtk_minus_rod_cm": {
-  "median": 0.28689762371156835,
-  "sd": 17.633672515774933
+  "median": 0.2868976286724889,
+  "sd": 17.633672515746092
  },
  "reference_stage_m": 0.404,
+ "bank_set_C": {
+  "record_max_level_m": 262.89432321067795,
+  "dist_bank_m_median": 6.2249380537876196
+ },
  "law": {
   "best": [
    -0.2,
    0.5
   ],
-  "CRPS_best": 0.42496676445038084,
-  "CRPS_none": 0.4324571059674206,
+  "CRPS_best": 0.4547726074760972,
+  "CRPS_none": 0.45183798802391684,
   "set_within_0.01": [
    [
     -0.2,

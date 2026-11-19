@@ -1,10 +1,10 @@
 """Step 10b. The origin of the old bank lines (set A in logbook entries 27 and 28), made self-contained.
 
-data_raw/bank_lines_{reach}.geojson, channel_extent_{reach}.geojson and centerline_union_{reach}.geojson were copied
-from the main branch's mapping/ folder when this folder was made; the code that wrote them is dataSorting.ipynb on the
-main branch at commit 2346281 ("Modelling visual tweaks", 18 September 2026), cells 1, 2, 6, 7, 10, 11, 12 and 13.
+The old lines (bank_lines, channel_extent, centerline_union for each reach) were first copied into data_raw from the
+main branch's mapping/ folder; those copies are gone (logbook entry 30), and this script now writes the lines. The code that
+wrote them is dataSorting.ipynb on the main branch at commit 2346281 ("Modelling visual tweaks", 18 September 2026), cells 1, 2, 6, 7, 10, 11, 12 and 13.
 This script carries that code over unchanged in what it computes (the plots, the CSV and GeoJSON round trips and the
-upstream-depth columns, which do not affect the lines, are left out) and checks that it reproduces the three files.
+upstream-depth columns, which do not affect the lines, are left out) and checks, by fingerprint, that it reproduces the copies.
 
 Method (the notebook's own description, cell 13): bank points noted in the field ('bank height', 'edge of bank') are
 placed on their transects with a straight-line fit of offset against position through the transect's in-water points;
@@ -16,7 +16,7 @@ the ADCP's 5-hour medians at its own position (cell 6), trimmed to the northing 
 
 Inputs:  data_raw/25_ecohydroData.csv, 26_ecohydroData.csv, 25_ADCPData.csv, Huron_RiverSystem.geojson
 Outputs: data_clean/banklines_survey/bank_lines_{r}.geojson, channel_extent_{r}.geojson, centerline_union_{r}.geojson,
-         summary.json (including the check against the files in data_raw)"""
+         in_water_points_{r}.csv (type and position only), summary.json (including the check against the September copies)"""
 import io, json, tempfile
 from pathlib import Path
 import numpy as np, pandas as pd, geopandas as gpd
@@ -38,6 +38,17 @@ MIN_WET_POINTS, CALIB_LIMIT_FT, OUTSIDE_TOL_FT = 4, 150.0, 1.0
 GRID_FT, BIN_FT, WINDOW_FT, BANK_REACH_FT, SMOOTH_FT, SAFETY_FT = 50.0, 100.0, 200.0, 400.0, 300.0, 2.0
 MIN_WIDTH_FT, MAX_GAP_FT, MAX_PASSES = 10.0, 800.0, 12
 _EPS_FT = 1.0
+SEPTEMBER_FINGERPRINTS = {"Upper": {"bank_lines": "8d297be14bb8cfbb", "centerline_union": "903090e1317b9743", "channel_extent": "fe704475ab24da89"},
+                          "Middle": {"bank_lines": "6e479317e200e0a2", "centerline_union": "9b1fa5fb8a329ba5", "channel_extent": "7c50b8a6cf2410df"},
+                          "Lower": {"bank_lines": "0d13deb6d75532e9", "centerline_union": "2bddaa2f4b27100d", "channel_extent": "c2b999cde8f1c214"}}
+
+
+def fingerprint(path):
+    import hashlib
+    h = hashlib.sha256()
+    for g in gpd.read_file(path).to_crs(CRS).geometry:
+        h.update(np.round(np.asarray(g.exterior.coords if g.geom_type == "Polygon" else g.coords), 1).tobytes())
+    return h.hexdigest()[:16]
 
 
 # ---------------------------------------------------------------- cells 1, 2, 6: the survey rows by section ---
@@ -274,12 +285,13 @@ if __name__ == "__main__":
         wet["distance_to_centerline"], wet["dist_along_centerline"] = distances_to_line(g.geometry.values, stem)
         buf = io.StringIO(); wet.to_csv(buf, index=False); buf.seek(0); wet = pd.read_csv(buf)
         wet = wet[wet.Northing <= NORTHING_MAX_FT[s]]
+        wet[["Type", "Easting", "Northing"]].to_csv(OUT / f"in_water_points_{s}.csv", index=False)   # type and position only: they set the 3DEP transects' extent (banklines_3dep.transect_points)
         lines, ext, summ = bank_lines(s, stem, wet, complete)
         gpd.GeoDataFrame(geometry=[stem], crs=CRS).to_file(OUT / f"centerline_union_{s}.geojson", driver="GeoJSON")
         lines.to_file(OUT / f"bank_lines_{s}.geojson", driver="GeoJSON"); ext.to_file(OUT / f"channel_extent_{s}.geojson", driver="GeoJSON")
-        # the check: does this reproduce the files the analysis has used since September?
-        old_l = gpd.read_file(RAW / f"bank_lines_{s}.geojson").to_crs(CRS); old_c = gpd.read_file(RAW / f"centerline_union_{s}.geojson").to_crs(CRS)
-        summ["reproduces_data_raw_m"] = {"bank_lines_max_hausdorff": round(max(a.hausdorff_distance(b) for a, b in zip(lines.geometry, old_l.geometry)) * 0.3048, 4),
-                                         "centerline_hausdorff": round(stem.hausdorff_distance(old_c.geometry.iloc[0]) * 0.3048, 4)}
+        # the check: does this reproduce the files the analysis used from September to November 2026 (copied then from the main branch's
+        # mapping/ folder, now removed from data_raw so that every line in the folder has a script that writes it)? Fingerprints of those
+        # copies: sha256 of the coordinates in ft rounded to 0.1 ft, first 16 hex digits.
+        summ["reproduces_september_copies"] = {k: fingerprint(OUT / f"{k}_{s}.geojson") == SEPTEMBER_FINGERPRINTS[s][k] for k in SEPTEMBER_FINGERPRINTS[s]}
         summary[s] = summ; print(s, json.dumps(summ))
     json.dump(summary, open(OUT / "summary.json", "w"), indent=1)

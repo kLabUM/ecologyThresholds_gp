@@ -16,15 +16,17 @@ This folder is a complete, reproducible analysis: a season-long velocity record 
 | `00_load.py` (runs twice) | raw sheets and sensor exports to clean tables; units converted here and nowhere else; named corrections listed in the code | `readings_transect.csv`, `nests.csv`, `stage_10min.csv`, `adcp.csv`, `usgs_*daily.csv` |
 | `02_` to `07_` | the stage record: daytime artefact diagnosed, nights from the sun's elevation, the correction (night line, monthly template, median), the 10-min grid shared with the ADCP | `series_10min.csv` (stage_m, adcp_ms) |
 | `08_`, `12_`, `13_` | log profiles: z0 for the reach, one amplitude a per location with its error, checks by substrate, year and crew | `locations.csv`, `field_qc.json`, `amplitude_*.json` |
-| `14_`, `15_`, `19_` | transect labels checked by geometry; RTK sections tied to the sensor datum; the candidate features | `features.csv`, `rtk_session_offsets.csv`, `banks.csv` |
+| `14_`, `15_`, `19_` | transect labels checked by geometry; RTK sections tied to the sensor datum; bank set C and the candidate features (bank distance and relative position from C at each point's survey-day level, entry 30) | `features.csv`, `rtk_session_offsets.csv`, `banks.csv` |
 | `gpcore.py` | `load_points()`, `destage()`, `with_target()` (A = a / g, y = log A, per-point sd), `Model` (WLS mean on notes + ARD Matérn GP), `scores()` (MAE, RMSE, CRPS, coverage) | |
-| `uncertainty.py` | `LAW_RIDGE` (the law set), `Chain` (GPs for every law, calibration on held-out days, the discrepancy split), `sample`, `sample_series`, `sample_reach` (one joint draw of the whole reach per sample) | `uncertainty_calibration.json` |
+| `uncertainty.py` | `LAW_RIDGE` (the law set), `Chain` (GPs for every law and every C draw, calibration on held-out days, the discrepancy split), `Field` (the field on the 5 cm stage grid, read at each draw's stage), `sample`, `sample_series`, `sample_reach` (one joint draw of the whole reach per sample), `GridLevels` | `uncertainty_calibration.json` |
 | `20_` to `26_` | steps 2 to 7: the GP on A with sections held out; the day effect and the laws; the (h0, γ) grid; the chain's calibration and attribution; the bed GP and 2 m grid; the section series, continuity and section-level coverage; the ecological share | `step2_*` to `step7_*`, `grid.csv` |
 | `30_`, `31_`, `34_`, `33_`, `35_`, `36_` | feature and kernel ablations; the ADCP re-read and single-beam test; nest-calibrated thresholds and the selection model; the Bayesian suitability; the explanatory figure | `step2_*_ablation.csv`, `adcp_*.json`, `nest_*.json/csv` |
 | `41_`, `29_`, `32_`, `40_` | the variables figure, the paper's F1 to F5, the tables, the methods document (docx and md), all from saved outputs | `paper/` |
-| `27_`, `28_`, `37_`, `38_`, `39_` | the other two reaches (paused; not in `run_all.sh`) | `reach_*`, `step8_*`, figures 08 to 16 |
-| `44_banklines_survey.py` | the origin of `data_raw/bank_lines_*`, `channel_extent_*`, `centerline_union_*`: the main branch's dataSorting.ipynb (commit 2346281) carried over; checks that it reproduces them exactly | `data_clean/banklines_survey/` |
-| `banklines_3dep.py`, `43_bankline_comparison.py` | bank lines from USGS 3DEP plus the survey (sets B and C) and the comparison under the rule in logbook entry 27 | `data_clean/bankcmp/`, figures 18 |
+| `27_`, `39_`, `37_`, `28_`, `38_` | the other two reaches, in this order (paused; not in `run_all.sh`); `37_` builds their bank set C from the sensor tie | `reach_*`, `step8_*`, figures 08 to 16 |
+| `44_banklines_survey.py` | the centrelines and the old bank lines (set A): the main branch's dataSorting.ipynb (commit 2346281) carried over; fingerprint check against the copies used until November 2026 | `data_clean/banklines_survey/` |
+| `banklines_3dep.py` | bank lines from USGS 3DEP plus the survey: the 3DEP transects (`transect_points`, `fetch_transects`, cache checked against the geometry), sets B and C, and `StageFeatures`, set C as the model uses it (edges, distance to the bank and relative position at any stage, best estimate or one of 20 draws) | `data_raw/3dep_bank_transects_*.csv`, `data_clean/banks_c/` (via `19_`, `37_`) |
+| `43_bankline_comparison.py` | the comparison of A, B and C under the rule in logbook entry 27 (the record of entries 27 and 28) | `data_clean/bankcmp/`, figures 18 |
+| `provenance.py` | every line or polygon file and the script that writes it; `00_load.py` stops if one has none | |
 
 ## Rules that keep the analysis honest
 
@@ -36,6 +38,7 @@ This folder is a complete, reproducible analysis: a season-long velocity record 
 6. No personal names anywhere: crews are coded in the raw sheets and in every output; people are "the PI", "the field lead", "the crew".
 7. Every change of method gets a numbered logbook entry with a figure and the numbers before and after; every figure has a caption that says what it shows; plain language, numbers with units, no em-dashes.
 8. Paper figures and tables are built only from saved tables (`29_`, `32_`, `40_`), so a rerun of the chain and a rebuild of the figures are separate, checkable steps.
+9. Every bank line, channel polygon and centreline in the folder is written by a script here (`provenance.py` lists them; `00_load.py` stops otherwise). The model uses bank set C (entry 30); A and B stay only as the record of the comparison.
 
 ## Common requests, and where to go
 

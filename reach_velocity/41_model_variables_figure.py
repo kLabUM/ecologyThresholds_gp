@@ -3,8 +3,9 @@ with the GP's inputs, and the chain from the sensor to the ecological number. Ou
 import json, numpy as np, pandas as pd
 import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt; from matplotlib.patches import FancyBboxPatch
 from pathlib import Path
+from uncertainty import PRIMARY, LAW_RIDGE   # the stage-law set, read from the saved law grid (entry 30)
 H = Path(__file__).resolve().parent; D = H / "data_clean"; F = H / "figures"
-Z0 = json.load(open(D / "field_qc.json"))["z0_m"]; H0, GAM = 0.45, 1.0; LAWS = [(0.45, 1.0), (0.35, 1.25), (0.55, 0.75), (0.35, 1.0), (0.45, 0.75), (0.65, 0.5), (0.55, 0.5)]
+Z0 = json.load(open(D / "field_qc.json"))["z0_m"]; H0, GAM = PRIMARY; LAWS = LAW_RIDGE
 loc = pd.read_csv(D / "locations.csv"); loc = loc[loc.a > 0]; rd = pd.read_csv(D / "readings_transect.csv"); fe = pd.read_csv(D / "features.csv")
 INK, INK2, AXIS, GRID, BLUE, ORANGE, GREEN, DARK, MUTED, BEIGE = "#0b0b0b", "#52514e", "#b9b8ae", "#e4e3dc", "#2a78d6", "#eb6834", "#1a9e74", "#0d366b", "#898781", "#e9e5dc"
 plt.rcParams.update({"font.family": "sans-serif", "font.sans-serif": ["Helvetica", "Arial", "DejaVu Sans"], "font.size": 8.5, "axes.edgecolor": AXIS, "axes.linewidth": 0.6, "grid.color": GRID, "grid.linewidth": 0.4, "legend.frameon": False, "savefig.dpi": 220, "axes.facecolor": "white"})
@@ -23,10 +24,10 @@ ax = fig.add_subplot(gs[0, 1]); dm = loc.groupby("date").agg(st=("stage_m", "med
 for d_, r in dm.iterrows(): ax.errorbar(r.st, r.a, yerr=[[r.a - r.lo], [r.hi - r.a]], fmt="o", ms=5, color=ORANGE, mec=INK, mew=0.5, elinewidth=0.8, capsize=0)
 xx = np.linspace(0.46, 1.65, 100); Aref = float(np.median(loc.a / np.clip(loc.stage_m - H0, 0.02, None)))
 for (h0, g_) in LAWS[1:]: A_ = float(np.median(loc.a / np.clip(loc.stage_m - h0, 0.02, None) ** g_)); ax.plot(xx, A_ * np.clip(xx - h0, 0, None) ** g_, color=MUTED, lw=0.7, alpha=0.7)
-ax.plot(xx, Aref * np.clip(xx - H0, 0, None) ** GAM, color=DARK, lw=2, label=f"the law  a = A · (stage − h0)^γ   with h0 = {H0} m, γ = {GAM:.0f}")
+ax.plot(xx, Aref * np.clip(xx - H0, 0, None) ** GAM, color=DARK, lw=2, label=f"the law  a = A · (stage − h0)^γ   with h0 = {H0} m, γ = {GAM:g}")
 ax.plot([], [], color=MUTED, lw=0.7, label="six other (h0, γ) pairs that fit the survey days as well: the law set")
 ax.axvspan(0.74, 1.09, color=GRID, alpha=0.6, lw=0); ax.text(0.75, 0.305, "surveyed stage range", fontsize=8, color=INK2); ax.axvline(H0, color=INK2, lw=0.8, ls=":"); ax.text(H0 + 0.012, 0.04, "h0: the stage at which\nthe amplitude vanishes", fontsize=8, color=INK2)
-ax.annotate("A: the place factor, the amplitude per metre of stage\nabove h0. It does not depend on the day. The GP learns A.", xy=(1.0, Aref * 0.55), xytext=(0.62, 0.24), fontsize=8, arrowprops=dict(arrowstyle="->", lw=0.7, color=INK2))
+ax.annotate("A: the place factor, the amplitude per unit of (stage − h0)^γ. It does not depend on the day. The GP learns A.", xy=(1.0, Aref * 0.55), xytext=(0.62, 0.24), fontsize=8, arrowprops=dict(arrowstyle="->", lw=0.7, color=INK2))
 ax.set_xlim(0.4, 1.65); ax.set_ylim(0, 0.32); ax.set_xlabel("stage at the sensor (m)"); ax.set_ylabel("amplitude a (m/s); orange: the survey days' medians"); ax.set_title("(b) The day's stage is removed by a one-parameter law: the place factor A", fontsize=10, loc="left"); ax.legend(loc="lower right", fontsize=7.5); ax.grid(True); ax.set_axisbelow(True)
 # (c) a cross-section with the GP's inputs
 ax = fig.add_subplot(gs[1, 0]); t = "AT0401"; q = fe[fe.transect == t].merge(loc[["location_id", "bed_rtk_sensor_datum_m", "bed_elev_m", "stage_m"]], on="location_id").sort_values("across_m"); bed = q.bed_rtk_sensor_datum_m.fillna(q.bed_elev_m).values; y = q.across_m.values; ref = 0.90

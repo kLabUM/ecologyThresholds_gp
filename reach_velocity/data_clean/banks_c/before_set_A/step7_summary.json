@@ -1,0 +1,67 @@
+{
+  "season": {
+    "2025": {
+      "median_share": 0.4125441697735717,
+      "median_share_in_range_hours": 0.36091124389149876,
+      "fraction_of_hours_outside_surveyed_range": 0.3543252595155709,
+      "fraction_of_hours_above_range": 0.07404844290657439,
+      "band_halfwidth_points_in_range": 7.641261025541112,
+      "band_halfwidth_points_above_range": 6.132503555658696
+    },
+    "2026": {
+      "median_share": 0.34102226134278496,
+      "median_share_in_range_hours": 0.34168060348369944,
+      "fraction_of_hours_outside_surveyed_range": 0.49849488260084285,
+      "fraction_of_hours_above_range": 0.25285972305839854,
+      "band_halfwidth_points_in_range": 7.545528619953545,
+      "band_halfwidth_points_above_range": 5.579395355621132
+    },
+    "May_2026": {
+      "share_median": 0.24454542769235185,
+      "lo": 0.1771609426068948,
+      "hi": 0.32338913294260907,
+      "fraction_above_range": 0.23652694610778444
+    }
+  },
+  "nests": {
+    "n_nests": 63,
+    "n_in_wet_cells": 59,
+    "median_percentile_in_reach": 0.17808744566607007,
+    "AUC_available_vs_used": 0.7222036336584658,
+    "ks_p_vs_uniform": 9.986299292947483e-10,
+    "AUC_restricted_to_30m_of_nests": 0.723052592049081,
+    "ks_p_restricted": 1.2076515390302754e-09,
+    "share_of_nests_below_thr_predicted": 0.6101694915254238,
+    "share_of_reach_below_thr_at_median_nest_stage": 0.23779303199067478,
+    "measured_nest_velocity_median": 0.024384,
+    "predicted_at_nests_depth_averaged_median": 0.16328281681219464,
+    "predicted_at_nests_at_reading_height_median": 0.153516957614305,
+    "nest_reading_height_median_m": 0.24384,
+    "baselines": {
+      "bank distance": {
+        "AUC": 0.7597548944922203,
+        "ks_p": 2.7546554099912154e-10
+      },
+      "conveyance A (no stage)": {
+        "AUC": 0.7387020271880065,
+        "ks_p": 2.3637641469658334e-11
+      },
+      "depth": {
+        "AUC": 0.5011455916182403,
+        "ks_p": 0.518264190623338
+      },
+      "velocity within bank-distance strata (\u00b12 m)": {
+        "AUC": 0.5294878090076597,
+        "ks_p": 0.1960853799624508
+      }
+    },
+    "day_cluster_inference": {
+      "n_days": 9,
+      "mean_of_day_means": 0.357172314842871,
+      "t_p_vs_0.5": 0.10688296321695977,
+      "wilcoxon_p": 0.1640625
+    },
+    "nest_bank_distance_median_m": 3.3649780034032637,
+    "wet_cell_bank_distance_median_m": 11.402209305732953
+  }
+}

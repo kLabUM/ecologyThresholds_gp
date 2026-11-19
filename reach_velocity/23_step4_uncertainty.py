@@ -6,7 +6,7 @@ import numpy as np, pandas as pd
 import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
 from gpcore import *; from uncertainty import *
 warnings.filterwarnings("ignore"); t0 = time.time(); log = lambda *a: (print(f"[{time.time()-t0:5.0f}s]", *a), sys.stdout.flush())
-df = load_points(); df["bed_m"] = df.bed_rtk_sensor_datum_m.fillna(df.bed_elev_m); ch = Chain(df); json.dump({**ch.calib, "discrepancy_split": ch.disc_split}, open(D / "uncertainty_calibration.json", "w"), indent=2); log(f"calibration: {ch.calib}")
+df = load_points(); df["bed_m"] = df.bed_rtk_sensor_datum_m.fillna(df.bed_elev_m); ch = Chain(df, banks=banks_for("Middle")); json.dump({**ch.calib, "discrepancy_split": ch.disc_split}, open(D / "uncertainty_calibration.json", "w"), indent=2); log(f"calibration: {ch.calib}")
 SECTIONS = ["AT10", "0625-T02", "AT0401", "AT13"]; STAGES = [0.75, 0.90, 1.10, 1.30]; N = 400; THR = 0.20
 rows, att = [], []
 for t in SECTIONS:
@@ -32,11 +32,11 @@ ax.set_xlabel("across (m)"); ax.set_ylabel("depth-averaged velocity (m/s)"); ax.
 ax = fig.add_subplot(gs[0, 1]); w = 0.2
 for k, st in enumerate(STAGES):
     a_ = at[(at.section == t) & (at.stage_m == st)].set_index("source"); ax.bar(np.arange(len(ALL_SOURCES)) + (k - 1.5) * w, [a_.mean_v_iqr90[s_] for s_ in ALL_SOURCES], w, color=cols[st], label=f"{st:.2f} m")
-ax.set_xticks(range(len(ALL_SOURCES))); ax.set_xticklabels(["A field\n(GP band)", "discrepancy\n(days held out)", "bed\n(6 cm)", "stage\n(1.5 cm)", "law\n(h0, γ ridge)", "z0\n(7 to 16 mm)"], fontsize=7); ax.set_ylabel("90% interval width of the section mean velocity (m/s)"); ax.set_title(f"{t}: which source drives the band on the section mean velocity", fontsize=9); ax.grid(True, axis="y"); ax.set_axisbelow(True); ax.legend(fontsize=7, title="stage")
+ax.set_xticks(range(len(ALL_SOURCES))); ax.set_xticklabels(["A field\n(GP band)", "discrepancy\n(days held out)", "bed\n(6 cm)", "stage\n(1.5 cm)", "law\n(h0, γ ridge)", "z0\n(7 to 16 mm)", "bank lines\n(set C, 20 draws)"], fontsize=7); ax.set_ylabel("90% interval width of the section mean velocity (m/s)"); ax.set_title(f"{t}: which source drives the band on the section mean velocity", fontsize=9); ax.grid(True, axis="y"); ax.set_axisbelow(True); ax.legend(fontsize=7, title="stage")
 ax = fig.add_subplot(gs[0, 2])
 for k, st in enumerate(STAGES):
     a_ = at[(at.section == t) & (at.stage_m == st)].set_index("source"); ax.bar(np.arange(len(ALL_SOURCES)) + (k - 1.5) * w, [a_.share_iqr90[s_] * 100 for s_ in ALL_SOURCES], w, color=cols[st])
-ax.set_xticks(range(len(ALL_SOURCES))); ax.set_xticklabels(["A field", "discrepancy", "bed", "stage", "law", "z0"], fontsize=7); ax.set_ylabel(f"90% interval width of the share below {THR} m/s (points)"); ax.set_title(f"{t}: the same, for the ecological share", fontsize=9); ax.grid(True, axis="y"); ax.set_axisbelow(True)
+ax.set_xticks(range(len(ALL_SOURCES))); ax.set_xticklabels(["A field", "discrepancy", "bed", "stage", "law", "z0", "bank lines"], fontsize=7); ax.set_ylabel(f"90% interval width of the share below {THR} m/s (points)"); ax.set_title(f"{t}: the same, for the ecological share", fontsize=9); ax.grid(True, axis="y"); ax.set_axisbelow(True)
 ax = fig.add_subplot(gs[1, 0:2]); xs = np.arange(len(SECTIONS)); w2 = 0.2
 for k, st in enumerate(STAGES):
     r = iv[iv.stage_m == st].set_index("section").loc[SECTIONS]; ax.errorbar(xs + (k - 1.5) * w2, r.share_median * 100, yerr=[(r.share_median - r.share_lo) * 100, (r.share_hi - r.share_median) * 100], fmt="o", color=cols[st], ms=5, capsize=3, label=f"stage {st:.2f} m")

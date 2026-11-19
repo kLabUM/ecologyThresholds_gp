@@ -9,7 +9,7 @@ import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt; impor
 from gpcore import *; from uncertainty import *
 warnings.filterwarnings("ignore"); t0 = time.time(); log = lambda *a: (print(f"[{time.time()-t0:5.0f}s]", *a), sys.stdout.flush())
 THR = 0.20; N = 100
-df = load_points(); df["bed_m"] = df.bed_rtk_sensor_datum_m.fillna(df.bed_elev_m); ch = Chain(df)
+df = load_points(); df["bed_m"] = df.bed_rtk_sensor_datum_m.fillna(df.bed_elev_m); ch = Chain(df, banks=banks_for("Middle"))
 sec_pts = {t: g.assign(_x=g.x_m.round(2), _y=g.y_m.round(2)).drop_duplicates(["_x", "_y"]).sort_values("across_m").reset_index(drop=True) for t, g in df.groupby("transect")}
 order = sorted(sec_pts, key=lambda t: sec_pts[t].along_m.median()); along = {t: float(sec_pts[t].along_m.median()) for t in order}
 g10 = pd.read_csv(D / "series_10min.csv", parse_dates=["time_utc"]).set_index("time_utc"); g10.index = pd.to_datetime(g10.index, utc=True); st2 = g10.stage_m.resample("2h").mean().dropna(); st2 = st2[(st2.index.year >= 2025)]
@@ -26,7 +26,7 @@ grid_st = np.linspace(0.65, 1.35, 36); RC = sample_reach(ch, grid_st, secs_all, 
 # ---- section-level check: each day held out, the chain refitted without it, its sections' measured mean velocity against the band
 cov_rows = []
 for day in sorted(df.date.unique()):
-    tr_ = df[df.date != day]; ch_d = Chain(tr_, n_restarts=1); te_secs = {t: sec_pts[t] for t in order if sec_pts[t].date.iloc[0] == day}
+    tr_ = df[df.date != day]; ch_d = Chain(tr_, n_restarts=1, banks=banks_for("Middle")); te_secs = {t: sec_pts[t] for t in order if sec_pts[t].date.iloc[0] == day}
     for t, p in te_secs.items():
         stage = float(p.stage_m.median()); s1 = sample_reach(ch_d, [stage], {t: p}, n=300, seed=21, threshold=THR); w = width_weights(p); h = p.water_depth_m.values; vb = p.a.values * (np.log(np.clip(h, np.e * Z0, None) / Z0) - 1)
         v_meas = float(np.sum(vb * w) / w.sum()); sh_meas = float(np.sum((vb < THR) * w) / w.sum()); mv = s1["mean_v"][t][:, 0]; sh = s1["share"][t][:, 0]

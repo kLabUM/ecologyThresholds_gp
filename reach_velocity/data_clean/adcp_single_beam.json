@@ -10,19 +10,19 @@
   0.6639933685610112,
   1.2038565872783946
  ],
- "level_ratio_record_over_field_median": 0.9080420799804226,
+ "level_ratio_record_over_field_median": 0.8672421961577425,
  "level_ratio_iqr": [
-  0.8447834286245913,
-  0.9630793256286501
+  0.8202911097428914,
+  0.9213491698211865
  ],
- "implied_beam_angle_if_level_matched_deg": 22.56648112967554,
- "MAE_m_s": 0.027137714341900075,
- "bias_m_s": -0.024191031803681665,
+ "implied_beam_angle_if_level_matched_deg": 21.500687410159355,
+ "MAE_m_s": 0.03716501510972001,
+ "bias_m_s": -0.03665118990052713,
  "coverage90": 1.0,
- "log_ratio_sd_over_season": 0.10115394612659136,
- "MAE_above_1.0_m": 0.031203867096141234,
+ "log_ratio_sd_over_season": 0.08621746108151175,
+ "MAE_above_1.0_m": 0.05502872024056904,
  "coverage90_above_1.0_m": 1.0,
  "n_above_1.0_m": 180,
- "field_logA_at_cell": -1.6190749937806324,
- "field_logA_sd_at_cell": 0.2403926359180576
+ "field_logA_at_cell": -1.7659433021201316,
+ "field_logA_sd_at_cell": 0.2346648580978001
 }

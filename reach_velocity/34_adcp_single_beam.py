@@ -6,7 +6,7 @@ import json, numpy as np, pandas as pd
 import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt; import matplotlib.dates as mdates
 from gpcore import *; from uncertainty import *
 BEAM_DEG = 25.0; SINB = np.sin(np.radians(BEAM_DEG))
-df = load_points(); df["bed_m"] = df.bed_rtk_sensor_datum_m.fillna(df.bed_elev_m); ch = Chain(df)
+df = load_points(); df["bed_m"] = df.bed_rtk_sensor_datum_m.fillna(df.bed_elev_m); ch = Chain(df, banks=banks_for("Middle"))
 grid = pd.read_csv(D / "grid.csv"); cell = grid.iloc[[int(np.argmin(np.hypot(grid.x_m, grid.y_m)))]].reset_index(drop=True); cell["bed_m"] = -0.043   # the surveyed bed 1.7 m away (adcp_recheck.json)
 ad = pd.read_csv(D / "adcp.csv", parse_dates=["time_utc"]); ad["time_utc"] = pd.to_datetime(ad.time_utc, utc=True); a2 = ad.set_index("time_utc")[["velocity_ms", "stage_m"]].resample("2h").mean().dropna(); a2["u_beam_ms"] = a2.velocity_ms / SINB
 S = sample_series(ch, a2.stage_m.values, cell, n=400, seed=3); v = S["mean_v"]   # one point: its depth-averaged velocity per draw and time

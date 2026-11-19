@@ -8,7 +8,7 @@ import json, numpy as np, pandas as pd
 from scipy.spatial import cKDTree; from scipy.optimize import minimize; from scipy import linalg
 import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt; import matplotlib.dates as mdates
 from gpcore import *; from uncertainty import *
-rng = np.random.default_rng(0); Z0 = json.load(open(D / "field_qc.json"))["z0_m"]; H0 = 0.45
+rng = np.random.default_rng(0); Z0 = json.load(open(D / "field_qc.json"))["z0_m"]; H0, GAM = PRIMARY   # the primary stage law (uncertainty.law_set, entry 30)
 from scipy.optimize import minimize_scalar
 LIT = json.load(open(RAW_LIT := (D.parent / "data_raw" / "literature_priors.json")))
 FT = 0.3048; sv = np.array(LIT["source_1"]["spawning_velocity_SI_ft_per_s"]); vv_lit, S_lit = sv[:, 0] * FT, sv[:, 1]; av = np.array(LIT["source_1"]["adult_velocity_SI_ft_per_s_category_three_Glover_Creek"]); va_lit, Sa_lit = av[:, 0] * FT, av[:, 1]
@@ -19,14 +19,14 @@ sd_ = np.array(LIT["source_1"]["spawning_depth_SI_ft"]); hh_lit, Sh_lit = sd_[:,
 PRIOR = {"velocity_per_m_s": {"mean": b_spawn, "sd": sd_v, "source": f"Edwards et al. (1983) spawning SI curve 20110 fitted by exp(b v): {b_spawn:.2f} per m/s; sd set so the adult utilisation curve ({b_adult:.2f} per m/s) is two sd away; a weak prior carrying sign and order of magnitude"},
          "bank_distance_per_m": {"mean": 0.0, "sd": 0.5, "source": "no published curve; weak, zero-centred"}, "depth_per_m": {"mean": b_depth, "sd": 5.0, "source": f"Edwards et al. (1983) spawning depth SI curve over 0.15 to 0.9 m fitted by exp(b h): {b_depth:.1f} per m; sd 5 (weak)"}, "intercept": {"mean": 0.0, "sd": 10.0}}
 print("literature prior:", json.dumps({k: {kk: (round(vv, 3) if isinstance(vv, float) else vv) for kk, vv in v.items()} for k, v in PRIOR.items()}, indent=1))
-df = load_points(); df["bed_m"] = df.bed_rtk_sensor_datum_m.fillna(df.bed_elev_m); ch = Chain(df)
-grid = pd.read_csv(D / "grid.csv"); nests = pd.read_csv(D / "step7_nests.csv").dropna(subset=["v_pred_ms"]).reset_index(drop=True); cell = grid.iloc[cKDTree(grid[["x_m", "y_m"]].values).query(nests[["x_m", "y_m"]].values)[1]].reset_index(drop=True)
+df = load_points(); df["bed_m"] = df.bed_rtk_sensor_datum_m.fillna(df.bed_elev_m); ch = Chain(df, banks=banks_for("Middle"))
+grid = pd.read_csv(D / "grid.csv"); nests = pd.read_csv(D / "step7_nests.csv").dropna(subset=["v_pred_ms"]).reset_index(drop=True); cell = grid.iloc[cKDTree(grid[["x_m", "y_m"]].values).query(nests[["x_m", "y_m"]].values)[1]].reset_index(drop=True); cix = cKDTree(grid[["x_m", "y_m"]].values).query(nests[["x_m", "y_m"]].values)[1]; GLV = GridLevels()   # the field and bank distance at each nest's own stage (bank set C, entry 30)
 def vbar(logA, bed, st):
-    h = np.clip(st - bed, 0, None); a = np.exp(logA) * np.clip(st - H0, 0.02, None); return np.where(h > np.e * Z0, a * (np.log(np.clip(h, np.e * Z0, None) / Z0) - 1), np.nan), h
+    h = np.clip(st - bed, 0, None); a = np.exp(logA) * np.clip(st - H0, 0.02, None) ** GAM; return np.where(h > np.e * Z0, a * (np.log(np.clip(h, np.e * Z0, None) / Z0) - 1), np.nan), h
 Xu, Xa = [], []
 for i, r in nests.iterrows():
-    st = r.stage_use; vg, hg = vbar(grid.logA.values, grid.bed_m.values, st); ok = ~np.isnan(vg); c = cell.iloc[i]; vc, hc = vbar(c.logA, c.bed_m, st); Xu.append([1.0, float(vc), c.dist_bank_m, float(hc)])
-    for j in rng.choice(np.where(ok)[0], 20, replace=False): Xa.append([1.0, vg[j], grid.dist_bank_m.values[j], hg[j]])
+    st = r.stage_use; gA, gD = GLV.at(st); vg, hg = vbar(gA, grid.bed_m.values, st); ok = ~np.isnan(vg); c = cell.iloc[i]; vc, hc = vbar(gA[cix[i]], c.bed_m, st); Xu.append([1.0, float(vc), gD[cix[i]], float(hc)])
+    for j in rng.choice(np.where(ok)[0], 20, replace=False): Xa.append([1.0, vg[j], gD[j], hg[j]])
 X = np.array(Xu + Xa); y = np.r_[np.ones(len(Xu)), np.zeros(len(Xa))]
 pm = np.array([PRIOR["intercept"]["mean"], PRIOR["velocity_per_m_s"]["mean"], PRIOR["bank_distance_per_m"]["mean"], PRIOR["depth_per_m"]["mean"]]); ps = np.array([PRIOR["intercept"]["sd"], PRIOR["velocity_per_m_s"]["sd"], PRIOR["bank_distance_per_m"]["sd"], PRIOR["depth_per_m"]["sd"]])
 def laplace(prior_sd):
@@ -44,17 +44,20 @@ out = {"prior": PRIOR, "n_used": int(len(Xu)), "n_available": int(len(Xa)),
 secs = {t: g.assign(_x=g.x_m.round(2), _y=g.y_m.round(2)).drop_duplicates(["_x", "_y"]).sort_values("across_m").reset_index(drop=True) for t, g in df.groupby("transect")}; names = list(secs)
 pts = pd.concat([secs[t].assign(_sec=t) for t in names], ignore_index=True); npts = len(pts); ww = np.concatenate([width_weights(secs[t]) for t in names]); sec_of = pts._sec.values
 al = np.array([float(secs[t].along_m.median()) for t in names]); o = np.argsort(al); ala = al[o]; edges = np.r_[ala[0] - (ala[1] - ala[0]) / 2, (ala[1:] + ala[:-1]) / 2, ala[-1] + (ala[-1] - ala[-2]) / 2]; lw = np.zeros(len(names)); lw[o] = np.diff(edges); lw /= lw.sum(); lw_pt = np.array([lw[names.index(s)] for s in sec_of])
-def suit_series(stages, n, seed, chunk=150):
-    rg = np.random.default_rng(seed); keys = [LAW_RIDGE[i] for i in rg.integers(len(LAW_RIDGE), size=n)]; mus, Ls = {}, {}
-    for key in set(keys): mu, cov = ch.models[key].predict_cov(pts); mus[key] = mu; Ls[key] = linalg.cholesky(cov + 1e-8 * np.eye(npts), lower=True)
-    logA = np.stack([mus[k] + Ls[k] @ rg.standard_normal(npts) for k in keys]) + rg.normal(0, ch.disc_split["independent_sd_log"], (n, npts)) + rg.normal(0, ch.disc_split["common_sd_log"], (n, 1))
-    bed = pts.bed_m.values[None, :] + rg.normal(0, BED_SD, (n, npts)); z0 = np.exp(rg.uniform(np.log(Z0_RANGE[0]), np.log(Z0_RANGE[1]), n)); zfac = np.log(Z_MEAS / Z0) / np.log(Z_MEAS / z0); h0 = np.array([k[0] for k in keys]); gam = np.array([k[1] for k in keys]); A = np.exp(logA) * zfac[:, None]
-    bvd = rg.multivariate_normal(b_post, C_post, n)[:, 1]; E = np.full((n, len(stages)), np.nan); stages = np.asarray(stages, float)
+def suit_series(stages, n, seed, chunk=40):
+    """per draw and stage: the reach's wetted-width-weighted mean suitability; every chain source (law, field, discrepancy, bed, stage,
+    z0, bank set C) plus one draw of the velocity coefficient. The field is read at each draw's stage on the 5 cm grid (entry 30)."""
+    rg = np.random.default_rng(seed); stages = np.asarray(stages, float); keys, js = ch.draw_keys(rg, n, ALL_SOURCES); sn = rg.normal(0, STAGE_SD, (n, 1))
+    F = Field(ch, pts, keys, js, rg, True, stages.min() + sn.min(), stages.max() + sn.max())
+    dl = rg.normal(0, ch.disc_split["independent_sd_log"], (n, npts)) + rg.normal(0, ch.disc_split["common_sd_log"], (n, 1))
+    bed = pts.bed_m.values[None, :] + rg.normal(0, BED_SD, (n, npts)); z0 = np.exp(rg.uniform(np.log(Z0_RANGE[0]), np.log(Z0_RANGE[1]), n)); zfac = np.log(Z_MEAS / Z0) / np.log(Z_MEAS / z0); h0 = np.array([k[0] for k in keys]); gam = np.array([k[1] for k in keys])
+    bvd = rg.multivariate_normal(b_post, C_post, n)[:, 1]; E = np.full((n, len(stages)), np.nan)
     for j0 in range(0, len(stages), chunk):
-        js = np.arange(j0, min(j0 + chunk, len(stages))); st = stages[js][None, :] + rg.normal(0, STAGE_SD, (n, 1)); g = np.clip(st - h0[:, None], 0.02, None) ** gam[:, None]
-        h = np.clip(st[:, :, None] - bed[:, None, :], 0, None); wet = h > np.e * z0[:, None, None]; v = np.where(wet, A[:, None, :] * g[:, :, None] * (np.log(np.clip(h, 1e-6, None) / z0[:, None, None]) - 1), 0.0)
+        js_ = np.arange(j0, min(j0 + chunk, len(stages))); st = stages[js_][None, :] + sn; g = np.clip(st - h0[:, None], 0.02, None) ** gam[:, None]
+        A = np.exp(F.at(st) + dl[:, None, :]) * zfac[:, None, None]
+        h = np.clip(st[:, :, None] - bed[:, None, :], 0, None); wet = h > np.e * z0[:, None, None]; v = np.where(wet, A * g[:, :, None] * (np.log(np.clip(h, 1e-6, None) / z0[:, None, None]) - 1), 0.0)
         S = np.exp(bvd[:, None, None] * v); w = (ww * lw_pt)[None, None, :] * wet   # width within the section times the section's length share
-        E[:, js] = (S * w).sum(2) / np.maximum(w.sum(2), 1e-12)   # the wetted-width-weighted mean suitability over the reach
+        E[:, js_] = (S * w).sum(2) / np.maximum(w.sum(2), 1e-12)   # the wetted-width-weighted mean suitability over the reach
     return E
 grid_st = np.linspace(0.65, 1.35, 15); Eg = suit_series(grid_st, 300, 1); curve = pd.DataFrame({"stage_m": grid_st, "E_med": np.nanmedian(Eg, 0), "E_lo": np.nanquantile(Eg, .05, 0), "E_hi": np.nanquantile(Eg, .95, 0), "P_E_above_0.5": np.nanmean(Eg > 0.5, 0), "P_E_above_0.4": np.nanmean(Eg > 0.4, 0)}); curve.to_csv(D / "nest_bayes_curve.csv", index=False)
 g10 = pd.read_csv(D / "series_10min.csv", parse_dates=["time_utc"]).set_index("time_utc"); g10.index = pd.to_datetime(g10.index, utc=True); st2 = g10.stage_m.resample("2h").mean().dropna(); st2 = st2[st2.index.year >= 2025]; Es = suit_series(st2.values, 100, 2)

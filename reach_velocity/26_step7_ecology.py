@@ -10,7 +10,7 @@ import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt; impor
 from gpcore import *; from uncertainty import *
 warnings.filterwarnings("ignore"); t0 = time.time(); log = lambda *a: (print(f"[{time.time()-t0:5.0f}s]", *a), sys.stdout.flush())
 THR = 0.20; Z_BED = 0.10
-df = load_points(); df["bed_m"] = df.bed_rtk_sensor_datum_m.fillna(df.bed_elev_m); ch = Chain(df)
+df = load_points(); df["bed_m"] = df.bed_rtk_sensor_datum_m.fillna(df.bed_elev_m); ch = Chain(df, banks=banks_for("Middle"))
 sec_pts = {t: g.assign(_x=g.x_m.round(2), _y=g.y_m.round(2)).drop_duplicates(["_x", "_y"]).sort_values("across_m").reset_index(drop=True) for t, g in df.groupby("transect")}
 order = sorted(sec_pts, key=lambda t: sec_pts[t].along_m.median()); al = np.array([sec_pts[t].along_m.median() for t in order]); edges = np.r_[al[0] - (al[1] - al[0]) / 2, (al[1:] + al[:-1]) / 2, al[-1] + (al[-1] - al[-2]) / 2]; wts = np.diff(edges); wts = wts / wts.sum()
 # ---- reach series from the section draws (length-weighted per draw)
@@ -31,7 +31,7 @@ for ref, zr in [("depth-averaged", None), (f"near-bed at {Z_BED:.2f} m", Z_BED)]
     log(f"{ref}: done")
 # the alternative-law scenario above the surveyed range: the flattest member of the law set alone, against the primary alone
 scen = {}
-for lab, key in [("primary (0.45, 1.0)", ch.primary), ("flattest in the set (0.65, 0.5)", (0.65, 0.5))]:
+for lab, key in [(f"primary {ch.primary}", ch.primary), ("flattest in the set (0.65, 0.5)", (0.65, 0.5))]:
     ch.primary, keep = key, ch.primary; R = sample_reach(ch, grid_st, secs_all, n=200, seed=12, threshold=THR, sources=("A_field", "disc", "bed", "stage", "z0")); ch.primary = keep
     scen[lab] = {f"{st:.2f}": float(np.nanmedian(R["reach_share"][:, j])) for j, st in enumerate(grid_st) if abs(st - round(st * 20) / 20) < 1e-6}
 json.dump(scen, open(D / "step7_law_scenarios.json", "w"), indent=1); log(f"law scenarios (share below {THR}): " + "; ".join(f"{k}: 1.30 m {v['1.30']:.2f}" for k, v in scen.items()))
@@ -48,37 +48,37 @@ nests.loc[nests.stage_use.isna() & (nests.date == "2025-05-27"), "stage_use"] = 
 assert nests.stage_use.notna().all(), nests[nests.stage_use.isna()]
 from scipy.spatial import cKDTree
 tree = cKDTree(grid[["x_m", "y_m"]].values); dist, idx = tree.query(nests[["x_m", "y_m"]].values); nests["grid_dist_m"] = dist; nests = nests[nests.grid_dist_m < 6].copy(); idx = idx[nests.index.map(lambda i: True)] if False else tree.query(nests[["x_m", "y_m"]].values)[1]
-gcell = grid.iloc[idx].reset_index(drop=True); nests = nests.reset_index(drop=True); pct, pct_near, vpred, vpred_h, hcell = [], [], [], [], []
+gcell = grid.iloc[idx].reset_index(drop=True); nests = nests.reset_index(drop=True); GLV = GridLevels(); nest_dist = []; pct, pct_near, vpred, vpred_h, hcell = [], [], [], [], []
 near_along = np.array([np.min(np.abs(gcell.along_m.values - a)) < 30 for a in grid.along_m])   # the restricted null: cells within 30 m along of some nest
 def v_of(logA, h, st, z=None):
     a = np.exp(logA) * np.clip(st - ch.primary[0], 0.02, None) ** ch.primary[1]
     if z is None: return np.where(h > np.e * Z0, a * (np.log(np.clip(h, np.e * Z0, None) / Z0) - 1), np.nan)   # depth-averaged, nan where dry
     return np.where(h > z, a * np.log(z / Z0), np.nan)   # at a height above the bed
 for k, r in nests.iterrows():
-    st = r.stage_use; cell = gcell.iloc[k]; h = max(st - cell.bed_m, 0); hcell.append(h); v = float(v_of(cell.logA, h, st)); vpred.append(v)
-    vpred_h.append(float(v_of(cell.logA, h, st, z=r.height_m)) if pd.notna(r.height_m) else np.nan)
-    hg = np.clip(st - grid.bed_m.values, 0, None); vg = v_of(grid.logA.values, hg, st); ok = ~np.isnan(vg)
+    st = r.stage_use; cell = gcell.iloc[k]; gA, gD = GLV.at(st); cA = gA[idx[k]]; nest_dist.append(float(gD[idx[k]])); h = max(st - cell.bed_m, 0); hcell.append(h); v = float(v_of(cA, h, st)); vpred.append(v)   # field and bank distance at the nest's own stage (bank set C)
+    vpred_h.append(float(v_of(cA, h, st, z=r.height_m)) if pd.notna(r.height_m) else np.nan)
+    hg = np.clip(st - grid.bed_m.values, 0, None); vg = v_of(gA, hg, st); ok = ~np.isnan(vg)
     pct.append(float(np.mean(vg[ok] < v)) if not np.isnan(v) else np.nan); pct_near.append(float(np.mean(vg[ok & near_along] < v)) if not np.isnan(v) else np.nan)
 nests["h_cell_m"] = hcell; nests["v_pred_ms"] = vpred; nests["v_pred_at_height_ms"] = vpred_h; nests["percentile_in_reach"] = pct; nests["percentile_near"] = pct_near
 nests[["location_id", "date", "x_m", "y_m", "stage_use", "h_cell_m", "water_depth_m", "height_m", "velocity_ms", "v_pred_ms", "v_pred_at_height_ms", "percentile_in_reach", "percentile_near", "grid_dist_m"]].to_csv(D / "step7_nests.csv", index=False)
 dry = nests.v_pred_ms.isna(); log(f"nests in cells dry at their stage (bed above the water in the 2 m grid): {int(dry.sum())} of {len(nests)}; these are set aside from the percentile test")
-st_ref = float(np.nanmedian(nests.stage_use)); hg = np.clip(st_ref - grid.bed_m.values, 0, None); ag = np.exp(grid.logA.values) * np.clip(st_ref - ch.primary[0], 0.02, None) ** ch.primary[1]; v_avail = np.where(hg > np.e * Z0, ag * (np.log(np.clip(hg, np.e * Z0, None) / Z0) - 1), np.nan); v_avail = v_avail[~np.isnan(v_avail)]
+st_ref = float(np.nanmedian(nests.stage_use)); hg = np.clip(st_ref - grid.bed_m.values, 0, None); gA_ref, gD_ref = GLV.at(st_ref); ag = np.exp(gA_ref) * np.clip(st_ref - ch.primary[0], 0.02, None) ** ch.primary[1]; v_avail = np.where(hg > np.e * Z0, ag * (np.log(np.clip(hg, np.e * Z0, None) / Z0) - 1), np.nan); v_avail = v_avail[~np.isnan(v_avail)]
 from scipy.stats import kstest
 q = nests.dropna(subset=["percentile_in_reach"]); ks = kstest(q.percentile_in_reach, "uniform"); ks_near = kstest(q.percentile_near, "uniform")
 # baselines: the same rank test with other scores (lower = 'better' habitat by that score), and the model's velocity within bank-distance strata (±2 m)
 pct_b = {"bank distance": [], "conveyance A (no stage)": [], "depth": []}; pct_strat = []
 for k, r in nests.iterrows():
     if pd.isna(r.percentile_in_reach): continue
-    st = r.stage_use; cell = gcell.iloc[k]; hg = np.clip(st - grid.bed_m.values, 0, None); vg = v_of(grid.logA.values, hg, st); ok = ~np.isnan(vg); hc = max(st - cell.bed_m, 0)
-    pct_b["bank distance"].append(float(np.mean(grid.dist_bank_m.values[ok] < cell.dist_bank_m))); pct_b["conveyance A (no stage)"].append(float(np.mean(grid.logA.values[ok] < cell.logA))); pct_b["depth"].append(float(np.mean(hg[ok] < hc)))
-    strat = ok & (np.abs(grid.dist_bank_m.values - cell.dist_bank_m) <= 2.0); pct_strat.append(float(np.mean(vg[strat] < float(v_of(cell.logA, hc, st)))))
+    st = r.stage_use; cell = gcell.iloc[k]; gA, gD = GLV.at(st); cA, cD = gA[idx[k]], gD[idx[k]]; hg = np.clip(st - grid.bed_m.values, 0, None); vg = v_of(gA, hg, st); ok = ~np.isnan(vg); hc = max(st - cell.bed_m, 0)
+    pct_b["bank distance"].append(float(np.mean(gD[ok] < cD))); pct_b["conveyance A (no stage)"].append(float(np.mean(gA[ok] < cA))); pct_b["depth"].append(float(np.mean(hg[ok] < hc)))
+    strat = ok & (np.abs(gD - cD) <= 2.0); pct_strat.append(float(np.mean(vg[strat] < float(v_of(cA, hc, st)))))
 baselines = {k: {"AUC": float(1 - np.mean(v)), "ks_p": float(kstest(v, "uniform").pvalue)} for k, v in pct_b.items()}; baselines["velocity within bank-distance strata (±2 m)"] = {"AUC": float(1 - np.mean(pct_strat)), "ks_p": float(kstest(pct_strat, "uniform").pvalue)}
 day_means = q.groupby("date").percentile_in_reach.mean(); from scipy.stats import ttest_1samp, wilcoxon
 cluster = {"n_days": int(len(day_means)), "mean_of_day_means": float(day_means.mean()), "t_p_vs_0.5": float(ttest_1samp(day_means, 0.5).pvalue), "wilcoxon_p": float(wilcoxon(day_means - 0.5).pvalue) if len(day_means) >= 6 else np.nan}
 nest_res = {"n_nests": int(len(nests)), "n_in_wet_cells": int(len(q)), "median_percentile_in_reach": float(q.percentile_in_reach.median()), "AUC_available_vs_used": float(1 - q.percentile_in_reach.mean()), "ks_p_vs_uniform": float(ks.pvalue),
             "AUC_restricted_to_30m_of_nests": float(1 - q.percentile_near.mean()), "ks_p_restricted": float(ks_near.pvalue), "share_of_nests_below_thr_predicted": float(np.mean(q.v_pred_ms < THR)), "share_of_reach_below_thr_at_median_nest_stage": float(np.mean(v_avail < THR)),
             "measured_nest_velocity_median": float(np.nanmedian(nests.velocity_ms)), "predicted_at_nests_depth_averaged_median": float(q.v_pred_ms.median()), "predicted_at_nests_at_reading_height_median": float(np.nanmedian(nests.v_pred_at_height_ms)), "nest_reading_height_median_m": float(np.nanmedian(nests.height_m)),
-            "baselines": baselines, "day_cluster_inference": cluster, "nest_bank_distance_median_m": float(gcell.dist_bank_m.median()), "wet_cell_bank_distance_median_m": float(grid.dist_bank_m.median())}
+            "baselines": baselines, "day_cluster_inference": cluster, "nest_bank_distance_median_m": float(np.median(nest_dist)), "wet_cell_bank_distance_median_m": float(np.median(gD_ref[hg > np.e * Z0]))}
 log(f"nests: {nest_res}"); json.dump({"season": season, "nests": nest_res}, open(D / "step7_summary.json", "w"), indent=2)
 # ---- figure
 INK, INK2, AXIS, GRID, BLUE, ORANGE, GREEN, DARK, MUTED = "#0b0b0b", "#52514e", "#c3c2b7", "#e1e0d9", "#2a78d6", "#eb6834", "#1a9e74", "#0d366b", "#898781"

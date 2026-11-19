@@ -3,20 +3,20 @@
   "kappa": 0.41,
   "adcp_on_bed_column_average": true,
   "z_adcp_point_old_m": 0.3048,
-  "h0_adcp_m_column_fit": 0.5523475725187503,
-  "h0_adcp_m_point_fit_step1b": 0.6256243720288295,
-  "column_fit_exponent_b": 0.46496999559601,
-  "column_fit_MAE_mm_s": 5.991831292198565,
+  "h0_adcp_m_column_fit": 0.5523475730276798,
+  "h0_adcp_m_point_fit_step1b": 0.6256243720289633,
+  "column_fit_exponent_b": 0.46496999370918624,
+  "column_fit_MAE_mm_s": 5.991831293493863,
   "adcp_amplitude_range": [
-    0.023931855745479416,
-    0.0711351445390876
+    0.023931855808734918,
+    0.07113514455723759
   ],
-  "adcp_amplitude_vs_depth_exponent": 0.4596321900107375,
+  "adcp_amplitude_vs_depth_exponent": 0.45963218768669617,
   "adcp_depth_scaling": {
-    "exponent_free": 0.9216426489485661,
-    "MAE_mm_s_free": 6.306337317108058,
-    "MAE_mm_s_b_0.5": 16.232522627821492,
-    "MAE_mm_s_b_2/3": 11.071270617058481
+    "exponent_free": 0.9216426471878378,
+    "MAE_mm_s_free": 6.306337311942823,
+    "MAE_mm_s_b_0.5": 16.232522599265142,
+    "MAE_mm_s_b_2/3": 11.071270580986777
   },
   "locations": {
     "n": 260,
@@ -33,7 +33,7 @@
       -0.09004255043576115,
       0.8075159344374264
     ],
-    "corr_a_vs_depth": 0.4741523334508863
+    "corr_a_vs_depth": 0.4741523334508867
   },
   "assumptions": [
     "z0 = 11 mm for every location (fit flat between 7 and 16 mm)",

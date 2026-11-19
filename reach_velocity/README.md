@@ -61,9 +61,9 @@ Validation: sections held out one at a time, days held out one at a time, the re
 
 **What is the 'law set' and why does the band widen above 1.1 m?** The day-out score is flat across (h0, γ) pairs from (0.35, 1.25) to (0.65, 0.5). Inside the surveyed range they agree; above it they diverge. The chain draws from the set, so the band says what the data cannot decide. Entries 16, 17, 22; figure 03b; Figure 4d.
 
-**What does the ADCP add?** It was never used in any fit. Read as a single 25° beam, its record through 2025 matches the chain at its own cell (ratio 0.91, 27 mm/s, the band covers every two-hour mean to 1.20 m). That reading is to be confirmed with the instrument's configuration (`OPEN_QUESTIONS.md`). Entry 23; figure 09; Figure 3b.
+**What does the ADCP add?** It was never used in any fit. Read as a single 25° beam, its record through 2025 matches the chain at its own cell (ratio 0.87, 37 mm/s, the band covers every two-hour mean to 1.20 m). That reading is to be confirmed with the instrument's configuration (`OPEN_QUESTIONS.md`). Entry 23; figure 09; Figure 3b.
 
-**Where does the ecological rule come from?** From the nests: a used-against-available model, with the USFWS 1983 spawning curve as a weak prior. The nests sit in deep, slow water near the bank; the velocity effect is −4.6 ± 1.5 log-odds per m/s, half use at 0.15 m/s. The 0.2 m/s convention sits at the 61st percentile of the nests. Entry 23; figures 10 to 12; Figure 5.
+**Where does the ecological rule come from?** From the nests: a used-against-available model, with the USFWS 1983 spawning curve as a weak prior. The nests sit in deep, slow water near the bank; the velocity effect is −2.5 ± 1.8 log-odds per m/s, half use at 0.26 m/s (with bank set C, entry 30, the effect is no longer clearly below zero). The 0.2 m/s convention sits at the 58th percentile of the nests. Entry 23; figures 10 to 12; Figure 5.
 
 **What are the numbers to quote?** `paper/TABLES.md`, Table 3, and the "Status" section at the end of the logbook.
 

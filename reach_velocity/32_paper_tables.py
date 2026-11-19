@@ -2,7 +2,8 @@
 the validation scores (Table 3), the ablations (Table 4). Outputs paper/TABLES.md and paper/table{1..4}_*.csv."""
 import json, numpy as np, pandas as pd
 from pathlib import Path
-ROOT = Path(__file__).resolve().parents[1]; HERE = ROOT / Path(__file__).resolve().parent.name; D = HERE / "data_clean"; P = HERE / "paper"; H0 = 0.45
+ROOT = Path(__file__).resolve().parents[1]; HERE = ROOT / Path(__file__).resolve().parent.name; D = HERE / "data_clean"; P = HERE / "paper"
+from uncertainty import PRIMARY, LAW_RIDGE; H0, GAM = PRIMARY   # the stage-law set, read from the saved law grid (entry 30)
 loc = pd.read_csv(D / "locations.csv"); loc = loc[loc.a > 0]; fe = pd.read_csv(D / "features.csv")
 # ---- Table 1: the sections
 cn = pd.read_csv(D / "step6_continuity.csv"); cv = pd.read_csv(D / "step6_section_coverage.csv"); npts = loc.groupby("transect").agg(n=("a", "size"), along_m=("along_m", "median")).reset_index().rename(columns={"transect": "section"})
@@ -13,7 +14,7 @@ t1.round(3).to_csv(P / "table1_sections.csv", index=False)
 # ---- Table 2: parameters and settings
 fq = json.load(open(D / "field_qc.json")); cal = json.load(open(D / "uncertainty_calibration.json")); s3 = json.load(open(D / "step3_summary.json")); sc = s3["scales_best_all_days"]; rtk = pd.read_csv(D / "rtk_session_offsets.csv")
 sdy = np.clip(fe.a_sd / fe.A / 1.0, 0.02, 1.0)   # a_sd/a: the per-point noise in log (A = a/g, same relative sd)
-import re; law_set = re.search(r"LAW_RIDGE = \[(.*?)\]", open(HERE / "uncertainty.py").read()).group(1)
+law_set = ", ".join(f"({h0}, {g})" for h0, g in LAW_RIDGE)   # the rule applied to the saved law grid (uncertainty.law_set, entry 30)
 rows = [
  ("Readings to one number", "vertical profile", "v(z) = a ln(z / z0); readings at z >= 3 cm and v > 5 mm/s", "fixed form"),
  ("", "roughness scale z0", f"{fq['z0_m']*1000:.1f} mm for the reach (flat between {fq['z0_within_5pct_of_min_m'][0]*1000:.0f} and {fq['z0_within_5pct_of_min_m'][1]*1000:.0f} mm), from {fq['profiles_in_z0_fit']} profiles with three or more readings", "fitted, pooled grid search"),
@@ -21,7 +22,7 @@ rows = [
  ("Stage record", "sensor", "ultrasonic range every 10 min; daytime sensor pattern removed against the night line, median filtered; 2 h means for the series", "processing"),
  ("", "stage error in the chain", "1.5 cm, one draw per time shared by every section", "assumed"),
  ("Stage law", "form", "a = A (stage - h0)^gamma, one law for the reach", "fixed form"),
- ("", "primary pair", "h0 = 0.45 m, gamma = 1.0 (best day-out CRPS)", "chosen on a grid"),
+ ("", "primary pair", f"h0 = {H0} m, gamma = {GAM} (best day-out CRPS)", "chosen on a grid"),
  ("", "law set drawn in the chain", f"every grid pair within 0.01 CRPS of the best with h0 below 0.66 m: {law_set}", "uniform over the set"),
  ("Spatial model", "target", "log A, A = a / (stage - h0)^gamma", ""),
  ("", "inputs", "along the reach, relative position across, distance to the nearer bank, relative depth in the section, section mean depth, lateral bed slope", "measured"),
@@ -40,7 +41,7 @@ t2 = pd.DataFrame(rows, columns=["block", "item", "value", "how set"]); t2.to_cs
 # ---- Table 3: scores
 m2 = pd.read_csv(D / "step2_metrics.csv"); to = m2[m2.scheme == "transect_out"].set_index("model"); rf = m2[m2.scheme == "random_10fold"].set_index("model"); m3 = pd.read_csv(D / "step3_metrics.csv"); do = m3[m3.scheme == "day_out"].set_index("law"); lg = pd.read_csv(D / "step3b_law_grid.csv").set_index(["h0", "gamma"])
 rh = pd.read_csv(D / "step6_readings_heldout_adopted_law.csv"); mae = np.mean(np.abs(rh.velocity_ms - rh.v_pred)); mad = np.mean(np.abs(rh.velocity_ms - rh.velocity_ms.median())); cov = np.mean((rh.velocity_ms >= rh.v_lo) & (rh.velocity_ms <= rh.v_hi)); below = rh.velocity_ms < 0.2; hit = np.mean((rh.v_pred < 0.2) == below); base = max(below.mean(), 1 - below.mean())
-ad = pd.read_csv(D / "step3_adcp.csv").dropna(subset=["velocity_ms", "stage_m"]); g_ = np.clip(ad.stage_m - H0, 0.02, None); c_ = np.median(ad.velocity_ms / g_); mae_adcp = np.mean(np.abs(ad.velocity_ms - c_ * g_)) * 1000; adc = json.load(open(D / "adcp_recheck.json"))
+ad = pd.read_csv(D / "step3_adcp.csv").dropna(subset=["velocity_ms", "stage_m"]); g_ = np.clip(ad.stage_m - H0, 0.02, None) ** GAM; c_ = np.median(ad.velocity_ms / g_); mae_adcp = np.mean(np.abs(ad.velocity_ms - c_ * g_)) * 1000; adc = json.load(open(D / "adcp_recheck.json"))
 cs = pd.read_csv(D / "step6_continuity_common_stage.csv"); sp = cs.groupby("stage_m").Q_med.agg(lambda x: np.std(np.log(x), ddof=1)); rr = json.load(open(D / "step6_reach_rating.json")); same = cn.groupby("date").filter(lambda g: len(g) > 1).groupby("date").Q_measured_m3s.agg(lambda x: x.max() / x.min())
 s7 = json.load(open(D / "step7_summary.json")); tot = pd.read_csv(D / "step5_reach_totals.csv")
 rows = [
@@ -48,16 +49,16 @@ rows = [
  ("", "MAE of log A: six features + notes / reach mean", f"{to.MAE_log['full features + notes']:.3f} / {to.MAE_log['reach mean']:.3f}"),
  ("", "95% band coverage, six features + notes", f"{to.coverage95['full features + notes']:.2f}"),
  ("", "random ten-fold CRPS for the same three models (the cautionary comparison)", f"{rf.CRPS_log['full features + notes']:.3f} / {rf.CRPS_log['generic shape (bank distance)']:.3f} / {rf.CRPS_log['reach mean']:.3f}"),
- ("Day held out (11 folds, 257 points)", "CRPS of log a: stage law (0.45, 1.0) / local depth^0.5 / no law", f"{lg.CRPS[(0.45, 1.0)]:.3f} / {do.CRPS['depth^0.5']:.3f} / {do.CRPS['none']:.3f}"),
- ("", "CRPS across the law set (seven pairs)", f"{lg.CRPS.min():.3f} to {lg.CRPS.loc[[(0.45,1.0),(0.35,1.25),(0.55,0.75),(0.35,1.0),(0.45,0.75),(0.65,0.5),(0.55,0.5)]].max():.3f}"),
+ ("Day held out (11 folds, 257 points)", f"CRPS of log a: stage law ({H0}, {GAM}) / local depth^0.5 / no law", f"{lg.CRPS[PRIMARY]:.3f} / {do.CRPS['depth^0.5']:.3f} / {do.CRPS['none']:.3f}"),
+ ("", f"CRPS across the law set ({len(LAW_RIDGE)} pairs)", f"{lg.CRPS.min():.3f} to {lg.CRPS.loc[LAW_RIDGE].max():.3f}"),
  ("", "day level: sd of the held-out day means before / after the law (log)", "0.34 / 0.17"),
  ("Readings on held-out days (1,208 readings)", "MAE / mean absolute deviation of the readings (m/s)", f"{mae:.3f} / {mad:.3f}"),
  ("", "95% band coverage", f"{cov:.2f}"),
  ("", "below or above 0.2 m/s called right / base rate", f"{hit*100:.0f}% / {base*100:.0f}%"),
  ("Sections on held-out days (20)", "measured section mean velocity inside the 90% band", f"{cv.mean_v_in_band.mean()*100:.0f}% (MAE {np.mean(np.abs(cv.mean_v_measured - cv.mean_v_med)):.3f} m/s, median relative error {np.median(np.abs(cv.mean_v_measured - cv.mean_v_med) / cv.mean_v_measured)*100:.0f}%)"),
  ("", "measured share below 0.2 m/s inside the 90% band", f"{cv.share_in_band.mean()*100:.0f}% (MAE {np.mean(np.abs(cv.share_measured - cv.share_med))*100:.0f} points)"),
- ("ADCP through 2025 (shape check, level fitted)", "MAE of the law c (stage - 0.45) against the 10-min record", f"{mae_adcp:.0f} mm/s"),
- ("", "sd of the log ratio over the season", f"{json.load(open(D / 'step3b_adcp_shape.json'))['adcp_shape']['reach stage law (stage-0.45)^1.00 | ADCP read as point at fixed height']['log_ratio_sd_over_season']:.3f}"),
+ ("ADCP through 2025 (shape check, level fitted)", f"MAE of the law c (stage - {H0})^{GAM} against the 10-min record", f"{mae_adcp:.0f} mm/s"),
+ ("", "sd of the log ratio over the season", f"{json.load(open(D / 'step3b_adcp_shape.json'))['adcp_shape'][f'reach stage law (stage-{H0:.2f})^{GAM:.2f} | ADCP read as point at fixed height']['log_ratio_sd_over_season']:.3f}"),
  ("", "its own exponent on (stage - 0.45) at the surveyed depth: point / column reading", f"{adc['adcp_exponent_on_stage_minus_0.45']['point reading (v proportional to a)']:.2f} / {adc['adcp_exponent_on_stage_minus_0.45']['column reading with the surveyed depth']:.2f}"),
  ("Continuity (measured)", "20 section discharges from 11 days on one rating", f"Q = {rr['coef']:.0f} (stage - 0.45)^{rr['exponent']:.2f} m3/s, {rr['scatter_pct']:.0f}% scatter"),
  ("", "same-day sections, max/min of the measured discharge", ", ".join(f"{v:.2f}" for v in same.values)),

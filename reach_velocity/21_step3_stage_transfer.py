@@ -41,20 +41,22 @@ for lname in ["none", best]:
     if lname == best: q.to_csv(D / "step3_readings_heldout.csv", index=False)
     log(f"readings on held-out days, {lname}: MAE {rl[lname]['MAE_m_s']:.3f} m/s, bias {rl[lname]['bias_m_s']:+.3f}, coverage {rl[lname]['coverage95']:.2f}, spread of readings {rl[lname]['sd_of_readings']:.3f}")
 # ADCP: A at its position from the field fitted on all days (best law), then its season
-law_b = LAWS[best]; d_all = with_target(df, law_b); m_all = Model().fit(d_all)
+law_b = LAWS[best]
 near = df.iloc[(df.x_m ** 2 + df.y_m ** 2).argmin()]; feat_adcp = {f: float(near[f]) for f in FULL}; feat_adcp["along_m"] = 0.0
-import geopandas as gpd
-from shapely.geometry import Point
-bk = gpd.read_file(HERE / "data_raw" / "bank_lines_Middle.geojson"); bk = bk.to_crs("ESRI:102690") if (bk.crs is None or bk.crs.is_geographic) else bk
-pA = Point(13244857.0, 319995.5); dl, dr = bk[bk.bank == "left"].geometry.iloc[0].distance(pA) * 0.3048, bk[bk.bank == "right"].geometry.iloc[0].distance(pA) * 0.3048
-feat_adcp["dist_bank_m"], feat_adcp["rel_across"] = min(dl, dr), (dr - dl) / (dl + dr)
-row = pd.DataFrame([{**feat_adcp, **{c: 0.0 for c in NOTE_COLS}}]); muA, sdA = m_all.predict(row); A_adcp = float(np.exp(muA[0])); sdA = float(sdA[0])
+import banklines_3dep as B
+SF = B.StageFeatures("Middle"); df = SF.training(df); d_all = with_target(df, law_b); m_all = Model().fit(d_all)   # bank set C (entry 30): the bank features at the ADCP follow its stage
 ad = pd.read_csv(D / "adcp_amplitude_2h.csv", parse_dates=["time_utc"]); h0 = json.load(open(D / "amplitude_inputs.json"))["h0_adcp_m_column_fit"]; ad["h"] = ad.stage_m - h0; ad = ad[ad.h > Z0 * 3].copy()
+LV = SF.grid(float(ad.stage_m.min()), float(ad.stage_m.max())); MUs, SDs = [], []
+for lv in LV:
+    dist_, rel_, _ = SF.features([13244857.0], [319995.5], lv); f_ = dict(feat_adcp, dist_bank_m=float(dist_[0]), rel_across=float(rel_[0]))
+    mu_, sd_ = m_all.predict(pd.DataFrame([{**f_, **{c: 0.0 for c in NOTE_COLS}}])); MUs.append(mu_[0]); SDs.append(sd_[0])
+muA_t, sdA_t = np.interp(ad.stage_m, LV, MUs), np.interp(ad.stage_m, LV, SDs); A_adcp = float(np.exp(np.interp(0.90, LV, MUs))); sdA = float(np.interp(0.90, LV, SDs))   # summary numbers at the reference stage 0.90 m
+feat_adcp["dist_bank_m"], feat_adcp["rel_across"] = [float(x[0]) for x in SF.features([13244857.0], [319995.5], 0.90)[:2]]
 if law_b[0] == "depth": g_t = ad.h ** law_b[1]
 elif law_b[0] == "Q":
     qd = pd.read_csv(D / "usgs_daily.csv"); qmap = qd.set_index("date").discharge_cfs; g_t = (ad.time_utc.dt.strftime("%Y-%m-%d").map(qmap).values / 350.0) ** law_b[1]
 else: g_t = np.ones(len(ad))
-ad["a_pred"] = A_adcp * g_t; ad["v_pred"] = ad.a_pred * (np.log(ad.h / Z0) - 1); ad["v_lo"] = ad.v_pred * np.exp(-1.96 * sdA); ad["v_hi"] = ad.v_pred * np.exp(1.96 * sdA)
+ad["a_pred"] = np.exp(muA_t) * g_t; ad["v_pred"] = ad.a_pred * (np.log(ad.h / Z0) - 1); ad["v_lo"] = ad.v_pred * np.exp(-1.96 * sdA_t); ad["v_hi"] = ad.v_pred * np.exp(1.96 * sdA_t)
 ad["a_obs"] = ad.velocity_ms / (np.log(ad.h / Z0) - 1); adcp_res = {"A_adcp_from_field": A_adcp, "sd_logA": sdA, "nearest_point": str(near.location_id), "dist_bank_m": feat_adcp["dist_bank_m"], "MAE_m_s": float(np.mean(np.abs(ad.v_pred - ad.velocity_ms))), "bias_m_s": float(np.mean(ad.v_pred - ad.velocity_ms)), "coverage95": float(np.mean((ad.velocity_ms >= ad.v_lo) & (ad.velocity_ms <= ad.v_hi))), "ratio_obs_over_pred_median": float(np.median(ad.velocity_ms / ad.v_pred))}
 ad.to_csv(D / "step3_adcp.csv", index=False); log(f"ADCP from the field ({best}): A {A_adcp:.3f} (sd log {sdA:.2f}); season MAE {adcp_res['MAE_m_s']*1000:.0f} mm/s, bias {adcp_res['bias_m_s']*1000:+.0f}, coverage {adcp_res['coverage95']:.2f}, obs/pred median {adcp_res['ratio_obs_over_pred_median']:.2f}")
 # revisited pairs under each law

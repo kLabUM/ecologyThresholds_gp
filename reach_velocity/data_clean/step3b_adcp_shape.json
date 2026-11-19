@@ -1,39 +1,39 @@
 {
   "best_stage_law": {
     "h0": 0.45,
-    "gamma": 1.0,
-    "CRPS": 0.30934732003433735
+    "gamma": 0.75,
+    "CRPS": 0.32051681219200345
   },
   "adcp_shape": {
-    "reach stage law (stage-0.45)^1.00 | ADCP read as column": {
-      "log_ratio_sd_over_season": 0.1303161826578116,
-      "slope_of_log_ratio_vs_log_depth": -0.26884237369814373
+    "reach stage law (stage-0.45)^0.75 | ADCP read as column": {
+      "log_ratio_sd_over_season": 0.08069043512490676,
+      "slope_of_log_ratio_vs_log_depth": -0.08672373402701261
     },
-    "reach stage law (stage-0.45)^1.00 | ADCP read as point at fixed height": {
-      "log_ratio_sd_over_season": 0.11043160272374997,
-      "slope_of_log_ratio_vs_log_depth": 0.19316808523968348
+    "reach stage law (stage-0.45)^0.75 | ADCP read as point at fixed height": {
+      "log_ratio_sd_over_season": 0.1689564092385601,
+      "slope_of_log_ratio_vs_log_depth": 0.37528672547412734
     },
     "local depth^0.5 at the ADCP | ADCP read as column": {
-      "log_ratio_sd_over_season": 0.07502473174280726,
-      "slope_of_log_ratio_vs_log_depth": -0.04036780998926248
+      "log_ratio_sd_over_season": 0.0750247319974188,
+      "slope_of_log_ratio_vs_log_depth": -0.040367812313302866
     },
     "local depth^0.5 at the ADCP | ADCP read as point at fixed height": {
-      "log_ratio_sd_over_season": 0.1842038877724662,
-      "slope_of_log_ratio_vs_log_depth": 0.4216426489485661
+      "log_ratio_sd_over_season": 0.18420388741336502,
+      "slope_of_log_ratio_vs_log_depth": 0.42164264718783817
     },
     "discharge^0.75 | ADCP read as column": {
-      "log_ratio_sd_over_season": 0.25019011690605397,
-      "slope_of_log_ratio_vs_log_depth": -0.52114861076198
+      "log_ratio_sd_over_season": 0.25019011734597163,
+      "slope_of_log_ratio_vs_log_depth": -0.5211486111375271
     },
     "discharge^0.75 | ADCP read as point at fixed height": {
       "log_ratio_sd_over_season": 0.14758589281115933,
-      "slope_of_log_ratio_vs_log_depth": -0.0591381518241501
+      "slope_of_log_ratio_vs_log_depth": -0.05913815163638407
     }
   },
   "adcp_exponents": {
-    "point_reading_exponent_vs_local_depth": 0.9216426489485656,
-    "column_reading_exponent_vs_local_depth": 0.45963219001073724,
-    "transects_day_out_exponent_on_stage_minus_h0": 1.0,
+    "point_reading_exponent_vs_local_depth": 0.9216426471878382,
+    "column_reading_exponent_vs_local_depth": 0.45963218768669706,
+    "transects_day_out_exponent_on_stage_minus_h0": 0.75,
     "h0": 0.45
   }
 }

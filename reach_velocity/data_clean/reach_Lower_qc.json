@@ -34,14 +34,12 @@
     "fit_r2_median": 0.7999558996482703
   },
   "geometry": {
-    "reach_length_m": 795.2542410095998,
-    "max_offset_from_centreline_m": 25.37087508670292,
-    "corr_rel_across_vs_across": 0.9539117797265816,
-    "width_m_median": 39.12790982828367
+    "reach_length_m": 795.254241009653,
+    "max_offset_from_centreline_m": 25.37087508525538
   },
   "slope": {
     "cm_per_100m": 4.95077613209105,
-    "se_cm_per_100m": 1.9971432347085822,
+    "se_cm_per_100m": 1.9971432347090408,
     "from_good_transects": 10,
     "days": [
       "2026-06-05",
@@ -49,23 +47,23 @@
       "2026-06-17",
       "2026-06-22"
     ],
-    "resid_sd_cm": 2.254946222404295,
-    "along_ref_m": 175.33266377414634
+    "resid_sd_cm": 2.2549462224071464,
+    "along_ref_m": 175.33266377429047
   },
   "rating": {
-    "stage_vs_lnQ_slope_m": 0.4927411139077764,
-    "intercept_m": 173.277133608372,
-    "residual_sd_cm": 30.699792555690024,
+    "stage_vs_lnQ_slope_m": 0.49274111390780034,
+    "intercept_m": 173.27713360837177,
+    "residual_sd_cm": 30.69979255568803,
     "n_days": 7,
     "Q_range_cfs": [
       110.0,
       519.0
     ],
     "stage_range_m": [
-      175.51509240343697,
-      176.6357279203681
+      175.51509240343682,
+      176.63572792036794
     ],
-    "corr_stage_lnQ": 0.7315782781580685
+    "corr_stage_lnQ": 0.7315782781580941
   },
   "transects": {
     "n": 15,

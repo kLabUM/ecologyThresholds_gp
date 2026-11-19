@@ -2,6 +2,7 @@
 data/ on 15 and 18 September 2026, the Upper record replaced on 18 November 2026). Sensor cleaning the Middle's way (implausible readings out, spikes against a 6 h rolling median out,
 10-min grid, 3 h median; the daily wobble is measured and reported, not removed), stage at each reading's time, the RTK water surface tied
 to the sensor per session (one slope), the bed on the sensor datum, features at a reference stage, and the day-out grid over (h0, gamma).
+Bank features from bank set C at each point's survey-day level (banklines_3dep.StageFeatures, entry 30); its lines go to data_clean/banks_c/.
 Outputs: data_clean/reach_{r}_stage_10min.csv, reach_{r}_points_sensor.csv, reach_{r}_tie.csv, reach_{r}_law_grid.csv, reach_{r}_sensor_qc.json, figures/14_other_reaches_sensor_prep.png"""
 import json, sys, time, warnings
 import numpy as np, pandas as pd
@@ -19,7 +20,7 @@ def sensor_along_m(reach, lat_lon, pts):
     from shapely.geometry import Point
     from shapely.ops import linemerge
     from pyproj import Transformer
-    cl = gpd.read_file(RAW / f"centerline_union_{reach}.geojson"); u = cl.geometry.union_all() if hasattr(cl.geometry, "union_all") else cl.geometry.unary_union; line = u if u.geom_type == "LineString" else linemerge(u)
+    cl = gpd.read_file(RAW.parent / "data_clean" / "banklines_survey" / f"centerline_union_{reach}.geojson"); u = cl.geometry.union_all() if hasattr(cl.geometry, "union_all") else cl.geometry.unary_union; line = u if u.geom_type == "LineString" else linemerge(u)
     x, y = Transformer.from_crs(4326, cl.crs, always_xy=True).transform(lat_lon[1], lat_lon[0]); p0 = pts.iloc[0]
     origin = line.project(Point(p0.Easting, p0.Northing)) - p0.along_m / FT   # the points' along_m origin, in the line's units (ft)
     return float((line.project(Point(x, y)) - origin) * FT), float(line.distance(Point(x, y)) * FT)
@@ -41,7 +42,7 @@ raw["location_id"] = raw.date + "|" + raw["Transect ID"].astype(str).str.strip()
 INK, INK2, AXIS, GRID, BLUE, ORANGE, GREEN, DARK, MUTED = "#0b0b0b", "#52514e", "#c3c2b7", "#e1e0d9", "#2a78d6", "#eb6834", "#1a9e74", "#0d366b", "#898781"
 plt.rcParams.update({"font.family": "sans-serif", "font.sans-serif": ["Helvetica", "Arial", "DejaVu Sans"], "font.size": 8, "axes.edgecolor": AXIS, "axes.linewidth": 0.6, "grid.color": GRID, "grid.linewidth": 0.5, "legend.frameon": False, "savefig.dpi": 200, "axes.facecolor": "#fcfcfb"})
 fig = plt.figure(figsize=(18, 10)); gs = fig.add_gridspec(2, 4, wspace=0.3, hspace=0.45, width_ratios=[2, 1, 1, 1])
-for i, (reach, cfg) in enumerate(CFG.items()):
+for i, (reach, cfg) in enumerate((r, c) for r, c in CFG.items() if r in (sys.argv[1:] or CFG)):   # python 37_other_reaches_prep.py [Upper] [Lower]
     g, qc = clean_stage(cfg["files"], cfg["offset_mm"]); g.to_csv(D / f"reach_{reach}_stage_10min.csv"); sm = g.stage_m.dropna(); qc.update({"site": cfg["site"], "offset_mm": cfg["offset_mm"], "note": cfg["note"], "along_sensor_m": cfg.get("along_sensor_m")})
     pts = pd.read_csv(D / f"reach_{reach}_points.csv")
     if cfg.get("lat_lon"):
@@ -61,6 +62,10 @@ for i, (reach, cfg) in enumerate(CFG.items()):
     pts["h_ref_m"] = np.clip(ref - S * (pts.along_m - cfg["along_sensor_m"]) - pts.bed_m, 0, None); gsec = pts.groupby("transect"); pts["rel_depth"] = (pts.h_ref_m / gsec.h_ref_m.transform("max").replace(0, np.nan)).fillna(0); pts["section_mean_depth_m"] = gsec.h_ref_m.transform("mean")
     pts["slope_cm_per_100m"] = S * 1e4; pts["along_sensor_m"] = cfg["along_sensor_m"]; pts["local_stage_m"] = pts.stage_m - S * (pts.along_m - cfg["along_sensor_m"])   # the water level at the section on the sensor datum
     pts.to_csv(D / f"reach_{reach}_points_sensor.csv", index=False); T.to_csv(D / f"reach_{reach}_tie.csv", index=False)
+    # ---- bank set C (entry 30): needs the tie just written; the bank features at each point's survey-day level, and the lines on disk
+    import banklines_3dep as B
+    SF = B.StageFeatures(reach); k_ = B.tie(reach); L_rec = k_["a"] + k_["b"] * sm.values; SF.write(D / "banks_c", float(L_rec.max()))
+    pts = SF.training(pts); pts.to_csv(D / f"reach_{reach}_points_sensor.csv", index=False); qc["bank_set_C"] = {"record_max_level_m": float(L_rec.max()), "dist_bank_m_median": float(pts.dist_bank_m.median())}
     # ---- the day-out grid over (h0, gamma) with the sensor stage (as step 3b for the Middle): h0 below the lowest stage the river reached
     d = pts[pts.a > 0].copy(); smin = float(sm.min()); rows = []
     for h0 in np.round(np.arange(max(smin - 0.45, -0.3), smin + 0.01, 0.1), 2):

@@ -50,20 +50,32 @@ STATION_FIELDS = ["transect", "station_m", "offset_m", "x_ft", "y_ft", "lon", "l
 
 
 # ---------------------------------------------------------------- inputs ---
+SURVEY_LINES = D / "banklines_survey"   # written by 44_banklines_survey.py (centreline, set A, in-water point positions)
+
+
 def centreline(reach):
-    cl = gpd.read_file(RAW / f"centerline_union_{reach}.geojson").to_crs(CRS_FT)
+    cl = gpd.read_file(SURVEY_LINES / f"centerline_union_{reach}.geojson").to_crs(CRS_FT)
     u = cl.geometry.union_all() if hasattr(cl.geometry, "union_all") else cl.geometry.unary_union
     return u if u.geom_type == "LineString" else linemerge(u)
 
 
+def sensor_rating(reach):
+    """Upper and Lower: the sections' water level L at the reference position (RTK surface, slope-corrected) against the sensor stage s on
+    the tied days, L = a + b s, with the fit's scatter (entries 21 and 26). Inputs from 37_other_reaches_prep.py; 38_ uses the same fit."""
+    pts = pd.read_csv(D / f"reach_{reach}_points_sensor.csv"); T = pd.read_csv(D / f"reach_{reach}_tie.csv")
+    S = float(pts.slope_cm_per_100m.iloc[0]) / 1e4; along_ref = float(pts.along_m.median())
+    good = T[T.rtk_good & T.stage_m.notna()].copy(); good["L"] = good.wse_rtk_m + S * (good.along_m - along_ref)
+    day = good.groupby("date").agg(s=("stage_m", "median"), L=("L", "mean"), n=("transect", "size"))
+    b = np.polyfit(day.s, day.L, 1); day["L_fit"] = np.polyval(b, day.s); sd = float((day.L - day.L_fit).std(ddof=2))
+    return {"a": float(b[1]), "b": float(b[0]), "slope": S, "along_ref": along_ref, "sd": sd, "day": day, "coef": b}
+
+
 def tie(reach):
-    """The sensor-to-section tie: Middle from entry 10, Upper and Lower from their chain summaries (entries 21, 26)."""
+    """The sensor-to-section tie: Middle from entry 10, Upper and Lower from their sensor-to-section rating (entries 21, 26)."""
     if reach in TIE:
         return TIE[reach]
-    sm = json.load(open(D / f"reach_{reach}_chain_summary.json")); pts = pd.read_csv(D / f"reach_{reach}_points_sensor.csv")
-    a, b = sm["sensor_to_section_rating"]["L = a + b s"]
-    return {"a": a, "b": b, "slope": float(pts.slope_cm_per_100m.iloc[0]) / 1e4, "along_ref": float(pts.along_m.median()),
-            "sd": sm["sensor_to_section_rating"]["scatter_sd_m"]}
+    k = sensor_rating(reach)
+    return {c: k[c] for c in ("a", "b", "slope", "along_ref", "sd")}
 
 
 def survey_points(reach):
@@ -75,9 +87,52 @@ def survey_points(reach):
     return p.dropna(subset=["Easting", "Northing"]).reset_index(drop=True)
 
 
-def load_transects(reach):
-    t = pd.read_csv(RAW / f"3dep_bank_transects_{reach}.csv")
-    return t[STATION_FIELDS]
+def load_transects(reach, check=True):
+    """The 3DEP transects with their elevations (data_raw cache, made by fetch_transects). Their positions are checked against
+    transect_points(): a cache made on other positions is refused, so the elevations always belong to this folder's geometry."""
+    t = pd.read_csv(RAW / f"3dep_bank_transects_{reach}.csv")[STATION_FIELDS]
+    if check:
+        err = check_transects(reach, t)
+        if err > 0.01:
+            raise SystemExit(f"{reach}: the cached 3DEP transects sit up to {err:.2f} m from transect_points(); refetch with "
+                             f"'python banklines_3dep.py fetch {reach}' (needs internet)")
+    return t
+
+
+# ---------------------------------------------------------------- the 3DEP transects (geometry and fetch) ---
+TRANSECT_EVERY_M, TRANSECT_HALF_M, TRANSECT_STEP_M, PAD_M = 10.0, 80.0, 1.0, 50.0   # every 10 m, +/- 80 m, 1 m step, 50 m beyond the survey
+SURVEY_TYPES = ("Transect", "Other", "Thalweg")
+
+
+def transect_points(reach):
+    """The points where 3DEP is sampled: transects across the centreline (44_) every 10 m over the stretch of the in-water survey
+    points (44_, the types that mark the surveyed stretch), padded 50 m at each end; normals to the left of the digitised direction.
+    Carried over from the fetch first run outside this folder (Code for Paper banklines/build_banklines_3dep.py, 18 Nov 2026)."""
+    line = centreline(reach); w = pd.read_csv(SURVEY_LINES / f"in_water_points_{reach}.csv"); w = w[w.Type.isin(SURVEY_TYPES)]
+    d = np.array([line.project(Point(x, y)) for x, y in zip(w.Easting, w.Northing)])
+    s0, s1 = max(d.min() - PAD_M / FT, 0), min(d.max() + PAD_M / FT, line.length)
+    offs = np.arange(-TRANSECT_HALF_M, TRANSECT_HALF_M + 1e-9, TRANSECT_STEP_M); rows = []
+    for i, s_ in enumerate(np.arange(s0, s1 + 1e-9, TRANSECT_EVERY_M / FT)):
+        p = line.interpolate(s_); a, b = line.interpolate(max(s_ - 10 / FT, 0)), line.interpolate(min(s_ + 10 / FT, line.length))
+        tx, ty = b.x - a.x, b.y - a.y; nrm = np.hypot(tx, ty) or 1.0; nx, ny = -ty / nrm, tx / nrm
+        rows += [(i, (s_ - s0) * FT, o, p.x + o / FT * nx, p.y + o / FT * ny) for o in offs]
+    t = pd.DataFrame(rows, columns=["transect", "station_m", "offset_m", "x_ft", "y_ft"])
+    ll = gpd.GeoSeries(gpd.points_from_xy(t.x_ft, t.y_ft), crs=CRS_FT).to_crs(4326); t["lon"], t["lat"] = ll.x.round(7), ll.y.round(7)
+    return t
+
+
+def check_transects(reach, t=None):
+    """Largest distance (m) between the cached transect points and transect_points(); inf if the counts differ."""
+    t = pd.read_csv(RAW / f"3dep_bank_transects_{reach}.csv") if t is None else t; g = transect_points(reach)
+    if len(t) != len(g):
+        return np.inf
+    a, b = t.sort_values(["transect", "offset_m"]), g.sort_values(["transect", "offset_m"])
+    return float(np.max(np.hypot(a.x_ft.to_numpy() - b.x_ft.to_numpy(), a.y_ft.to_numpy() - b.y_ft.to_numpy())) * FT)
+
+
+def fetch_transects(reach):
+    """Sample 3DEP at transect_points() and write the cache data_raw/3dep_bank_transects_{reach}.csv (needs internet)."""
+    t = transect_points(reach); t["elev_m"] = sample_3dep(t); t.to_csv(RAW / f"3dep_bank_transects_{reach}.csv", index=False); return t
 
 
 def stations(reach, t):
@@ -146,7 +201,7 @@ def along_interp(st, an, col):
 # ---------------------------------------------------------------- the three sets ---
 def set_A(reach):
     """The old lines, as written by 44_banklines_survey.py (the main branch's dataSorting.ipynb at commit 2346281)."""
-    return gpd.read_file(RAW / f"bank_lines_{reach}.geojson").to_crs(CRS_FT)
+    return gpd.read_file(SURVEY_LINES / f"bank_lines_{reach}.geojson").to_crs(CRS_FT)
 
 
 def offsets_to_lines(reach, st, neg, pos, old):
@@ -288,3 +343,94 @@ def sample_3dep(pts, batch=500):
             except (TypeError, ValueError): v = np.nan
             out[k * batch + int(s["locationId"])] = v if v > -1000 else np.nan
     return out
+
+
+# ---------------------------------------------------------------- set C in the model (logbook entry 30) ---
+LEVEL_STEP_M = 0.05     # the chain's stage grid for the bank features (decision in entry 30)
+C_SEED = 30
+
+
+class StageFeatures:
+    """Set C as the model uses it: bank lines, distance to the bank and relative position at any stage, best estimate or draw j.
+
+    stage is in the chain's own unit: the sensor stage for the Middle, the sections' level L at the reference position (m NAVD88)
+    for the Upper and Lower. At a stage, the edges are C's edges at the water level that stage gives at each station, moved out so that
+    every point surveyed on a day with the same or a lower water level is inside (1 m margin); the same rule makes the training
+    features (each point at its own survey day's level). Draw j: the edge errors (lidar, gap, substitute) as correlated normals fixed
+    per draw, and for the survey days also the day's tie error; away from survey days the tie error enters through the chain's stage
+    source, which moves the stage at which the features are read."""
+
+    def __init__(self, reach, n_draws=N_DRAWS, seed=C_SEED):
+        self.reach, self.n_draws = reach, n_draws
+        t = load_transects(reach); self.st = stations(reach, t); e = flat_edges(t); an = survey_anchors(reach, self.st)
+        self.C = StageBanks(reach, t, self.st, e, an); self.old = set_A(reach); self.k = tie(reach)
+        self.along = self.st.along_m.to_numpy(); self.p = survey_points(reach)
+        sday = self.p.groupby("date").stage_m.median()
+        self.day_stage = sday.map(self.from_sensor).to_dict() if reach != "Middle" else sday.to_dict()   # in the chain's unit
+        rng = np.random.default_rng(seed); n = len(self.st)
+        self.zn = [correlated_normals(n, rng) for _ in range(n_draws)]; self.zp = [correlated_normals(n, rng) for _ in range(n_draws)]
+        self.ztie = [{d: float(rng.standard_normal()) for d in sorted(self.day_stage)} for _ in range(n_draws)]
+        self._cache = {}
+
+    def from_sensor(self, s):
+        return s if self.reach == "Middle" else self.k["a"] + self.k["b"] * s
+
+    def level(self, stage):
+        if self.reach == "Middle":
+            return water_level(self.reach, stage, self.along)
+        return stage - self.k["slope"] * (self.along - self.k["along_ref"])
+
+    def offsets(self, stage, j=None, day=None):
+        key = (round(float(stage), 4), j, day)
+        if key in self._cache:
+            return self._cache[key]
+        lev = self.level(stage) + (self.ztie[j][day] * self.k["sd"] if (j is not None and day is not None) else 0.0)
+        if j is None:
+            ed = self.C.edges(lev); neg, pos = ed["neg"][0].copy(), ed["pos"][0].copy()
+        else:
+            neg, pos = self.C.draw(lev, self.zn[j], self.zp[j])
+        lower = [d for d, s in self.day_stage.items() if s <= float(stage) + 1e-9]
+        neg, pos = push_out(self.st, neg, pos, self.reach, self.p[self.p.date.isin(lower)])
+        self._cache[key] = (neg, pos); return neg, pos
+
+    def lines(self, stage, j=None, day=None):
+        neg, pos = self.offsets(stage, j, day); return offsets_to_lines(self.reach, self.st, neg, pos, self.old)
+
+    def features(self, E, N, stage, j=None, day=None):
+        """dist_bank_m, rel_across, width_m at positions (ft, state plane) for one stage."""
+        import shapely
+        bk = self.lines(stage, j, day); left = bk[bk.bank == "left"].geometry.iloc[0]; right = bk[bk.bank == "right"].geometry.iloc[0]
+        P = shapely.points(np.asarray(E, float), np.asarray(N, float)); dl = shapely.distance(P, left) * FT; dr = shapely.distance(P, right) * FT
+        return np.minimum(dl, dr), (dr - dl) / (dl + dr), dl + dr
+
+    def training(self, df, j=None):
+        """df with the bank features at each point's own survey day (C best, or draw j)."""
+        d = df.copy(); dist, rel, wid = np.empty(len(d)), np.empty(len(d)), np.empty(len(d))
+        for day, ix in d.groupby("date").indices.items():
+            r = self.features(d.Easting.values[ix], d.Northing.values[ix], self.day_stage[day], j, day); dist[ix], rel[ix], wid[ix] = r
+        d["dist_bank_m"], d["rel_across"], d["width_m"] = dist, rel, wid; return d
+
+    def grid(self, lo, hi):
+        """The stage grid covering [lo, hi] at LEVEL_STEP_M."""
+        return np.round(np.arange(np.floor(lo / LEVEL_STEP_M) * LEVEL_STEP_M, np.ceil(hi / LEVEL_STEP_M) * LEVEL_STEP_M + 1e-9, LEVEL_STEP_M), 4)
+
+    def outline(self, stage):
+        """The channel polygon of the best estimate at a stage (the map uses the highest stage in the record)."""
+        return polygon(self.lines(stage))
+
+    def write(self, out_dir, record_max):
+        """The lines on disk: C at each survey day and the outline at the record's highest stage."""
+        out_dir.mkdir(parents=True, exist_ok=True)
+        for day, s in self.day_stage.items():
+            self.lines(s).to_file(out_dir / f"C_{self.reach}_{day}.geojson", driver="GeoJSON")
+        self.lines(record_max).to_file(out_dir / f"C_{self.reach}_record_max.geojson", driver="GeoJSON")
+        gpd.GeoDataFrame({"reach": [self.reach], "stage": [record_max]}, geometry=[self.outline(record_max)], crs=CRS_FT).to_file(out_dir / f"C_outline_{self.reach}.geojson", driver="GeoJSON")
+
+
+if __name__ == "__main__":
+    import sys
+    if len(sys.argv) >= 3 and sys.argv[1] == "fetch":
+        fetch_transects(sys.argv[2])
+    elif len(sys.argv) >= 2 and sys.argv[1] == "check":
+        for r in ("Upper", "Middle", "Lower"):
+            print(r, "largest distance from transect_points (m):", check_transects(r))

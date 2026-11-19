@@ -2,7 +2,8 @@
 Coordinates: along, across. Hydraulic and geometric: relative position across the channel, distance to the nearest bank,
 local width, bed elevation, depth at a reference stage, relative depth within the section, lateral bed slope, section mean
 depth and width (pool/riffle), channel curvature and inner/outer bank, substrate class and a wake flag from the notes.
-Outputs: data_clean/features.csv, figures/00v_features.png"""
+Bank lines: set C (logbook entry 30) at each point's survey-day water level, from banklines_3dep.StageFeatures; centreline from 44_.
+Outputs: data_clean/features.csv, data_clean/banks_c/C_Middle_*.geojson, C_outline_Middle.geojson, C_Middle_reference.geojson, figures/00v_features.png"""
 import json, re
 from pathlib import Path
 import numpy as np, pandas as pd, geopandas as gpd
@@ -14,13 +15,17 @@ ROOT = Path(__file__).resolve().parents[1]; HERE = ROOT / Path(__file__).resolve
 FT = 0.3048; ADCP_E, ADCP_N = 13244857.0, 319995.5; STAGE_REF = 0.90
 loc = pd.read_csv(D / "locations.csv"); loc = loc[loc.a > 0].copy(); loc["A"] = loc.a / np.sqrt(loc.water_depth_m)
 loc["bed_m"] = loc.bed_rtk_sensor_datum_m.fillna(loc.bed_elev_m)
-# ---- banks: distance to each bank line, local width, relative position
-bk = gpd.read_file(RAW / "bank_lines_Middle.geojson"); bk = bk.to_crs("ESRI:102690") if (bk.crs is None or bk.crs.is_geographic) else bk
-left = bk[bk.bank == "left"].geometry.iloc[0]; right = bk[bk.bank == "right"].geometry.iloc[0]
-pts = [Point(e, n) for e, n in zip(loc.Easting, loc.Northing)]
-loc["dist_left_bank_m"] = [left.distance(p) * FT for p in pts]; loc["dist_right_bank_m"] = [right.distance(p) * FT for p in pts]
-loc["dist_bank_m"] = loc[["dist_left_bank_m", "dist_right_bank_m"]].min(axis=1); loc["width_m"] = loc.dist_left_bank_m + loc.dist_right_bank_m
-loc["rel_across"] = (loc.dist_right_bank_m - loc.dist_left_bank_m) / loc.width_m     # -1 at the right bank, +1 at the left bank
+# ---- banks: set C (logbook entry 30) at each point's own survey-day water level: distance to each bank line, local width, relative position.
+# The lines on disk (C at each survey day, at the highest stage of the record, and that outline) are written here.
+import banklines_3dep as B
+SF = B.StageFeatures("Middle"); SF.write(D / "banks_c", float(pd.read_csv(D / "series_10min.csv").stage_m.max()))
+SF.lines(STAGE_REF).to_file(D / "banks_c" / "C_Middle_reference.geojson", driver="GeoJSON")   # C at the reference stage 0.90 m: the lines drawn on the overview and paper maps
+loc = SF.training(loc)
+for side in ("left", "right"):
+    loc[f"dist_{side}_bank_m"] = np.nan   # filled below from the day's lines
+for day, ix in loc.groupby("date").indices.items():
+    bk = SF.lines(SF.day_stage[day]); P = [Point(e, n) for e, n in zip(loc.Easting.values[ix], loc.Northing.values[ix])]
+    for side in ("left", "right"): loc.iloc[ix, loc.columns.get_loc(f"dist_{side}_bank_m")] = [bk[bk.bank == side].geometry.iloc[0].distance(p) * FT for p in P]
 sign_check = np.corrcoef(loc.rel_across, loc.across_m)[0, 1]; print(f"relative position vs across_m: r = {sign_check:.2f} (should be strongly positive if 'left' means the same bank in both)")
 # ---- depth at a reference stage, relative depth within the section, lateral bed slope, section summaries
 loc["h_ref_m"] = np.clip(STAGE_REF - loc.bed_m, 0, None)
@@ -28,7 +33,7 @@ g = loc.groupby("transect"); loc["rel_depth"] = loc.h_ref_m / g.h_ref_m.transfor
 loc = loc.sort_values(["transect", "across_m"]); loc["lateral_bed_slope"] = g.apply(lambda d: pd.Series(np.gradient(d.bed_m.values, d.across_m.values) if len(d) > 2 else np.zeros(len(d)), index=d.index), include_groups=False).reset_index(level=0, drop=True)
 loc["lateral_bed_slope_abs"] = loc.lateral_bed_slope.abs()
 # ---- curvature of the centreline at each location, and inner/outer bank
-cl = gpd.read_file(RAW / "centerline_union_Middle.geojson"); cl = cl.to_crs("ESRI:102690") if (cl.crs is None or cl.crs.is_geographic) else cl
+cl = gpd.read_file(D / "banklines_survey" / "centerline_union_Middle.geojson"); cl = cl.to_crs("ESRI:102690") if (cl.crs is None or cl.crs.is_geographic) else cl
 u = cl.geometry.union_all() if hasattr(cl.geometry, "union_all") else cl.geometry.unary_union; line = u if u.geom_type == "LineString" else linemerge(u)
 def curvature(e, n, ds=25 / FT):
     d = line.project(Point(e, n)); p0, p1, p2 = [np.array(line.interpolate(max(min(d + k, line.length), 0)).coords[0]) for k in (-ds, 0, ds)]

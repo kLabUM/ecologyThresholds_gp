@@ -13,7 +13,7 @@ from shapely.geometry import Point
 from shapely.ops import linemerge
 import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
 warnings.filterwarnings("ignore"); t0 = time.time(); log = lambda *a: (print(f"[{time.time()-t0:5.0f}s]", *a), sys.stdout.flush())
-ROOT = Path(__file__).resolve().parents[1]; HERE = Path(__file__).resolve().parent; D = HERE / "data_clean"; F = HERE / "figures"; RAW = HERE / "data_raw"; MAP = RAW
+ROOT = Path(__file__).resolve().parents[1]; HERE = Path(__file__).resolve().parent; D = HERE / "data_clean"; F = HERE / "figures"; RAW = HERE / "data_raw"; MAP = D / "banklines_survey"   # the centreline from 44_
 FT = 0.3048; ZMIN, VMIN = 0.03, 0.005; SUBS = ["cobble", "gravel", "sand", "silt", "vegetation", "woody debris"]
 GOOD_SCATTER_M = 0.15; TIE_MAX_M = 0.20   # a transect's surface is 'good' when its points agree to this; a rating-derived surface is 'tied' when its uncertainty is below this
 # Upper: the southern ~1 km only (Northing below 365,000 ft); the August transects further upstream were exploratory and are left out
@@ -26,7 +26,7 @@ raw["date"] = pd.to_datetime(raw["Collection Date"].str.strip(), format="mixed")
 gauges = {"04172000": pd.read_csv(D / "usgs_04172000_daily.csv").set_index("date").discharge_cfs, "04174500": pd.read_csv(D / "usgs_daily.csv").set_index("date").discharge_cfs}
 def geometry(reach):
     cl = gpd.read_file(MAP / f"centerline_union_{reach}.geojson"); u = cl.geometry.union_all() if hasattr(cl.geometry, "union_all") else cl.geometry.unary_union; line = u if u.geom_type == "LineString" else linemerge(u)
-    bk = gpd.read_file(MAP / f"bank_lines_{reach}.geojson"); return line, bk[bk.bank == "left"].geometry.iloc[0], bk[bk.bank == "right"].geometry.iloc[0]
+    return line   # no bank lines here: the bank features come from bank set C, which needs the sensor tie (37_); 28_ and 38_ read them (entry 30)
 def robust_sd(x): x = np.asarray(x, float); x = x[~np.isnan(x)]; return float(1.4826 * np.median(np.abs(x - np.median(x)))) if len(x) >= 3 else np.nan
 out_all = {}
 for reach, cfg in REACHES.items():
@@ -58,16 +58,14 @@ for reach, cfg in REACHES.items():
     loc = pd.DataFrame(rows); loc["a_sd"] = loc.a_sd.fillna(loc.a_sd.median()); loc["year"] = 2026
     qc["locations"] = {"n": int(len(loc)), "a_zero_standing": int((loc.a <= 0).sum()), "a_median": float(loc.a[loc.a > 0].median()), "a_sd_median": float(loc.a_sd.median()), "fit_r2_median": float(loc.fit_r2.median())}
     # ---- geometry: along the centreline from the most upstream location, signed across, banks
-    line, left, right = geometry(reach); pts = [Point(e, n) for e, n in zip(loc.Easting, loc.Northing)]; d_along = np.array([line.project(p) for p in pts]); origin = d_along.min()
+    line = geometry(reach); pts = [Point(e, n) for e, n in zip(loc.Easting, loc.Northing)]; d_along = np.array([line.project(p) for p in pts]); origin = d_along.min()
     def across(p, d):
         q = line.interpolate(d); d1, d2 = max(d - 5, 0), min(d + 5, line.length); t = np.array(line.interpolate(d2).coords[0]) - np.array(line.interpolate(d1).coords[0]); t /= np.linalg.norm(t); off = np.array([p.x - q.x, p.y - q.y]); return float(t[0] * off[1] - t[1] * off[0]) * FT
     loc["along_m"] = (d_along - origin) * FT; loc["across_m"] = [across(p, d) for p, d in zip(pts, d_along)]; o = line.interpolate(origin); loc["x_m"] = (loc.Easting - o.x) * FT; loc["y_m"] = (loc.Northing - o.y) * FT
-    loc["dist_left_bank_m"] = [left.distance(p) * FT for p in pts]; loc["dist_right_bank_m"] = [right.distance(p) * FT for p in pts]; loc["dist_bank_m"] = loc[["dist_left_bank_m", "dist_right_bank_m"]].min(axis=1)
-    loc["width_m"] = loc.dist_left_bank_m + loc.dist_right_bank_m; loc["rel_across"] = (loc.dist_right_bank_m - loc.dist_left_bank_m) / loc.width_m
-    qc["geometry"] = {"reach_length_m": float(loc.along_m.max()), "max_offset_from_centreline_m": float(loc.across_m.abs().max()), "corr_rel_across_vs_across": float(np.corrcoef(loc.rel_across, loc.across_m)[0, 1]), "width_m_median": float(loc.width_m.median())}
+    qc["geometry"] = {"reach_length_m": float(loc.along_m.max()), "max_offset_from_centreline_m": float(loc.across_m.abs().max())}
     # ---- the water surface, one per transect: median of (RTK bed + rod depth); its scatter grades the fix
     loc["wse_pt_m"] = loc.elev_rtk_m + loc.water_depth_m
-    T = loc.groupby("transect").agg(date=("date", "first"), n=("a", "size"), along_m=("along_m", "median"), wse_rtk_m=("wse_pt_m", "median"), wse_scatter_m=("wse_pt_m", robust_sd), depth_mean_m=("water_depth_m", "mean"), width_m=("width_m", "median")).reset_index()
+    T = loc.groupby("transect").agg(date=("date", "first"), n=("a", "size"), along_m=("along_m", "median"), wse_rtk_m=("wse_pt_m", "median"), wse_scatter_m=("wse_pt_m", robust_sd), depth_mean_m=("water_depth_m", "mean"), surveyed_width_m=("across_m", lambda a: a.max() - a.min())).reset_index()
     T["rtk_good"] = (T.wse_scatter_m < GOOD_SCATTER_M) & (T.n >= 3); good = T[T.rtk_good]
     # slope from the good transects: wse = c_day - S along, days with two or more good transects
     gd = good.groupby("date").filter(lambda g: len(g) >= 2); days_s = sorted(gd.date.unique()); X = np.column_stack([(gd.date.values[:, None] == np.array(days_s)[None, :]).astype(float), -gd.along_m.values]); b, res_ss, *_ = np.linalg.lstsq(X, gd.wse_rtk_m.values, rcond=None)
@@ -86,7 +84,7 @@ for reach, cfg in REACHES.items():
     loc = loc.merge(T[["transect", "wse_m", "wse_source", "wse_sd_m", "tied", "rtk_good", "wse_scatter_m"]], on="transect"); loc["bed_m"] = loc.wse_m - loc.water_depth_m; loc["bed_rtk_resid_m"] = loc.elev_rtk_m - loc.bed_m
     loc["stage_local_m"] = loc.wse_m   # the surface at the point on its day (NAVD88 m)
     # ---- features within the section from the survey-day depths (no datum needed), notes
-    g = loc.groupby("transect"); loc["rel_depth"] = loc.water_depth_m / g.water_depth_m.transform("max").replace(0, np.nan); loc["rel_depth"] = loc.rel_depth.fillna(0); loc["section_mean_depth_m"] = g.water_depth_m.transform("mean"); loc["section_width_m"] = g.width_m.transform("median")
+    g = loc.groupby("transect"); loc["rel_depth"] = loc.water_depth_m / g.water_depth_m.transform("max").replace(0, np.nan); loc["rel_depth"] = loc.rel_depth.fillna(0); loc["section_mean_depth_m"] = g.water_depth_m.transform("mean")
     loc = loc.sort_values(["transect", "across_m"]).reset_index(drop=True); g = loc.groupby("transect")
     loc["lateral_bed_slope"] = g.apply(lambda d: pd.Series(np.gradient(d.bed_m.values, d.across_m.values) if (len(d) > 2 and d.across_m.nunique() == len(d)) else np.zeros(len(d)), index=d.index), include_groups=False).reset_index(level=0, drop=True); loc["lateral_bed_slope_abs"] = loc.lateral_bed_slope.abs().fillna(0)
     notes = loc.notes.fillna("").str.lower(); sub = pd.Series("not noted", index=loc.index)
@@ -96,7 +94,7 @@ for reach, cfg in REACHES.items():
     qc["substrate_counts"] = loc.substrate.value_counts().to_dict(); qc["wake_flagged"] = int(loc.wake_flag.sum())
     loc["Q_cfs"] = loc.date.map(Q); loc["Q_m3s"] = loc.Q_cfs * 0.0283168
     loc.to_csv(D / f"reach_{reach}_points.csv", index=False); T.to_csv(D / f"reach_{reach}_transects.csv", index=False); dd.to_csv(D / f"reach_{reach}_days.csv", index=False); json.dump(qc, open(D / f"reach_{reach}_qc.json", "w"), indent=2, default=str)
-    out_all[reach] = dict(loc=loc, T=T, dd=dd, qc=qc, z0_grid=z0_grid, sse=sse, z0=z0, line=line, left=left, right=right, S=S, br=br, along_ref=along_ref)
+    out_all[reach] = dict(loc=loc, T=T, dd=dd, qc=qc, z0_grid=z0_grid, sse=sse, z0=z0, line=line, S=S, br=br, along_ref=along_ref)
     log(f"{reach}: {len(loc)} locations, {len(T)} transects ({int(T.rtk_good.sum())} with a good fix, {int(T.tied.sum())} tied), {T.date.nunique()} days, reach {loc.along_m.max():.0f} m; z0 {z0*1000:.1f} mm ({flat.min()*1000:.1f} to {flat.max()*1000:.1f}); a median {qc['locations']['a_median']:.3f}")
     log(f"   slope {S*1e4:.1f} ± {S_se*1e4:.1f} cm/100 m from {len(gd)} good transects on {len(days_s)} days (resid {np.sqrt(s2)*100:.1f} cm); local stage vs ln Q on {int(ok.sum())} good days: r {qc['rating']['corr_stage_lnQ']:.2f}, slope {br[0]:.3f} m per ln(cfs), residual {rating_sd*100:.1f} cm, Q {dd.Q_cfs.min():.0f} to {dd.Q_cfs.max():.0f} cfs; untied: {qc['transects']['untied']}")
 # ---- figure
@@ -106,7 +104,6 @@ fig = plt.figure(figsize=(19, 10)); gs = fig.add_gridspec(2, 5, wspace=0.38, hsp
 for i, reach in enumerate(REACHES):
     o = out_all[reach]; loc, T, dd = o["loc"], o["T"], o["dd"]; cmap = plt.get_cmap("tab10"); days = sorted(loc.date.unique()); dcol = {d: cmap(k % 10) for k, d in enumerate(days)}
     ax = fig.add_subplot(gs[i, 0]); i0 = loc.along_m.idxmin(); ox, oy = o["line"].interpolate(o["line"].project(Point(loc.Easting[i0], loc.Northing[i0]))).coords[0]
-    for gml in (o["left"], o["right"]): xs, ys = np.array(gml.coords).T; ax.plot((xs - ox) * FT, (ys - oy) * FT, color="#8a877f", lw=0.6)
     xs, ys = np.array(o["line"].coords).T; ax.plot((xs - ox) * FT, (ys - oy) * FT, color=AXIS, lw=0.5, ls=":")
     sc = ax.scatter(loc.x_m, loc.y_m, c=loc.a, cmap="Blues", s=9, vmin=0, vmax=np.nanquantile(loc.a, .98), edgecolor=INK, lw=0.15); fig.colorbar(sc, ax=ax, shrink=0.6, pad=0.02).set_label("amplitude a (m/s)")
     for _, t in T[~T.tied].iterrows(): p = loc[loc.transect == t.transect]; ax.scatter(p.x_m.mean(), p.y_m.mean(), s=90, facecolor="none", edgecolor="red", lw=0.7)

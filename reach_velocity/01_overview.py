@@ -20,7 +20,7 @@ def to_local(gdf):
     if gdf.crs is None or gdf.crs.is_geographic: gdf = gdf.set_crs("EPSG:4269", allow_override=True).to_crs("ESRI:102690") if gdf.crs is None else gdf.to_crs("ESRI:102690")
     return gdf.translate(xoff=-ADCP_E, yoff=-ADCP_N).scale(FT, FT, origin=(0, 0))
 RAW = HERE / "data_raw"
-cl = to_local(gpd.read_file(RAW / "centerline_union_Middle.geojson")); bk = to_local(gpd.read_file(RAW / "bank_lines_Middle.geojson"))
+cl = to_local(gpd.read_file(D / "banklines_survey" / "centerline_union_Middle.geojson")); bk = to_local(gpd.read_file(D / "banks_c" / "C_Middle_reference.geojson"))   # 44_ and 19_ (bank set C at 0.90 m)
 fig, ax = plt.subplots(figsize=(8.5, 6.5))
 pad = 120; xlo, xhi, ylo, yhi = loc.x.min() - pad, loc.x.max() + pad, loc.y.min() - pad, loc.y.max() + pad
 bk.plot(ax=ax, color="#b9b8b0", lw=0.8); cl.plot(ax=ax, color="#6f6e68", lw=1.0, linestyle="--")
@@ -31,7 +31,7 @@ ax.scatter([0], [0], marker="*", s=160, color=CADCP, edgecolor="white", lw=0.6, 
 ax.axhline((321000 - ADCP_N) * FT, color=INK2, lw=0.6, ls=":"); ax.text(xlo + 5, (321000 - ADCP_N) * FT + 4, "Northing 321000 ft: cut used in the notebooks (transects above it were dropped)", fontsize=6.5, color=INK2)
 ax.set_xlim(xlo, xhi); ax.set_ylim(ylo, yhi); ax.set_aspect("equal"); ax.set_xlabel("east of the ADCP (m)"); ax.set_ylabel("north of the ADCP (m)"); ax.grid(True); ax.set_axisbelow(True)
 ax.legend(handles=[Line2D([], [], marker="o", ls="", color=C25, markersize=5, label=f"2025 transect locations ({(loc.year==2025).sum()}, 9 days)"), Line2D([], [], marker="o", ls="", color=C26, markersize=5, label=f"2026 transect locations ({(loc.year==2026).sum()}, 2 days)"),
-                   Line2D([], [], color="#6f6e68", ls=(0, (5, 3)), label="centreline (mapping/centerline_union_Middle)"), Line2D([], [], color="#b9b8b0", label="bank lines")], loc="lower right", fontsize=7)
+                   Line2D([], [], color="#6f6e68", ls=(0, (5, 3)), label="centreline (44_banklines_survey)"), Line2D([], [], color="#b9b8b0", label="bank lines (set C at 0.90 m stage)")], loc="lower right", fontsize=7)
 ax.set_title("Middle reach: where the hand-held readings were taken", fontsize=9); fig.savefig(F / "00a_map.png", bbox_inches="tight"); plt.close(fig)
 
 # ---------------------------------------------------------------- 00b stage and discharge with survey days

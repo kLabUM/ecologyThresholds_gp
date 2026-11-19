@@ -4,12 +4,13 @@ velocity (the depth-averaged velocity at the survey-day depth) against the reach
 mean residual is the level a stage law has to explain; those levels against the local stage from the RTK water surface (tied days) and
 against the nearest gauge. (3) Bed matching between sections surveyed twice: the RTK datum check. No season series for the reaches
 without a sensor: the RTK shows the gauge does not give their water level. Outputs: step8_summary.csv, step8_transect_out.csv,
-step8_day_levels.csv, step8_bed_matching.csv, figures/08_step8_transfer.png"""
+step8_day_levels.csv, step8_bed_matching.csv, figures/08_step8_transfer.png
+Bank features: set C (entry 30) for all three reaches, so this script runs after 37_ (the Upper and Lower sensor ties)."""
 import json, sys, time, warnings
 import numpy as np, pandas as pd
 from scipy.stats import spearmanr, pearsonr
 import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
-from gpcore import *
+from gpcore import *; from uncertainty import banks_for
 warnings.filterwarnings("ignore"); t0 = time.time(); log = lambda *a: (print(f"[{time.time()-t0:5.0f}s]", *a), sys.stdout.flush())
 THR = 0.20; Z0 = {"Middle": json.load(open(D / "field_qc.json"))["z0_m"]}
 def target(df):
@@ -17,7 +18,8 @@ def target(df):
 reaches, daystage, gauge_name = {}, {}, {"Middle": "USGS Ann Arbor, 18 km downstream", "Upper": "USGS near Hamburg, 6 km downstream", "Lower": "USGS Ann Arbor, 42 km upstream, three dams between"}
 mid = load_points(); reaches["Middle"] = target(mid); daystage["Middle"] = mid.groupby("date").stage_m.mean()
 for r in ["Upper", "Lower"]:
-    reaches[r] = target(pd.read_csv(D / f"reach_{r}_points.csv")); Z0[r] = json.load(open(D / f"reach_{r}_qc.json"))["z0_m"]; dd = pd.read_csv(D / f"reach_{r}_days.csv"); daystage[r] = dd.set_index("date").stage_local_m
+    reaches[r] = target(banks_for(r).training(pd.read_csv(D / f"reach_{r}_points.csv")));   # bank features from set C at the survey-day sensor level (entry 30); needs 37_ first
+    Z0[r] = json.load(open(D / f"reach_{r}_qc.json"))["z0_m"]; dd = pd.read_csv(D / f"reach_{r}_days.csv"); daystage[r] = dd.set_index("date").stage_local_m
 summary, to_rows, dl_rows = [], [], []
 for reach, d in reaches.items():
     z0 = Z0[reach]; days = sorted(d.date.unique()); vfac = np.log(np.clip(d.water_depth_m, np.e * z0, None) / z0) - 1
