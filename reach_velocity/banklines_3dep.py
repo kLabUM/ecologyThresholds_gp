@@ -414,17 +414,21 @@ class StageFeatures:
         """The stage grid covering [lo, hi] at LEVEL_STEP_M."""
         return np.round(np.arange(np.floor(lo / LEVEL_STEP_M) * LEVEL_STEP_M, np.ceil(hi / LEVEL_STEP_M) * LEVEL_STEP_M + 1e-9, LEVEL_STEP_M), 4)
 
+    def top_survey_stage(self):
+        """The highest survey-day stage: the map's outline is C there, so the grid stays inside what the survey supports (entry 30)."""
+        return float(max(self.day_stage.values()))
+
     def outline(self, stage):
-        """The channel polygon of the best estimate at a stage (the map uses the highest stage in the record)."""
+        """The channel polygon of the best estimate at a stage (the map uses the highest survey-day stage)."""
         return polygon(self.lines(stage))
 
-    def write(self, out_dir, record_max):
-        """The lines on disk: C at each survey day and the outline at the record's highest stage."""
+    def write(self, out_dir):
+        """The lines on disk: C at each survey day and the outline at the highest survey-day stage."""
         out_dir.mkdir(parents=True, exist_ok=True)
         for day, s in self.day_stage.items():
             self.lines(s).to_file(out_dir / f"C_{self.reach}_{day}.geojson", driver="GeoJSON")
-        self.lines(record_max).to_file(out_dir / f"C_{self.reach}_record_max.geojson", driver="GeoJSON")
-        gpd.GeoDataFrame({"reach": [self.reach], "stage": [record_max]}, geometry=[self.outline(record_max)], crs=CRS_FT).to_file(out_dir / f"C_outline_{self.reach}.geojson", driver="GeoJSON")
+        top = self.top_survey_stage()
+        gpd.GeoDataFrame({"reach": [self.reach], "stage": [top]}, geometry=[self.outline(top)], crs=CRS_FT).to_file(out_dir / f"C_outline_{self.reach}.geojson", driver="GeoJSON")
 
 
 if __name__ == "__main__":

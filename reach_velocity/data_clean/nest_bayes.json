@@ -28,56 +28,56 @@
    3.00498613466944
   ],
   "data_alone": [
-   -2.9357267363379393,
-   2.2075215160433146
+   -4.155561321723135,
+   2.381458837561718
   ],
   "posterior": [
-   -2.503167527798345,
-   1.7605323518540617
+   -3.197970748531841,
+   1.8438945391603314
   ]
  },
  "bank_distance_coef_per_m": {
   "data_alone": [
-   -0.11472902345747757,
-   0.041844900941825455
+   -0.16489799828617818,
+   0.04571105016823869
   ],
   "posterior": [
-   -0.12089378775264492,
-   0.03759540894952297
+   -0.1770947240111335,
+   0.041443366979186165
   ]
  },
  "depth_coef_per_m": {
   "data_alone": [
-   3.4274966191755194,
-   0.7440212638272559
+   4.495915227227793,
+   0.8067149792051086
   ],
   "posterior": [
-   3.374548180924531,
-   0.7015016555869894
+   4.353833809621726,
+   0.765067844073622
   ]
  },
  "v50_m_s_posterior": {
-  "median": 0.2566337080080778,
+  "median": 0.21011920823708746,
   "ci90": [
-   0.127220136179736,
-   1.3945579543425346
+   0.11129245101136755,
+   0.9808985704905293
   ],
-  "share_of_draws_with_positive_velocity_effect": 0.07725
+  "share_of_draws_with_positive_velocity_effect": 0.04
  },
  "definition": "relative suitability S(v) = exp(beta_v v), the used/available odds at velocity v relative to still water, at the same bank distance and depth; the ecological number is the width- and length-weighted mean of S over the reach's wetted width",
  "reach_mean_suitability": {
   "2025": {
-   "median": 0.5165087914721563,
-   "share_of_hours_with_P(E>0.5)_over_0.9": 0.186159169550173
+   "median": 0.5447112403261037,
+   "share_of_hours_with_P(E>0.5)_over_0.9": 0.14186851211072665
   },
   "2026": {
-   "median": 0.44608480178851395,
-   "share_of_hours_with_P(E>0.5)_over_0.9": 0.16676700782661047
+   "median": 0.4833490464517256,
+   "share_of_hours_with_P(E>0.5)_over_0.9": 0.12101143889223359
   },
   "at_0.90_m": {
-   "median": 0.5243289664234739,
-   "lo": 0.30311373767770106,
-   "hi": 1.2987730203951677
+   "median": 0.4312115524317067,
+   "lo": 0.24016314506970116,
+   "hi": 0.856967032207615
   }
  }
 }

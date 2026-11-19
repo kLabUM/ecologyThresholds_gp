@@ -18,7 +18,7 @@ loc["bed_m"] = loc.bed_rtk_sensor_datum_m.fillna(loc.bed_elev_m)
 # ---- banks: set C (logbook entry 30) at each point's own survey-day water level: distance to each bank line, local width, relative position.
 # The lines on disk (C at each survey day, at the highest stage of the record, and that outline) are written here.
 import banklines_3dep as B
-SF = B.StageFeatures("Middle"); SF.write(D / "banks_c", float(pd.read_csv(D / "series_10min.csv").stage_m.max()))
+SF = B.StageFeatures("Middle"); SF.write(D / "banks_c")
 SF.lines(STAGE_REF).to_file(D / "banks_c" / "C_Middle_reference.geojson", driver="GeoJSON")   # C at the reference stage 0.90 m: the lines drawn on the overview and paper maps
 loc = SF.training(loc)
 for side in ("left", "right"):

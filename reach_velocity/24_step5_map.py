@@ -1,7 +1,7 @@
 """Step 5. From the sections to the reach: the bed between transects (GP on the RTK cross-sections and the bank points),
 the channel grid, the conveyance field queried on the grid, velocity and the share below a threshold at chosen stages,
 and where the bands are wide. Numbers still come from the sections; this is the map with its uncertainty.
-Bank lines: set C (entry 30); the grid fills C's channel at the highest stage of the record; grid.csv carries the bank features and
+Bank lines: set C (entry 30); the grid fills C's channel at the highest survey-day stage; grid.csv carries the bank features and
 the field at the reference stage, grid_levels.npz the same on the 5 cm stage grid (read by 26_, 33_, 35_, 36_ at each nest's stage).
 Outputs: grid.csv, grid_levels.npz, step5_reach_totals.csv, figures/05_step5_map.png"""
 import json, sys, time, warnings
@@ -21,7 +21,7 @@ cl = gpd.read_file(D / "banklines_survey" / "centerline_union_Middle.geojson"); 
 u = cl.geometry.union_all() if hasattr(cl.geometry, "union_all") else cl.geometry.unary_union; line = u if u.geom_type == "LineString" else linemerge(u)
 SF = banks_for("Middle"); REC = pd.read_csv(D / "series_10min.csv").stage_m; REC_MAX = float(REC.max())   # bank set C (entry 30)
 bk = SF.lines(STAGE_REF); left, right = bk[bk.bank == "left"].geometry.iloc[0], bk[bk.bank == "right"].geometry.iloc[0]   # drawn on the maps: C at the reference stage
-poly = SF.outline(REC_MAX)   # the grid covers C's channel at the highest stage of the record (19_ writes it as banks_c/C_outline_Middle.geojson); cells dry at lower water drop out by the wet test
+poly = SF.outline(SF.top_survey_stage())   # the grid covers C's channel at the highest survey-day stage (1.09 m; 19_ writes it as banks_c/C_outline_Middle.geojson), not above what the survey supports; cells dry at lower water drop out by the wet test
 d_adcp = line.project(Point(ADCP_E, ADCP_N))
 def proj(e, n):
     pt = Point(e, n); d = line.project(pt); q = line.interpolate(d); d1, d2 = max(d - 5, 0), min(d + 5, line.length); t = np.array(line.interpolate(d2).coords[0]) - np.array(line.interpolate(d1).coords[0]); t /= np.linalg.norm(t); off = np.array([e - q.x, n - q.y])

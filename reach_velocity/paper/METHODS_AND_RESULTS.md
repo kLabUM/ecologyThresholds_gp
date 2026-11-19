@@ -73,9 +73,9 @@ The first deliverable is the set of spatial rating curves: the section mean velo
 
 ### 3.6 The nest model and the posterior update
 
-Each nest is one 'used' 2 m cell, with the velocity, depth and bank distance the chain gives it on the day the nest was found, and 20 'available' cells are drawn from the wet channel at the same stage. A logistic model then asks what makes a cell used rather than available, each variable with the others held fixed. Bank distance is the strong selector (nests at 4.9 m from the bank against 12.3 m for the channel, partly where the crews searched). Velocity adds nothing until depth is in the model: near the bank the deeper cells are faster, and the nests take the deep-but-slow ones. With depth in, velocity leans against use (the 57 nests alone: -2.9 ± 2.2 log-odds per m/s) and depth for (+3.4 per m). In plain terms, the fish nest in deep water near the bank; with the bank lines at each nest's own stage (bank set C, logbook entry 30) the velocity effect is about 1.3 standard errors from zero, so its sign is suggested rather than shown.
+Each nest is one 'used' 2 m cell, with the velocity, depth and bank distance the chain gives it on the day the nest was found, and 20 'available' cells are drawn from the wet channel at the same stage. A logistic model then asks what makes a cell used rather than available, each variable with the others held fixed. Bank distance is the strong selector (nests at 4.4 m from the bank against 13.0 m for the channel, partly where the crews searched). Velocity adds nothing until depth is in the model: near the bank the deeper cells are faster, and the nests take the deep-but-slow ones. With depth in, velocity leans against use (the 57 nests alone: -4.2 ± 2.4 log-odds per m/s) and depth for (+4.5 per m). In plain terms, the fish nest in deep water near the bank; with the bank lines at each nest's own stage (bank set C, logbook entry 30) the velocity effect is about 1.7 standard errors from zero, so its sign is suggested rather than shown.
 
-The prior is the USFWS habitat suitability curve for smallmouth bass spawning (Edwards, Gebhart and Maughan 1983, curve 20110), digitised from the scanned report and fitted by an exponential (-1.5 per m/s), with its sd set so that the same report's steep adult utilisation curve sits two sd away (3.0). It is weak by design: it carries the sign and the order of magnitude and lets 59 nests move it. The posterior is -2.5 ± 1.8 per m/s, half use at 0.26 m/s [0.13, 1.39]. E is the width-weighted mean of the relative use exp(b_v v) over the reach: 1 if the whole reach were still water, 0 if all of it were too fast for a nest. Its band combines the curve's posterior with the velocity chain. The 0.2 m/s convention sits at the 61st percentile of the nests, so it was not far off. The difference is that the rule is now estimated, with a band, and can be updated as nests accumulate.
+The prior is the USFWS habitat suitability curve for smallmouth bass spawning (Edwards, Gebhart and Maughan 1983, curve 20110), digitised from the scanned report and fitted by an exponential (-1.5 per m/s), with its sd set so that the same report's steep adult utilisation curve sits two sd away (3.0). It is weak by design: it carries the sign and the order of magnitude and lets 59 nests move it. The posterior is -3.2 ± 1.8 per m/s, half use at 0.21 m/s [0.11, 0.98]. E is the width-weighted mean of the relative use exp(b_v v) over the reach: 1 if the whole reach were still water, 0 if all of it were too fast for a nest. Its band combines the curve's posterior with the velocity chain. The 0.2 m/s convention sits at the 61st percentile of the nests, so it was not far off. The difference is that the rule is now estimated, with a band, and can be updated as nests accumulate.
 
 
 ## 4. The data, and what was done to it before any model
@@ -111,7 +111,7 @@ Takeaway: the field beats the reach mean on 17 of 20 held-out sections (CRPS 0.3
 
 ![Figure 3](F3_stage_law.png)
 
-*Figure 3. One sensor carries the field through time. (a) Day levels before and after the law. (b) The ADCP through 2025, never used in the fit, read as a single 25° beam, against the chain at its own cell: level ratio 0.87, MAE 37 mm/s, the band covers every two-hour mean to 1.20 m of stage. (c) The 1,208 readings on held-out days predicted at their own height. (d) Continuity: every section's modelled discharge at common stages, the measured discharges on the survey days, and the rating through them.*
+*Figure 3. One sensor carries the field through time. (a) Day levels before and after the law. (b) The ADCP through 2025, never used in the fit, read as a single 25° beam, against the chain at its own cell: level ratio 1.07, MAE 23 mm/s, the band covers every two-hour mean to 1.20 m of stage. (c) The 1,208 readings on held-out days predicted at their own height. (d) Continuity: every section's modelled discharge at common stages, the measured discharges on the survey days, and the rating through them.*
 
 Takeaway: the day effect is stage. The readings on held-out days come back to 0.082 m/s against a deviation of 0.119, the section means on held-out days fall inside the band 20 of 20 times, the 20 measured discharges lie on one rating with 6% scatter, and the ADCP validates field and law continuously at one point (reading Vb as a beam, which the instrument's configuration has to confirm).
 
@@ -127,7 +127,7 @@ Takeaway: this is the deliverable. Bands are about ±28% inside the surveyed ran
 
 *Figure 5. The ecological number, learned from the nests. (a, b) The reach's mean nesting suitability E and the share below 0.2 m/s every two hours, both seasons, with bands. (c) The ecological rating curve: habitat against stage, E with its band and the share below four thresholds; the surveyed range is shaded and the extrapolation hatched. (d) The velocity effect: the published curve as a weak prior, the nests alone, and the posterior.*
 
-Takeaway: the ecological rating curve is the number the sensor delivers. Every 10 cm of stage removes about 8 points of slow water from the reach inside the surveyed range, and E falls from about 60% at 0.65 m to 20% at 1.30 m. E has median 52% in 2025 and 45% in 2026 (the share below 0.2 m/s: 45% and 35%). The rule is estimated with a band rather than assumed; what the nests select on (deep, slow water near the bank) is in the supplementary figure 12.
+Takeaway: the ecological rating curve is the number the sensor delivers. Every 10 cm of stage removes about 8 points of slow water from the reach inside the surveyed range, and E falls from about 60% at 0.65 m to 20% at 1.30 m. E has median 54% in 2025 and 48% in 2026 (the share below 0.2 m/s: 45% and 35%). The rule is estimated with a band rather than assumed; what the nests select on (deep, slow water near the bank) is in the supplementary figure 12.
 
 
 ### 5.1 Validation scores (Table 3)
@@ -153,13 +153,13 @@ Takeaway: the ecological rating curve is the number the sensor delivers. Every 1
 | Continuity (measured) | 20 section discharges from 11 days on one rating | Q = 28 (stage - 0.45)^1.70 m3/s, 6% scatter |
 |  | same-day sections, max/min of the measured discharge | 1.10, 1.11, 1.01, 1.11, 1.10 |
 | Continuity (modelled, common stage) | sd of log Q across the 20 sections at 0.70 / 0.90 / 1.30 m | 0.143 / 0.113 / 0.137 |
-| Reach share below 0.2 m/s at 0.90 m | sections (width- and length-weighted) / map with margins to the bank line | 0.362 / 0.480 |
+| Reach share below 0.2 m/s at 0.90 m | sections (width- and length-weighted) / map with margins to the bank line | 0.362 / 0.454 |
 |  | 90% band half-width inside the surveyed range (points) | 7.7 |
 | Season medians | 2025 record / hours inside the surveyed range | 45% / 39% (65% of hours) |
 |  | 2026 record / hours inside the surveyed range | 35% / 35% (50% of hours) |
 |  | May 2026 (extrapolated: 24% of its hours above the range) | 23% [18, 30] |
-| Nests (59 in wet cells) | AUC of nests against the wet channel: field velocity / bank distance / place factor / depth | 0.63 / 0.69 / 0.66 / 0.45 |
-|  | field velocity within bank-distance strata (+-2 m) | 0.45 (p = 0.00) |
+| Nests (59 in wet cells) | AUC of nests against the wet channel: field velocity / bank distance / place factor / depth | 0.69 / 0.72 / 0.71 / 0.47 |
+|  | field velocity within bank-distance strata (+-2 m) | 0.46 (p = 0.00) |
 
 
 ### 5.2 Parameters and settings (Table 2)

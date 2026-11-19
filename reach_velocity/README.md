@@ -63,7 +63,7 @@ Validation: sections held out one at a time, days held out one at a time, the re
 
 **What does the ADCP add?** It was never used in any fit. Read as a single 25° beam, its record through 2025 matches the chain at its own cell (ratio 0.87, 37 mm/s, the band covers every two-hour mean to 1.20 m). That reading is to be confirmed with the instrument's configuration (`OPEN_QUESTIONS.md`). Entry 23; figure 09; Figure 3b.
 
-**Where does the ecological rule come from?** From the nests: a used-against-available model, with the USFWS 1983 spawning curve as a weak prior. The nests sit in deep, slow water near the bank; the velocity effect is −2.5 ± 1.8 log-odds per m/s, half use at 0.26 m/s (with bank set C, entry 30, the effect is no longer clearly below zero). The 0.2 m/s convention sits at the 58th percentile of the nests. Entry 23; figures 10 to 12; Figure 5.
+**Where does the ecological rule come from?** From the nests: a used-against-available model, with the USFWS 1983 spawning curve as a weak prior. The nests sit in deep, slow water near the bank; the velocity effect is −3.2 ± 1.8 log-odds per m/s, half use at 0.21 m/s (weaker with bank set C, entry 30). The 0.2 m/s convention sits at the 60th percentile of the nests. Entry 23; figures 10 to 12; Figure 5.
 
 **What are the numbers to quote?** `paper/TABLES.md`, Table 3, and the "Status" section at the end of the logbook.
 

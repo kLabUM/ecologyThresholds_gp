@@ -64,8 +64,8 @@ for i, (reach, cfg) in enumerate((r, c) for r, c in CFG.items() if r in (sys.arg
     pts.to_csv(D / f"reach_{reach}_points_sensor.csv", index=False); T.to_csv(D / f"reach_{reach}_tie.csv", index=False)
     # ---- bank set C (entry 30): needs the tie just written; the bank features at each point's survey-day level, and the lines on disk
     import banklines_3dep as B
-    SF = B.StageFeatures(reach); k_ = B.tie(reach); L_rec = k_["a"] + k_["b"] * sm.values; SF.write(D / "banks_c", float(L_rec.max()))
-    pts = SF.training(pts); pts.to_csv(D / f"reach_{reach}_points_sensor.csv", index=False); qc["bank_set_C"] = {"record_max_level_m": float(L_rec.max()), "dist_bank_m_median": float(pts.dist_bank_m.median())}
+    SF = B.StageFeatures(reach); k_ = B.tie(reach); L_rec = k_["a"] + k_["b"] * sm.values; SF.write(D / "banks_c")
+    pts = SF.training(pts); pts.to_csv(D / f"reach_{reach}_points_sensor.csv", index=False); qc["bank_set_C"] = {"record_max_level_m": float(L_rec.max()), "outline_level_m": SF.top_survey_stage(), "dist_bank_m_median": float(pts.dist_bank_m.median())}
     # ---- the day-out grid over (h0, gamma) with the sensor stage (as step 3b for the Middle): h0 below the lowest stage the river reached
     d = pts[pts.a > 0].copy(); smin = float(sm.min()); rows = []
     for h0 in np.round(np.arange(max(smin - 0.45, -0.3), smin + 0.01, 0.1), 2):

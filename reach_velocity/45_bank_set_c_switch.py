@@ -66,7 +66,7 @@ for j, r in enumerate(("Upper", "Middle", "Lower")):
     ax.scatter((p.Easting - x0) * FT, (p.Northing - y0) * FT, s=2, color=INK, lw=0, alpha=0.6)
     pad = 40; ax.set_xlim((p.Easting.min() - x0) * FT - pad, (p.Easting.max() - x0) * FT + pad); ax.set_ylim((p.Northing.min() - y0) * FT - pad, (p.Northing.max() - y0) * FT + pad); ax.set_aspect("equal"); ax.grid(True); ax.set_axisbelow(True); ax.tick_params(labelsize=6)
     ax.set_xlabel("east (m)"); ax.set_ylabel("north (m)") if j == 0 else None
-    ax.legend(handles=[Line2D([], [], color=ORANGE, label="A (old lines, one for all stages)")] + [Line2D([], [], color=c, label=f"C at {LEVELS[r][0]} {lv:g}") for c, lv in zip(CS, LEVELS[r][1])] + [Line2D([], [], color=GRID, lw=6, label="C at the record's highest stage (the map's outline)")], fontsize=6, loc="lower left")
+    ax.legend(handles=[Line2D([], [], color=ORANGE, label="A (old lines, one for all stages)")] + [Line2D([], [], color=c, label=f"C at {LEVELS[r][0]} {lv:g}") for c, lv in zip(CS, LEVELS[r][1])] + [Line2D([], [], color=GRID, lw=6, label="C at the highest survey-day stage (the map's outline)")], fontsize=6, loc="lower left")
     ax.set_title(f"({'abc'[j]}) {r}: bank lines A and C", fontsize=9)
 ax = fig.add_subplot(gs[1, 0]); sb, sa = [pd.read_csv(p_ / "step7_sensitivity.csv") for p_ in (BEF, D)]
 for t, c, lab in ((sb, ORANGE, "before (A)"), (sa, BLUE, "after (C)")):

@@ -175,14 +175,14 @@
    "share_median_in_range": 0.28467608441746883,
    "fraction_hours_in_range": 0.6950105411103303,
    "band_halfwidth_points_in_range": 14.941149046616948,
-   "E_median": 0.44735007560975293
+   "E_median": 0.3836907949088123
   },
   "2026": {
    "share_median": 0.17548606415710116,
    "share_median_in_range": 0.2232653034005973,
    "fraction_hours_in_range": 0.7295539033457249,
    "band_halfwidth_points_in_range": 11.753574090707472,
-   "E_median": 0.38327027354463905
+   "E_median": 0.3185373533992122
   }
  }
 }
