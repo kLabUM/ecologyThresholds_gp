@@ -3,7 +3,7 @@ method is and what it does to the results.
 
 The methods: A, the old lines (44_, the original notebook code); B, the fixed hybrid (surveyed edges with 3DEP between them, 43_);
 C moving with stage (the edges at the sensor's water level, entry 30), once with the map's outline at the record's highest stage and once
-at the highest survey-day stage; C fixed at 0.90 m (the Middle's reference stage); and C fixed at each reach's median survey-day level,
+at the highest survey-day stage; and C fixed at each reach's median survey-day level,
 the version the model uses (entry 31). Fixed C is C's method (the surveyed edges first, the 3DEP lidar where the survey has no edge,
 interpolated between them by water level) read at one level and pushed out so that every surveyed point is inside.
 
@@ -29,9 +29,8 @@ METHODS = [("A", "A: old lines", M / "set_A", "#eb6834"),
            ("B", "B: fixed hybrid", None, "#1a9e74"),
            ("C_stage_record", "C moving with stage, outline at record high", M / "C_stage_record_outline", "#c4b5fd"),
            ("C_stage", "C moving with stage", M / "C_stage", "#7c3aed"),
-           ("C_fixed_090", "C fixed at 0.90 m", M / "C_fixed_090", "#93c5fd"),
            ("C_fixed_median", "C fixed at the median survey level (in use)", D, "#1d4ed8")]
-LAB = {k: l for k, l, _, _ in METHODS}; SHORT = {"A": "A: old lines", "B": "B: fixed hybrid", "C_stage_record": "C moving, record-high outline", "C_stage": "C moving with stage", "C_fixed_090": "C fixed at 0.90 m", "C_fixed_median": "C fixed at the median (in use)"}; COL = {k: c for k, _, _, c in METHODS}; DIR = {k: p for k, _, p, _ in METHODS}
+LAB = {k: l for k, l, _, _ in METHODS}; SHORT = {"A": "A: old lines", "B": "B: fixed hybrid", "C_stage_record": "C moving, record-high outline", "C_stage": "C moving with stage", "C_fixed_median": "C fixed at the median (in use)"}; COL = {k: c for k, _, _, c in METHODS}; DIR = {k: p for k, _, p, _ in METHODS}
 
 
 def jl(p):
@@ -46,7 +45,7 @@ def band(d, f="{:.3f}"):
 S = pd.read_csv(CMP / "scores_sections.csv").replace({"set": {"C": "C_stage"}})
 fx = [pd.read_csv(CMP / f"scores_points_fixed_{r}.csv") for r in REACHES if (CMP / f"scores_points_fixed_{r}.csv").exists()]
 if fx:
-    P = pd.concat(fx).replace({"set": {"Cfix_median": "C_fixed_median", "Cfix_090": "C_fixed_090"}})
+    P = pd.concat(fx).replace({"set": {"Cfix_median": "C_fixed_median"}})
     S = pd.concat([S, P.groupby(["reach", "set", "transect"]).agg(crps=("crps", "mean"), in90=("in90", "mean"), n=("crps", "size")).reset_index()])
 per = S.groupby(["reach", "set"]).agg(crps=("crps", "mean"), in90=("in90", "mean"))
 W = S.pivot_table(index=["reach", "transect"], columns="set", values="crps")
@@ -79,21 +78,20 @@ add("What it is",
     A="the original notebook's lines, one set for all stages", B="surveyed edges, 3DEP edges between transects, one set",
     C_stage_record="edges at the sensor's water level each time step; map outline at the record's highest stage",
     C_stage="edges at the sensor's water level each time step; map outline at the highest survey-day stage",
-    C_fixed_090="C's edges at one level, 0.90 m on the sensor, all points inside",
     C_fixed_median="C's edges at one level per reach, the median of the survey-day levels, all points inside")
 lev = {r: SFs[r].fixed for r in REACHES}
-add("Level of the fixed lines (Upper / Middle / Lower)", C_fixed_090="Middle only: 0.90 m sensor stage",
+add("Level of the fixed lines (Upper / Middle / Lower)",
     C_fixed_median=f"{lev['Upper']:.2f} m NAVD88 / {lev['Middle']:.3f} m sensor / {lev['Lower']:.2f} m NAVD88")
 add("Surveyed points outside the lines (Upper / Middle / Lower)",
     A=" / ".join(str(out[r]["A"]) for r in REACHES), B=" / ".join(str(out[r]["B"]) for r in REACHES),
-    C_stage="0 / 0 / 0 (each point on its own day)", C_stage_record="0 / 0 / 0 (each point on its own day)", C_fixed_090="0 (Middle)",
+    C_stage="0 / 0 / 0 (each point on its own day)", C_stage_record="0 / 0 / 0 (each point on its own day)",
     C_fixed_median=" / ".join(str(out[r]["C_fixed_median"]) for r in REACHES))
 for r in REACHES:
     add(f"{r}: section held out, CRPS of ln A (share of points in the 90% band)",
         **{k: f"{per.loc[(r, k), 'crps']:.3f} ({per.loc[(r, k), 'in90']:.2f})" for k in LAB if (r, k) in per.index})
 add("All sections: CRPS minus A's, mean +/- se (sections better than A)",
     **{k: "{:+.3f} +/- {:.3f}".format(*paired(k, "A")[:2]) + f" ({int(((W[k] - W['A']).dropna() < 0).sum())} of {paired(k, 'A')[2]})" for k in LAB if k in W and k != "A"})
-add("Run through the whole model?", A="yes", B="no (scored under the entry-27 rule only)", C_stage_record="yes (Middle)", C_stage="yes", C_fixed_090="yes", C_fixed_median="yes")
+add("Run through the whole model?", A="yes", B="no (scored under the entry-27 rule only)", C_stage_record="yes (Middle)", C_stage="yes", C_fixed_median="yes")
 
 
 def mid(k, f):

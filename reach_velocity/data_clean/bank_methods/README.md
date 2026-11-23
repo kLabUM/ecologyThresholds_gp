@@ -9,6 +9,5 @@ survey-day level, logbook entry 31) is the live `data_clean/`.
 | `set_A/` | A, the old lines | commit 4298715 (entry 29) |
 | `C_stage_record_outline/` | C moving with stage, the map's outline at the record's highest stage (Middle ecology only) | commit 87bcb46 (entry 30) |
 | `C_stage/` | C moving with stage, the map's outline at the highest survey-day stage | commit 5f876e4 (entry 30) |
-| `C_fixed_090/` | C fixed at the Middle's reference stage, 0.90 m (Middle only) | test run, 19 November 2026 (entry 31) |
 
-Set B was scored under the entry-27 rule only (`data_clean/bankcmp/`, entry 28), not run through the whole model. `run_logs/` holds the console logs of the two fixed-line runs.
+Set B was scored under the entry-27 rule only (`data_clean/bankcmp/`, entry 28), not run through the whole model. `run_logs/` holds the console logs of the fixed-line run and its scoring.

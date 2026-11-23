@@ -175,18 +175,14 @@ def score_reach(reach, log):
     return pd.concat(rows)
 
 
-FIXED_ARMS = {"Cfix_median": "median", "Cfix_090": 0.90}   # entry 31: C as one fixed line set per reach; 0.90 m is the Middle's reference stage (Middle only)
+FIXED_ARMS = {"Cfix_median": "median"}   # entry 31: C as one fixed line set per reach, at its median survey-day level
 
 
 def score_fixed(reach, log):
-    """Entry 31: the fixed-line versions of C under the entry-27 rule (sections held out, the 20 draws scored as one mixture)."""
+    """Entry 31: C fixed at the reach's median survey-day level, under the entry-27 rule (sections held out, the 20 draws scored as one mixture)."""
     d = model_points(reach); rows = []
-    for arm, lev in FIXED_ARMS.items():
-        if lev != "median" and reach != "Middle":
-            continue
-        SF = B.StageFeatures(reach, fixed="default" if lev == "median" else lev); dd0 = d.drop(columns=[c for c in ("dist_bank_m", "rel_across", "width_m") if c in d], errors="ignore")
-        if lev == "median":
-            SF.fixed = float(np.median(list(SF.day_stage.values())))
+    for arm in FIXED_ARMS:
+        SF = B.StageFeatures(reach, fixed="default"); dd0 = d.drop(columns=[c for c in ("dist_bank_m", "rel_across", "width_m") if c in d])
         MU, SD = [], []
         for k in range(B.N_DRAWS):
             mu, sd = section_out(SF.training(dd0, k)); MU.append(mu); SD.append(sd); log(f"  {reach} {arm} (level {SF.fixed:.3f}) draw {k + 1}/{B.N_DRAWS}")
