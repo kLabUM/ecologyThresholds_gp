@@ -2,7 +2,7 @@
 data/ on 15 and 18 September 2026, the Upper record replaced on 18 November 2026). Sensor cleaning the Middle's way (implausible readings out, spikes against a 6 h rolling median out,
 10-min grid, 3 h median; the daily wobble is measured and reported, not removed), stage at each reading's time, the RTK water surface tied
 to the sensor per session (one slope), the bed on the sensor datum, features at a reference stage, and the day-out grid over (h0, gamma).
-Bank features from bank set C at each point's survey-day level (banklines_3dep.StageFeatures, entry 30); its lines go to data_clean/banks_c/.
+Bank features from bank set C fixed at the reach's median survey-day level (banklines_3dep.StageFeatures, entries 30 and 31); its lines go to data_clean/banks_c/.
 Outputs: data_clean/reach_{r}_stage_10min.csv, reach_{r}_points_sensor.csv, reach_{r}_tie.csv, reach_{r}_law_grid.csv, reach_{r}_sensor_qc.json, figures/14_other_reaches_sensor_prep.png"""
 import json, sys, time, warnings
 import numpy as np, pandas as pd
@@ -62,7 +62,7 @@ for i, (reach, cfg) in enumerate((r, c) for r, c in CFG.items() if r in (sys.arg
     pts["h_ref_m"] = np.clip(ref - S * (pts.along_m - cfg["along_sensor_m"]) - pts.bed_m, 0, None); gsec = pts.groupby("transect"); pts["rel_depth"] = (pts.h_ref_m / gsec.h_ref_m.transform("max").replace(0, np.nan)).fillna(0); pts["section_mean_depth_m"] = gsec.h_ref_m.transform("mean")
     pts["slope_cm_per_100m"] = S * 1e4; pts["along_sensor_m"] = cfg["along_sensor_m"]; pts["local_stage_m"] = pts.stage_m - S * (pts.along_m - cfg["along_sensor_m"])   # the water level at the section on the sensor datum
     pts.to_csv(D / f"reach_{reach}_points_sensor.csv", index=False); T.to_csv(D / f"reach_{reach}_tie.csv", index=False)
-    # ---- bank set C (entry 30): needs the tie just written; the bank features at each point's survey-day level, and the lines on disk
+    # ---- bank set C (entries 30 and 31): needs the tie just written; the bank features from the fixed lines, and the lines on disk
     import banklines_3dep as B
     SF = B.StageFeatures(reach); k_ = B.tie(reach); L_rec = k_["a"] + k_["b"] * sm.values; SF.write(D / "banks_c")
     pts = SF.training(pts); pts.to_csv(D / f"reach_{reach}_points_sensor.csv", index=False); qc["bank_set_C"] = {"record_max_level_m": float(L_rec.max()), "outline_level_m": SF.top_survey_stage(), "dist_bank_m_median": float(pts.dist_bank_m.median())}

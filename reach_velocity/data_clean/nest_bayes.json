@@ -28,56 +28,56 @@
    3.00498613466944
   ],
   "data_alone": [
-   -4.155561321723135,
-   2.381458837561718
+   -4.471319180171853,
+   2.1651459633121273
   ],
   "posterior": [
-   -3.197970748531841,
-   1.8438945391603314
+   -3.548218492905031,
+   1.717989750078992
   ]
  },
  "bank_distance_coef_per_m": {
   "data_alone": [
-   -0.16489799828617818,
-   0.04571105016823869
+   -0.15271231788575165,
+   0.04189848835995292
   ],
   "posterior": [
-   -0.1770947240111335,
-   0.041443366979186165
+   -0.1637524022800141,
+   0.038956469644838516
   ]
  },
  "depth_coef_per_m": {
   "data_alone": [
-   4.495915227227793,
-   0.8067149792051086
+   3.373970893625297,
+   0.7758588760123352
   ],
   "posterior": [
-   4.353833809621726,
-   0.765067844073622
+   3.2289101934761657,
+   0.7315161501602856
   ]
  },
  "v50_m_s_posterior": {
-  "median": 0.21011920823708746,
+  "median": 0.19436829621474147,
   "ci90": [
-   0.11129245101136755,
-   0.9808985704905293
+   0.10957862666571622,
+   0.7082113189829589
   ],
-  "share_of_draws_with_positive_velocity_effect": 0.04
+  "share_of_draws_with_positive_velocity_effect": 0.01725
  },
  "definition": "relative suitability S(v) = exp(beta_v v), the used/available odds at velocity v relative to still water, at the same bank distance and depth; the ecological number is the width- and length-weighted mean of S over the reach's wetted width",
  "reach_mean_suitability": {
   "2025": {
-   "median": 0.5447112403261037,
-   "share_of_hours_with_P(E>0.5)_over_0.9": 0.14186851211072665
+   "median": 0.49353352016085633,
+   "share_of_hours_with_P(E>0.5)_over_0.9": 0.0006920415224913495
   },
   "2026": {
-   "median": 0.4833490464517256,
-   "share_of_hours_with_P(E>0.5)_over_0.9": 0.12101143889223359
+   "median": 0.4424746111489447,
+   "share_of_hours_with_P(E>0.5)_over_0.9": 0.0030102347983142685
   },
   "at_0.90_m": {
-   "median": 0.4312115524317067,
-   "lo": 0.24016314506970116,
-   "hi": 0.856967032207615
+   "median": 0.3983353395799476,
+   "lo": 0.2357605593689081,
+   "hi": 0.7378013465300384
   }
  }
 }

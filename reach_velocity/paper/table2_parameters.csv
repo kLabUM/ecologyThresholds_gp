@@ -5,15 +5,15 @@ Readings to one number,vertical profile,v(z) = a ln(z / z0); readings at z >= 3 
 Stage record,sensor,"ultrasonic range every 10 min; daytime sensor pattern removed against the night line, median filtered; 2 h means for the series",processing
 ,stage error in the chain,"1.5 cm, one draw per time shared by every section",assumed
 Stage law,form,"a = A (stage - h0)^gamma, one law for the reach",fixed form
-,primary pair,"h0 = 0.45 m, gamma = 0.75 (best day-out CRPS)",chosen on a grid
-,law set drawn in the chain,"every grid pair within 0.01 CRPS of the best with h0 below 0.66 m: (0.45, 0.75), (0.35, 1.0), (0.55, 0.5), (0.35, 0.75), (0.55, 0.75), (0.45, 1.0), (0.65, 0.5), (0.35, 1.25)",uniform over the set
+,primary pair,"h0 = 0.35 m, gamma = 1.0 (best day-out CRPS)",chosen on a grid
+,law set drawn in the chain,"every grid pair within 0.01 CRPS of the best with h0 below 0.66 m: (0.35, 1.0), (0.55, 0.75), (0.45, 0.75), (0.35, 1.25), (0.45, 1.0), (0.65, 0.5), (0.55, 0.5), (0.35, 0.75)",uniform over the set
 Spatial model,target,"log A, A = a / (stage - h0)^gamma",
 ,inputs,"along the reach, relative position across, distance to the nearer bank, relative depth in the section, section mean depth, lateral bed slope",measured
 ,mean,"weighted least squares on an intercept, six substrate classes from the notes and a wake flag",fitted
 ,kernel,ARD Matern 3/2 plus a white nugget; per-point noise fixed from the readings' spread,"fitted by marginal likelihood, 2 to 3 restarts"
-,fitted scales,"amplitude sd 0.84, nugget sd 0.14 (log); length scales: along 197 m, relative across 2.1, bank distance 17 m, relative depth 0.40, section mean depth 0.17 m, lateral slope 1.54",fitted
+,fitted scales,"amplitude sd 0.87, nugget sd 0.16 (log); length scales: along 198 m, relative across 1.9, bank distance 19 m, relative depth 0.42, section mean depth 0.18 m, lateral slope 1.54",fitted
 Uncertainty chain,field,one joint Gaussian process draw over every point of every section,posterior
-,discrepancy,"inflation 1.159 from held-out days (95% coverage before inflation 0.911, n 257); total 0.312 in log, split into a reach-level part 0.070 (one draw per reach) and a point-level part 0.304",calibrated
+,discrepancy,"inflation 1.241 from held-out days (95% coverage before inflation 0.899, n 257); total 0.390 in log, split into a reach-level part 0.057 (one draw per reach) and a point-level part 0.386",calibrated
 ,bed,"RTK cross-sections on the sensor datum through per-session offsets (one water-surface slope of 5 cm per 100 m, residual 1.3 cm, 11 sessions); 6 cm per point in the chain",measured; error assumed
 ,roughness,"z0 drawn between 7 and 16 mm, one per draw; a rescaled through the readings' typical height (0.25 m)",assumed range
 ,draws,"100 per two-hourly stage for the series (3,106 stages), 300 for the rating curves",setting

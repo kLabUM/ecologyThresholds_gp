@@ -20,7 +20,7 @@ def vbar_at(logA, bed, stage):
 loc = pd.read_csv(D / "locations.csv"); loc = loc[loc.a > 0].copy(); loc["A"] = loc.a / np.clip(loc.stage_m - H0, 0.02, None) ** GAM
 rd = pd.read_csv(D / "readings_transect.csv"); ser = pd.read_csv(D / "series_10min.csv", parse_dates=["time_utc"]); ser["time_utc"] = pd.to_datetime(ser.time_utc, utc=True)
 grid = pd.read_csv(D / "grid.csv"); sec_along = loc.groupby("transect").along_m.median().sort_values(); order = sec_along.index.tolist()
-bk = gpd.read_file(D / "banks_c" / "C_Middle_reference.geojson"); banks = [(np.array(g.coords)[:, 0] - ADCP_E) * FT for g in bk.geometry], [(np.array(g.coords)[:, 1] - ADCP_N) * FT for g in bk.geometry]   # bank set C at the reference stage 0.90 m (19_, entry 30)
+bk = gpd.read_file(D / "banks_c" / "C_Middle.geojson"); banks = [(np.array(g.coords)[:, 0] - ADCP_E) * FT for g in bk.geometry], [(np.array(g.coords)[:, 1] - ADCP_N) * FT for g in bk.geometry]   # bank set C, fixed at the median survey-day level (19_, entry 31)
 def draw_banks(ax, lw=0.5): [ax.plot(x, y, color="#8a877f", lw=lw) for x, y in zip(*banks)]
 def draw_sections(ax, lw=0.5, color=INK, alpha=0.7):
     for t, g in loc.groupby("transect"): g = g.sort_values("across_m"); ax.plot(g.x_m, g.y_m, color=color, lw=lw, alpha=alpha)
@@ -60,7 +60,7 @@ ax.set_yscale("log"); ax.set_xlabel("distance to the nearer bank (m)"); ax.set_y
 pr_all = pd.read_csv(D / "step2_predictions.csv"); pr_all = pr_all[pr_all.scheme == "transect_out"]; m2 = pd.read_csv(D / "step2_metrics.csv"); m_to = m2[m2.scheme == "transect_out"].set_index("model"); m_rf = m2[m2.scheme == "random_10fold"].set_index("model")
 ax = fig.add_subplot(gs[0, 1]); tsec = "AT0401"; pf = pr_all[(pr_all.model == "full features + notes") & (pr_all.transect == tsec)].merge(loc[["location_id", "across_m"]], on="location_id").sort_values("across_m"); pm = pr_all[(pr_all.model == "reach mean") & (pr_all.transect == tsec)].merge(loc[["location_id", "across_m"]], on="location_id").sort_values("across_m")
 ax.fill_between(pf.across_m, pf.mu - 1.96 * pf.sd, pf.mu + 1.96 * pf.sd, color=BLUE, alpha=0.2, lw=0, label="six features, 95% band"); ax.plot(pf.across_m, pf.mu, color=BLUE, lw=1.2); ax.plot(pm.across_m, pm.mu, color=MUTED, lw=1, ls="--", label="reach mean"); ax.scatter(pf.across_m, pf.y, s=16, color=INK, zorder=4, label="measured")
-ax.set_xlabel("across the section (m)"); ax.set_ylabel("log A"); ax.set_title(f"Section {tsec} held out, predicted from the other 19\n(the field beats the reach mean on 17 of 20 sections)"); ax.legend(loc="lower left"); ax.grid(True); ax.set_axisbelow(True); letter(ax, "b")
+ax.set_xlabel("across the section (m)"); ax.set_ylabel("log A"); ax.set_title(f"Section {tsec} held out, predicted from the other 19\n(the field beats the reach mean on 16 of 20 sections)"); ax.legend(loc="lower left"); ax.grid(True); ax.set_axisbelow(True); letter(ax, "b")
 ax = fig.add_subplot(gs[1, 0]); models = [("reach mean", "reach mean"), ("generic shape (bank distance)", "bank distance"), ("full features + notes", "six features + notes")]; xs = np.arange(3)
 ax.bar(xs - 0.18, [m_to.CRPS_log[m] for m, _ in models], 0.36, color=BLUE, label="section held out"); ax.bar(xs + 0.18, [m_rf.CRPS_log[m] for m, _ in models], 0.36, color=MUTED, label="random folds (leak neighbours)")
 for i, (m, _) in enumerate(models): ax.text(xs[i] - 0.18, m_to.CRPS_log[m] + 0.005, f"{m_to.CRPS_log[m]:.2f}", ha="center", fontsize=6); ax.text(xs[i] + 0.18, m_rf.CRPS_log[m] + 0.005, f"{m_rf.CRPS_log[m]:.2f}", ha="center", fontsize=6, color=INK2)

@@ -1,0 +1,83 @@
+{
+ "prior": {
+  "velocity_per_m_s": {
+   "mean": -1.5323981324331974,
+   "sd": 3.00498613466944,
+   "source": "Edwards et al. (1983) spawning SI curve 20110 fitted by exp(b v): -1.53 per m/s; sd set so the adult utilisation curve (-7.54 per m/s) is two sd away; a weak prior carrying sign and order of magnitude"
+  },
+  "bank_distance_per_m": {
+   "mean": 0.0,
+   "sd": 0.5,
+   "source": "no published curve; weak, zero-centred"
+  },
+  "depth_per_m": {
+   "mean": 4.951622169381817,
+   "sd": 5.0,
+   "source": "Edwards et al. (1983) spawning depth SI curve over 0.15 to 0.9 m fitted by exp(b h): 5.0 per m; sd 5 (weak)"
+  },
+  "intercept": {
+   "mean": 0.0,
+   "sd": 10.0
+  }
+ },
+ "n_used": 57,
+ "n_available": 1140,
+ "velocity_coef_per_m_s": {
+  "prior": [
+   -1.5323981324331974,
+   3.00498613466944
+  ],
+  "data_alone": [
+   -4.799407340018063,
+   2.1012181401746437
+  ],
+  "posterior": [
+   -3.805900142689396,
+   1.6819108427425424
+  ]
+ },
+ "bank_distance_coef_per_m": {
+  "data_alone": [
+   -0.15607311493723014,
+   0.042188416013659004
+  ],
+  "posterior": [
+   -0.1680149573954896,
+   0.03958502832929348
+  ]
+ },
+ "depth_coef_per_m": {
+  "data_alone": [
+   3.4049001749893337,
+   0.7686650507621654
+  ],
+  "posterior": [
+   3.2598870607306094,
+   0.7336272206315368
+  ]
+ },
+ "v50_m_s_posterior": {
+  "median": 0.18210641284246779,
+  "ci90": [
+   0.10627313447350215,
+   0.5608206616934572
+  ],
+  "share_of_draws_with_positive_velocity_effect": 0.011
+ },
+ "definition": "relative suitability S(v) = exp(beta_v v), the used/available odds at velocity v relative to still water, at the same bank distance and depth; the ecological number is the width- and length-weighted mean of S over the reach's wetted width",
+ "reach_mean_suitability": {
+  "2025": {
+   "median": 0.4709802234680744,
+   "share_of_hours_with_P(E>0.5)_over_0.9": 0.0
+  },
+  "2026": {
+   "median": 0.416358981237023,
+   "share_of_hours_with_P(E>0.5)_over_0.9": 0.0
+  },
+  "at_0.90_m": {
+   "median": 0.3743753333289572,
+   "lo": 0.23253572798356964,
+   "hi": 0.6814567582248183
+  }
+ }
+}

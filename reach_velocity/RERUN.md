@@ -28,7 +28,7 @@ Checked on 22 September 2026: the branch was cloned into an empty directory, a n
 After a rerun, compare against the committed outputs:
 
 1. `paper/TABLES.md`: Table 3 (scores) and Table 4 (ablations) match to the printed precision.
-2. The headline numbers: section held out CRPS 0.311 against 0.414 for the reach mean (`data_clean/step2_metrics.csv`); readings on held-out days MAE 0.084 m/s against a deviation of 0.119 (`step6_validation_table.csv`); section means on held-out days inside the 90% band 20 of 20 (`step6_section_coverage.csv`); reach share below 0.2 m/s at 0.90 m 0.362 (`step5_reach_totals.csv`); mean suitability E at 0.90 m 0.43 with the velocity effect −3.2 ± 1.8 per m/s (`nest_bayes.json`); ADCP level ratio 0.87 (`adcp_single_beam.json`). These are the numbers with bank set C (logbook entry 30).
+2. The headline numbers: section held out CRPS 0.319 against 0.414 for the reach mean (`data_clean/step2_metrics.csv`); readings on held-out days MAE 0.087 m/s against a deviation of 0.119 (`step6_validation_table.csv`); section means on held-out days inside the 90% band 20 of 20 (`step6_section_coverage.csv`); reach share below 0.2 m/s at 0.90 m 0.361 (`step5_reach_totals.csv`); mean suitability E at 0.90 m 0.40 with the velocity effect −3.5 ± 1.7 per m/s (`nest_bayes.json`); ADCP level ratio 0.86 (`adcp_single_beam.json`). These are the numbers with bank set C fixed at each reach's median survey-day level (logbook entry 31).
 3. `paper/F1_*.png` to `F5_*.png` regenerate identically.
 
 A prompt for a coding-agent session that verifies the work independently:

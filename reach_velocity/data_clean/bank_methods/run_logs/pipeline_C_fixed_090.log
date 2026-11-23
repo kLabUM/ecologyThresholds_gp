@@ -1,0 +1,1465 @@
+relative position vs across_m: r = 0.90 (should be strongly positive if 'left' means the same bank in both)
+              feature  spearman_r_with_A  spearman_r_with_logA
+              along_m               0.01                  0.01
+             across_m               0.13                  0.13
+           rel_across               0.14                  0.14
+          dist_bank_m               0.58                  0.58
+              width_m               0.17                  0.17
+                bed_m              -0.10                 -0.10
+              h_ref_m               0.10                  0.10
+            rel_depth               0.30                  0.30
+lateral_bed_slope_abs              -0.19                 -0.19
+ section_mean_depth_m              -0.37                 -0.37
+      section_width_m               0.17                  0.17
+    curvature_1_per_m               0.01                  0.01
+     outer_bank_score              -0.23                 -0.23
+            wake_flag              -0.28                 -0.28
+
+A by substrate class:
+               median  size
+substrate                 
+cobble         0.141    11
+gravel         0.134    24
+not noted      0.143   138
+sand           0.106    17
+silt           0.033    11
+vegetation     0.076    10
+woody debris   0.076    46
+saved 00v
+      date  year    stage  n_loc   n  q_cfs
+2025-05-30  2025 0.876819     17 166  316.0
+2025-06-03  2025 0.894123     19  71  327.0
+2025-06-06  2025 0.987458     18 125  689.0
+2025-06-10  2025 1.092374     18  90  673.0
+2025-07-09  2025 0.925453     13  77  347.0
+2025-07-14  2025 0.792062     23 133  200.0
+2025-07-16  2025 0.853236     17  69  253.0
+2025-07-21  2025 0.829672     28 118  238.0
+2025-07-23  2025 0.813453     30 123  213.0
+2026-06-18  2026 0.741158     33 125  283.0
+2026-06-25  2026 0.938599     44 188  393.0
+saved 00a-00d
+[    0s] 257 points; median sd of log A 0.15; substrate noted at 119, wake flag at 55
+[    0s] transect_out         reach mean                     MAE_log 0.567 CRPS_log 0.414 cov 0.87 MAE_A 0.057
+[    0s] transect_out         reach mean + notes             MAE_log 0.494 CRPS_log 0.364 cov 0.86 MAE_A 0.049
+[    6s] transect_out         generic shape (bank distance)  MAE_log 0.438 CRPS_log 0.321 cov 0.92 MAE_A 0.042
+[   16s] transect_out         coords                         MAE_log 0.515 CRPS_log 0.388 cov 0.91 MAE_A 0.051
+[   26s] transect_out         coords + bank                  MAE_log 0.503 CRPS_log 0.378 cov 0.91 MAE_A 0.048
+[   47s] transect_out         full features                  MAE_log 0.477 CRPS_log 0.344 cov 0.90 MAE_A 0.044
+[   68s] transect_out         full features + notes          MAE_log 0.434 CRPS_log 0.317 cov 0.93 MAE_A 0.041
+[   68s] random_10fold        reach mean                     MAE_log 0.564 CRPS_log 0.412 cov 0.88 MAE_A 0.057
+[   68s] random_10fold        reach mean + notes             MAE_log 0.485 CRPS_log 0.356 cov 0.88 MAE_A 0.048
+[   71s] random_10fold        generic shape (bank distance)  MAE_log 0.435 CRPS_log 0.318 cov 0.93 MAE_A 0.041
+[   75s] random_10fold        coords                         MAE_log 0.356 CRPS_log 0.261 cov 0.90 MAE_A 0.033
+[   80s] random_10fold        coords + bank                  MAE_log 0.352 CRPS_log 0.257 cov 0.91 MAE_A 0.032
+[   89s] random_10fold        full features                  MAE_log 0.364 CRPS_log 0.265 cov 0.90 MAE_A 0.033
+[   97s] random_10fold        full features + notes          MAE_log 0.385 CRPS_log 0.285 cov 0.89 MAE_A 0.035
+[   97s] june25_transect_out  reach mean                     MAE_log 0.348 CRPS_log 0.260 cov 0.93 MAE_A 0.039
+[   97s] june25_transect_out  reach mean + notes             MAE_log 0.351 CRPS_log 0.262 cov 0.91 MAE_A 0.039
+[   98s] june25_transect_out  generic shape (bank distance)  MAE_log 0.236 CRPS_log 0.184 cov 0.89 MAE_A 0.025
+[   98s] june25_transect_out  coords                         MAE_log 0.250 CRPS_log 0.185 cov 0.89 MAE_A 0.026
+[   98s] june25_transect_out  coords + bank                  MAE_log 0.254 CRPS_log 0.187 cov 0.89 MAE_A 0.027
+[   99s] june25_transect_out  full features                  MAE_log 0.307 CRPS_log 0.237 cov 0.82 MAE_A 0.032
+[   99s] june25_transect_out  full features + notes          MAE_log 0.335 CRPS_log 0.251 cov 0.86 MAE_A 0.035
+[  100s] full fit coords: {'amp_sd': 0.7590680484472981, 'nugget_sd': 0.13466051947338903, 'along_m': 29.202284831833378, 'rel_across': 0.5877973657843799}
+[  101s] full fit full features: {'amp_sd': 0.819096781681265, 'nugget_sd': 0.11675630449298663, 'along_m': 101.69355960549193, 'rel_across': 1.9756069701524581, 'dist_bank_m': 20.514705747241877, 'rel_depth': 0.8726139166211214, 'section_mean_depth_m': 0.15225695749707394, 'lateral_bed_slope_abs': 0.5594836312605509}
+[  102s] full fit full features + notes: {'amp_sd': 0.6716913457866238, 'nugget_sd': 0.2255448374528485, 'along_m': 154.1161487690855, 'rel_across': 2.167236741419748, 'dist_bank_m': 20.812112617815313, 'rel_depth': 0.7022697431339471, 'section_mean_depth_m': 0.10729155418907353, 'lateral_bed_slope_abs': 0.7780762982903641}
+[  102s] june25 fit: {'amp_sd': 0.5427534009798544, 'nugget_sd': 0.004775536504368825, 'along_m': 2001.6558984413555, 'rel_across': 31.404947900832042, 'dist_bank_m': 12.827017170998202, 'rel_depth': 11.90357377277311, 'section_mean_depth_m': 0.23912786200695388, 'lateral_bed_slope_abs': 0.1015412061216934}
+[  102s] saved 02
+             scheme                         model  MAE_log  CRPS_log  coverage95  mean_sd  MAE_A   n
+       transect_out                    reach mean    0.567     0.414       0.868    0.517  0.057 257
+       transect_out            reach mean + notes    0.494     0.364       0.864    0.486  0.049 257
+       transect_out generic shape (bank distance)    0.438     0.321       0.922    0.526  0.042 257
+       transect_out                        coords    0.515     0.388       0.911    0.651  0.051 257
+       transect_out                 coords + bank    0.503     0.378       0.911    0.647  0.048 257
+       transect_out                 full features    0.477     0.344       0.903    0.538  0.044 257
+       transect_out         full features + notes    0.434     0.317       0.934    0.508  0.041 257
+      random_10fold                    reach mean    0.564     0.412       0.879    0.517  0.057 257
+      random_10fold            reach mean + notes    0.485     0.356       0.875    0.485  0.048 257
+      random_10fold generic shape (bank distance)    0.435     0.318       0.930    0.527  0.041 257
+      random_10fold                        coords    0.356     0.261       0.899    0.391  0.033 257
+      random_10fold                 coords + bank    0.352     0.257       0.907    0.388  0.032 257
+      random_10fold                 full features    0.364     0.265       0.899    0.373  0.033 257
+      random_10fold         full features + notes    0.385     0.285       0.895    0.422  0.035 257
+june25_transect_out                    reach mean    0.348     0.260       0.932    0.452  0.039  44
+june25_transect_out            reach mean + notes    0.351     0.262       0.909    0.390  0.039  44
+june25_transect_out generic shape (bank distance)    0.236     0.184       0.886    0.305  0.025  44
+june25_transect_out                        coords    0.250     0.185       0.886    0.293  0.026  44
+june25_transect_out                 coords + bank    0.254     0.187       0.886    0.297  0.027  44
+june25_transect_out                 full features    0.307     0.237       0.818    0.295  0.032  44
+june25_transect_out         full features + notes    0.335     0.251       0.864    0.321  0.035  44
+[    0s] 257 points, 11 days
+[   11s] none         day-out MAE log a 0.508 CRPS 0.382 cov 0.89 | after removing each day's offset (oracle): MAE 0.451
+[   22s] depth^0.25   day-out MAE log a 0.467 CRPS 0.344 cov 0.93 | after removing each day's offset (oracle): MAE 0.434
+[   33s] depth^0.5    day-out MAE log a 0.461 CRPS 0.336 cov 0.94 | after removing each day's offset (oracle): MAE 0.436
+[   44s] depth^0.67   day-out MAE log a 0.467 CRPS 0.337 cov 0.93 | after removing each day's offset (oracle): MAE 0.444
+[   54s] depth^1.0    day-out MAE log a 0.528 CRPS 0.379 cov 0.88 | after removing each day's offset (oracle): MAE 0.466
+[   65s] depth^1.5    day-out MAE log a 0.621 CRPS 0.444 cov 0.84 | after removing each day's offset (oracle): MAE 0.509
+[   77s] Q^0.25       day-out MAE log a 0.469 CRPS 0.350 cov 0.90 | after removing each day's offset (oracle): MAE 0.443
+[   89s] Q^0.5        day-out MAE log a 0.451 CRPS 0.333 cov 0.91 | after removing each day's offset (oracle): MAE 0.429
+[  100s] Q^0.75       day-out MAE log a 0.456 CRPS 0.336 cov 0.90 | after removing each day's offset (oracle): MAE 0.426
+[  111s] Q^1.0        day-out MAE log a 0.497 CRPS 0.362 cov 0.91 | after removing each day's offset (oracle): MAE 0.441
+[  121s] Q^1.5        day-out MAE log a 0.622 CRPS 0.455 cov 0.88 | after removing each day's offset (oracle): MAE 0.481
+[  121s] best law by day-out CRPS: Q^0.5
+[  121s] day offsets, none: sd 0.32; vs stage rho +0.75; vs Q rho +0.58; 2025 mean +0.10, 2026 mean -0.34
+[  121s] day offsets, Q^0.5: sd 0.16; vs stage rho +0.10; vs Q rho -0.15; 2025 mean +0.03, 2026 mean -0.11
+[  121s] readings on held-out days, none: MAE 0.105 m/s, bias +0.014, coverage 0.84, spread of readings 0.153
+[  121s] readings on held-out days, Q^0.5: MAE 0.089 m/s, bias +0.005, coverage 0.85, spread of readings 0.153
+[  122s] ADCP from the field (Q^0.5): A 0.090 (sd log 0.22); season MAE 93 mm/s, bias +93, coverage 0.15, obs/pred median 0.58
+[  123s] saved 03
+       law                 scheme   MAE  RMSE  CRPS  coverage95  mean_sd  bias   n
+      none                day_out 0.508 0.696 0.382       0.887    0.581 0.090 257
+      none day_out_oracle_offsets 0.451 0.626 0.335       0.922    0.581 0.058 257
+depth^0.25                day_out 0.467 0.641 0.344       0.926    0.544 0.075 257
+depth^0.25 day_out_oracle_offsets 0.434 0.600 0.319       0.946    0.544 0.033 257
+ depth^0.5                day_out 0.461 0.627 0.336       0.938    0.529 0.061 257
+ depth^0.5 day_out_oracle_offsets 0.436 0.598 0.317       0.938    0.529 0.069 257
+depth^0.67                day_out 0.467 0.629 0.337       0.930    0.520 0.056 257
+depth^0.67 day_out_oracle_offsets 0.444 0.606 0.321       0.930    0.520 0.066 257
+ depth^1.0                day_out 0.528 0.695 0.379       0.875    0.505 0.086 257
+ depth^1.0 day_out_oracle_offsets 0.466 0.634 0.336       0.899    0.505 0.068 257
+ depth^1.5                day_out 0.621 0.798 0.444       0.844    0.534 0.093 257
+ depth^1.5 day_out_oracle_offsets 0.509 0.704 0.371       0.907    0.534 0.033 257
+    Q^0.25                day_out 0.469 0.652 0.350       0.899    0.530 0.076 257
+    Q^0.25 day_out_oracle_offsets 0.443 0.616 0.326       0.918    0.530 0.051 257
+     Q^0.5                day_out 0.451 0.629 0.333       0.911    0.507 0.058 257
+     Q^0.5 day_out_oracle_offsets 0.429 0.609 0.318       0.907    0.507 0.061 257
+    Q^0.75                day_out 0.456 0.630 0.336       0.903    0.512 0.037 257
+    Q^0.75 day_out_oracle_offsets 0.426 0.610 0.316       0.914    0.512 0.071 257
+     Q^1.0                day_out 0.497 0.660 0.362       0.907    0.546 0.005 257
+     Q^1.0 day_out_oracle_offsets 0.441 0.620 0.324       0.934    0.546 0.068 257
+     Q^1.5                day_out 0.622 0.790 0.455       0.883    0.690 0.014 257
+     Q^1.5 day_out_oracle_offsets 0.481 0.669 0.362       0.946    0.690 0.104 257
+law         Q^0.5  none
+date                   
+2025-05-30   0.06 -0.25
+2025-06-03  -0.13  0.04
+2025-06-06  -0.14  0.30
+2025-06-10   0.05  0.52
+2025-07-09   0.22  0.33
+2025-07-14   0.01 -0.12
+2025-07-16  -0.15 -0.02
+2025-07-21   0.10 -0.02
+2025-07-23   0.24  0.09
+2026-06-18  -0.24 -0.71
+2026-06-25   0.03  0.03
+[    8s] stage law h0 0.35 gamma 0.5: CRPS 0.342 MAE 0.459 cov 0.90
+[   16s] stage law h0 0.35 gamma 0.75: CRPS 0.329 MAE 0.448 cov 0.91
+[   23s] stage law h0 0.35 gamma 1.0: CRPS 0.323 MAE 0.440 cov 0.91
+[   31s] stage law h0 0.35 gamma 1.25: CRPS 0.324 MAE 0.441 cov 0.89
+[   39s] stage law h0 0.45 gamma 0.5: CRPS 0.335 MAE 0.453 cov 0.90
+[   47s] stage law h0 0.45 gamma 0.75: CRPS 0.323 MAE 0.441 cov 0.91
+[   55s] stage law h0 0.45 gamma 1.0: CRPS 0.324 MAE 0.441 cov 0.89
+[   63s] stage law h0 0.45 gamma 1.25: CRPS 0.335 MAE 0.460 cov 0.90
+[   71s] stage law h0 0.55 gamma 0.5: CRPS 0.326 MAE 0.444 cov 0.91
+[   78s] stage law h0 0.55 gamma 0.75: CRPS 0.323 MAE 0.441 cov 0.90
+[   86s] stage law h0 0.55 gamma 1.0: CRPS 0.339 MAE 0.467 cov 0.90
+[   95s] stage law h0 0.55 gamma 1.25: CRPS 0.382 MAE 0.523 cov 0.87
+[  103s] stage law h0 0.65 gamma 0.5: CRPS 0.323 MAE 0.441 cov 0.89
+[  111s] stage law h0 0.65 gamma 0.75: CRPS 0.359 MAE 0.495 cov 0.89
+[  120s] stage law h0 0.65 gamma 1.0: CRPS 0.406 MAE 0.546 cov 0.88
+[  128s] stage law h0 0.65 gamma 1.25: CRPS 0.477 MAE 0.645 cov 0.85
+[  128s] best stage law: h0 0.35, gamma 1.0, CRPS 0.323
+[  128s] reach stage law (stage-0.35)^1.00 | ADCP read as column: after fixing the level, residual sd over the season 0.09 (log), remaining trend with depth -0.12
+[  128s] reach stage law (stage-0.35)^1.00 | ADCP read as point at fixed height: after fixing the level, residual sd over the season 0.16 (log), remaining trend with depth +0.34
+[  128s] local depth^0.5 at the ADCP | ADCP read as column: after fixing the level, residual sd over the season 0.08 (log), remaining trend with depth -0.04
+[  128s] local depth^0.5 at the ADCP | ADCP read as point at fixed height: after fixing the level, residual sd over the season 0.18 (log), remaining trend with depth +0.42
+[  128s] discharge^0.75 | ADCP read as column: after fixing the level, residual sd over the season 0.25 (log), remaining trend with depth -0.52
+[  128s] discharge^0.75 | ADCP read as point at fixed height: after fixing the level, residual sd over the season 0.15 (log), remaining trend with depth -0.06
+[  129s] saved 03b
+[  153s] calibration: {'held_out_coverage95_before': 0.9066147859922179, 'q95_abs_z': 2.3860956745279016, 'inflation': 1.217395752310154, 'disc_sd_log': 0.36896993259367583, 'n': 257}
+[  154s] AT10 at 0.75 m: mean v 0.201 [0.152, 0.264]; share < 0.2: 0.58 [0.42, 0.75]
+[  154s] AT10 at 0.90 m: mean v 0.300 [0.227, 0.393]; share < 0.2: 0.38 [0.23, 0.62]
+[  154s] AT10 at 1.10 m: mean v 0.444 [0.324, 0.592]; share < 0.2: 0.23 [0.15, 0.38]
+[  155s] AT10 at 1.30 m: mean v 0.582 [0.418, 0.801]; share < 0.2: 0.15 [0.08, 0.31]
+[  155s] 0625-T02 at 0.75 m: mean v 0.175 [0.125, 0.255]; share < 0.2: 0.67 [0.44, 0.80]
+[  155s] 0625-T02 at 0.90 m: mean v 0.280 [0.213, 0.394]; share < 0.2: 0.40 [0.30, 0.60]
+[  156s] 0625-T02 at 1.10 m: mean v 0.425 [0.329, 0.597]; share < 0.2: 0.30 [0.10, 0.40]
+[  156s] 0625-T02 at 1.30 m: mean v 0.565 [0.432, 0.814]; share < 0.2: 0.10 [0.00, 0.30]
+[  156s] AT0401 at 0.75 m: mean v 0.157 [0.117, 0.201]; share < 0.2: 0.72 [0.56, 0.89]
+[  157s] AT0401 at 0.90 m: mean v 0.240 [0.194, 0.296]; share < 0.2: 0.50 [0.39, 0.67]
+[  157s] AT0401 at 1.10 m: mean v 0.350 [0.285, 0.445]; share < 0.2: 0.33 [0.17, 0.44]
+[  157s] AT0401 at 1.30 m: mean v 0.457 [0.366, 0.607]; share < 0.2: 0.22 [0.06, 0.33]
+[  158s] AT13 at 0.75 m: mean v 0.164 [0.125, 0.215]; share < 0.2: 0.69 [0.56, 0.81]
+[  158s] AT13 at 0.90 m: mean v 0.258 [0.199, 0.329]; share < 0.2: 0.56 [0.38, 0.69]
+[  158s] AT13 at 1.10 m: mean v 0.381 [0.288, 0.500]; share < 0.2: 0.38 [0.19, 0.56]
+[  159s] AT13 at 1.30 m: mean v 0.501 [0.376, 0.689]; share < 0.2: 0.25 [0.06, 0.44]
+[  160s] saved 04
+ section  stage_m  mean_v_median  mean_v_lo  mean_v_hi  share_median  share_lo  share_hi  wet_points
+    AT10     0.75          0.201      0.152      0.264         0.583     0.417     0.751          13
+    AT10     0.90          0.300      0.227      0.393         0.385     0.231     0.615          13
+    AT10     1.10          0.444      0.324      0.592         0.231     0.154     0.385          13
+    AT10     1.30          0.582      0.418      0.801         0.154     0.077     0.308          13
+0625-T02     0.75          0.175      0.125      0.255         0.667     0.444     0.800          10
+0625-T02     0.90          0.280      0.213      0.394         0.400     0.300     0.600          10
+0625-T02     1.10          0.425      0.329      0.597         0.300     0.100     0.400          10
+0625-T02     1.30          0.565      0.432      0.814         0.100     0.000     0.300          10
+  AT0401     0.75          0.157      0.117      0.201         0.722     0.556     0.889          18
+  AT0401     0.90          0.240      0.194      0.296         0.500     0.389     0.667          18
+  AT0401     1.10          0.350      0.285      0.445         0.333     0.167     0.444          18
+  AT0401     1.30          0.457      0.366      0.607         0.222     0.056     0.333          18
+    AT13     0.75          0.164      0.125      0.215         0.688     0.562     0.812          16
+    AT13     0.90          0.258      0.199      0.329         0.562     0.375     0.688          16
+    AT13     1.10          0.381      0.288      0.500         0.375     0.188     0.562          16
+    AT13     1.30          0.501      0.376      0.689         0.250     0.062     0.438          16
+stage_m   0.75   0.90   1.10   1.30
+source                             
+A_field  0.038  0.056  0.084  0.113
+bank     0.005  0.008  0.012  0.016
+bed      0.016  0.008  0.008  0.008
+disc     0.077  0.112  0.167  0.225
+law      0.030  0.016  0.067  0.159
+stage    0.027  0.030  0.032  0.034
+z0       0.006  0.002  0.005  0.014
+[    1s] bed GP: along scale 117 m, across scale 28.9 m, nugget sd 5 cm, on 280 points
+[    2s] grid: 8114 cells of 2 m inside the channel polygon, along -232 to 466 m
+[  153s] field on the stage grid: 1 levels, 0.90 to 0.90 m
+[  154s] field on the grid: median sd of log A 0.27; on transects 0.24, between (> 15 m) 0.30
+[  192s] stage 0.75: share below 0.2 m/s, map 0.66 [0.58, 0.74], sections 0.59 [0.51, 0.68]
+[  230s] stage 0.90: share below 0.2 m/s, map 0.42 [0.35, 0.47], sections 0.36 [0.29, 0.42]
+[  270s] stage 1.10: share below 0.2 m/s, map 0.24 [0.19, 0.30], sections 0.20 [0.15, 0.26]
+[  310s] stage 1.30: share below 0.2 m/s, map 0.15 [0.10, 0.21], sections 0.12 [0.08, 0.17]
+[  311s] saved 05
+ stage_m                      source  share_below_thr_median    lo    hi  wet_area_m2
+    0.75 map (joint draws, 4 m grid)                   0.660 0.580 0.744    29972.306
+    0.75   sections, length-weighted                   0.592 0.511 0.683          NaN
+    0.90 map (joint draws, 4 m grid)                   0.417 0.354 0.473    31400.130
+    0.90   sections, length-weighted                   0.359 0.294 0.420          NaN
+    1.10 map (joint draws, 4 m grid)                   0.239 0.188 0.304    32060.049
+    1.10   sections, length-weighted                   0.197 0.146 0.261          NaN
+    1.30 map (joint draws, 4 m grid)                   0.148 0.100 0.210    32312.018
+    1.30   sections, length-weighted                   0.121 0.077 0.173          NaN
+[  161s] 20 sections, 3106 two-hourly stages
+[  174s] joint reach draws: discrepancy common 0.050, independent 0.366 (log); reach share at the median stage of the record: 0.392
+[  999s] section level, day held out: mean velocity inside the 90% band for 100% of 20 sections (MAE 0.053 m/s, median relative error 21%); share below 0.2 inside the band for 95% (MAE 11 points)
+[ 1003s] continuity:
+ section       date  stage_m  Q_measured_m3s  Q_model_m3s  Q_model_lo  Q_model_hi  Q_usgs_m3s  width_m
+0625-T05 2026-06-25     0.94            7.89         8.72        5.91       13.46       11.13    35.98
+0625-T04 2026-06-25     0.94            8.62         9.97        6.85       14.03       11.13    36.24
+0625-T03 2026-06-25     0.94            8.31         9.02        6.10       13.39       11.13    43.22
+0625-T02 2026-06-25     0.94            8.66         8.59        6.45       12.00       11.13    45.23
+0625-T01 2026-06-25     0.95            8.00         8.59        6.52       11.65       11.13    48.73
+ACORNT01 2025-05-30     0.88            7.61         8.41        6.58       10.81        8.95    45.72
+0618-T01 2026-06-18     0.75            3.48         3.73        2.67        5.38        8.01    43.01
+    AT03 2025-06-03     0.89            6.72         8.16        6.59       10.17        9.26    48.41
+    AT05 2025-06-10     1.09           13.68        14.95       12.16       18.78       19.06    48.44
+0618-T02 2026-06-18     0.74            3.24         3.46        2.47        4.68        8.01    46.43
+  AT0401 2025-06-06     0.99            9.55        10.15        8.27       12.78       19.51    42.91
+    AT07 2025-07-09     0.93            7.88         8.59        6.73       11.36        9.83    40.22
+    AT06 2025-07-14     0.79            4.81         5.23        3.69        7.45        5.66    49.28
+    AT08 2025-07-14     0.79            4.39         4.58        3.39        6.61        5.66    51.44
+    AT09 2025-07-16     0.85            5.57         6.01        4.72        7.63        7.16    47.91
+    AT10 2025-07-21     0.83            5.90         6.43        4.85        8.42        6.74    44.02
+    AT11 2025-07-21     0.83            5.31         5.71        4.35        7.40        6.74    44.74
+0618-T03 2026-06-18     0.74            3.61         3.85        2.83        5.31        8.01    48.55
+    AT12 2025-07-23     0.81            5.06         5.40        4.11        7.13        6.03    53.46
+    AT13 2025-07-23     0.81            5.20         5.93        4.49        7.77        6.03    52.36
+[ 1003s] reach rating from the measured section discharges: Q = 25.3 (stage - 0.35)^2.10 m3/s, scatter 6% (n 20)
+[ 1048s] continuity at common stage, sd of log Q across the 20 sections: 0.70 m: 0.133, 0.75 m: 0.107, 0.80 m: 0.091, 0.85 m: 0.086, 0.90 m: 0.089, 0.95 m: 0.095, 1.00 m: 0.103, 1.05 m: 0.111, 1.10 m: 0.120, 1.15 m: 0.126, 1.20 m: 0.131, 1.25 m: 0.136, 1.30 m: 0.142
+[ 1053s] readings on held-out days, adopted law: MAE 0.086 m/s (mean absolute deviation of the readings 0.119), coverage 0.84, below/above 0.2 called right 74% (base 58%), n 1208
+[ 1053s] same-day sections: measured discharge ratio max/min by day {'2025-07-14': 1.09, '2025-07-21': 1.11, '2025-07-23': 1.03, '2026-06-18': 1.11, '2026-06-25': 1.1}; measured/USGS median 0.78 (IQR 0.72 to 0.81); model/USGS median 0.82
+[ 1054s] saved 06
+                                                                test                            value                                                                                                                           note
+                 section held out: CRPS of log A, model / reach mean                    0.317 / 0.414                                                                                  20 sections, 257 points; 95% band covers 0.93
+            day held out: CRPS of log a, stage law / no law / oracle              0.323 / 0.382 / nan                                           11 days; six days hold out a single section, so this fold set overlaps the one above
+readings on held-out days: MAE / their mean absolute deviation (m/s)                    0.086 / 0.119                        1,208 readings, adopted law; 95% band covers 0.84; below/above 0.2 m/s called right 74% (base rate 58%)
+        sections on held-out days: mean velocity inside the 90% band                       100% of 20                                                                             MAE 0.053 m/s; share below 0.2 inside its band 95%
+             ADCP through 2025: shape of the stage law, level fitted          0.159 (sd of log ratio) point reading; the level is not predicted by the field; under a column reading the shape is depth^0.46 (instrument model open)
+          continuity: same-day sections' measured discharge, max/min     1.09, 1.11, 1.03, 1.11, 1.10                                                                      a consistency check on the measurements, not on the model
+      continuity at common stage: sd of log Q across the 20 sections 0.089 at 0.90 m, 0.142 at 1.30 m                 modelled discharge of every section at the same stage; the spread is the model's between-section inconsistency
+              continuity: measured section discharge / gauge, median                             0.78                                                        USGS Ann Arbor 18 km downstream; two tributary-storm days at 0.4 to 0.5
+                 reach share below 0.2 m/s at 0.90 m: map / sections                    0.417 / 0.359                                      the map carries the margins to the bank line; the sections stop at their outermost points
+[  162s] reach share below 0.2 m/s: {"2025": {"median_share": 0.43196757294670696, "median_share_in_range_hours": 0.3765643725892708, "fraction_of_hours_outside_surveyed_range": 0.3543252595155709, "fraction_of_hours_above_range": 0.07404844290657439, "band_halfwidth_points_in_range": 6.1487147598272065, "band_halfwidth_points_above_range": 5.416944175560519}, "2026": {"median_share": 0.35382562691772523, "median_share_in_range_hours": 0.3547199782457209, "fraction_of_hours_outside_surveyed_range": 0.49849488260084285, "fraction_of_hours_above_range": 0.25285972305839854, "band_halfwidth_points_in_range": 6.014282806086725, "band_halfwidth_points_above_range": 5.053158815380161}, "May_2026": {"share_median": 0.26816148954145397, "lo": 0.20597226328649412, "hi": 0.32646184331909933, "fraction_above_range": 0.23652694610778444}}
+[  166s] depth-averaged: done
+[  169s] near-bed at 0.10 m: done
+[  170s] law scenarios (share below 0.2): primary (0.35, 1.0): 1.30 m 0.12; flattest in the set (0.65, 0.5): 1.30 m 0.13
+[  170s] nests in cells dry at their stage (bed above the water in the 2 m grid): 1 of 58; these are set aside from the percentile test
+[  170s] nests: {'n_nests': 58, 'n_in_wet_cells': 57, 'median_percentile_in_reach': 0.18941892920578535, 'AUC_available_vs_used': 0.7141738812459519, 'ks_p_vs_uniform': 5.202311821634123e-08, 'AUC_restricted_to_30m_of_nests': 0.7151324458629229, 'ks_p_restricted': 9.054032666876729e-08, 'share_of_nests_below_thr_predicted': 0.6842105263157895, 'share_of_reach_below_thr_at_median_nest_stage': 0.2775275275275275, 'measured_nest_velocity_median': 0.024384, 'predicted_at_nests_depth_averaged_median': 0.14881376158485232, 'predicted_at_nests_at_reading_height_median': 0.14691296644843221, 'nest_reading_height_median_m': 0.24384, 'baselines': {'bank distance': {'AUC': 0.7543711236802608, 'ks_p': 1.2523980839320857e-10}, 'conveyance A (no stage)': {'AUC': 0.7296818582144817, 'ks_p': 3.2719506592339364e-08}, 'depth': {'AUC': 0.5041014972239639, 'ks_p': 0.3970293923155892}, 'velocity within bank-distance strata (±2 m)': {'AUC': 0.4955631066553644, 'ks_p': 0.06976293042428106}}, 'day_cluster_inference': {'n_days': 9, 'mean_of_day_means': 0.34050511905173875, 't_p_vs_0.5': 0.055136930915076286, 'wilcoxon_p': 0.0390625}, 'nest_bank_distance_median_m': 4.666419717888093, 'wet_cell_bank_distance_median_m': 12.237134027146103}
+[  171s] saved 07
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 2 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 2 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 2 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 2 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 2 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 3 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 3 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+{
+ "beam_angle_deg": 25.0,
+ "factor": 0.42261826174069944,
+ "n_2h": 1213,
+ "period": [
+  "2025-05-30",
+  "2025-09-13"
+ ],
+ "stage_range_m": [
+  0.6639933685610112,
+  1.2038565872783946
+ ],
+ "level_ratio_record_over_field_median": 0.9920207165588283,
+ "level_ratio_iqr": [
+  0.9164852988854895,
+  1.0560270379233552
+ ],
+ "implied_beam_angle_if_level_matched_deg": 24.786997940600862,
+ "MAE_m_s": 0.019435440355298567,
+ "bias_m_s": 0.00013175430159871994,
+ "coverage90": 1.0,
+ "log_ratio_sd_over_season": 0.10685925670312733,
+ "MAE_above_1.0_m": 0.01686358584928377,
+ "coverage90_above_1.0_m": 1.0,
+ "n_above_1.0_m": 180,
+ "field_logA_at_cell": -1.9038386513694787,
+ "field_logA_sd_at_cell": 0.2587108741556568
+}
+saved 09
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 2 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 2 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 2 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 2 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 2 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 3 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 3 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+{
+ "n_nests": 57,
+ "nest_calibrated_thresholds_m_s": {
+  "q50": {
+   "value": 0.1488137615848523,
+   "ci90": [
+    0.12728242121401084,
+    0.1965749794862756
+   ]
+  },
+  "q75": {
+   "value": 0.2579773889565387,
+   "ci90": [
+    0.1735807445679936,
+    0.2853080573136938
+   ]
+  },
+  "q90": {
+   "value": 0.3056046345486505,
+   "ci90": [
+    0.2661927014667801,
+    0.3662181371459364
+   ]
+  }
+ },
+ "share_of_nests_below_0.2": 0.6842105263157895,
+ "selection_model": {
+  "velocity alone": {
+   "velocity (m/s)": {
+    "coef_per_sd": -0.8140020450004601,
+    "ci90": [
+     -1.0912953322114416,
+     -0.5899578922333588
+    ],
+    "per_unit": -5.301077230602186
+   }
+  },
+  "bank distance alone": {
+   "bank distance (m)": {
+    "coef_per_sd": -1.1068251860529978,
+    "ci90": [
+     -1.635131828012595,
+     -0.5467468533738836
+    ],
+    "per_unit": -0.1609960712328866
+   }
+  },
+  "velocity + bank distance": {
+   "velocity (m/s)": {
+    "coef_per_sd": 0.058435833667677926,
+    "ci90": [
+     -0.3745751098891763,
+     0.4902601767300692
+    ],
+    "per_unit": 0.3805553919791552
+   },
+   "bank distance (m)": {
+    "coef_per_sd": -1.1542919919391488,
+    "ci90": [
+     -2.06061897555744,
+     -0.3936180278270632
+    ],
+    "per_unit": -0.16790047615422385
+   }
+  },
+  "velocity + bank distance + depth": {
+   "velocity (m/s)": {
+    "coef_per_sd": -0.5431458846275244,
+    "ci90": [
+     -1.208171209331903,
+     0.07296195865879641
+    ],
+    "per_unit": -3.5371634501147033
+   },
+   "bank distance (m)": {
+    "coef_per_sd": -1.2005092451344723,
+    "ci90": [
+     -2.5319264986269854,
+     -0.3158107021432757
+    ],
+    "per_unit": -0.17462312421227624
+   },
+   "depth (m)": {
+    "coef_per_sd": 0.6760331268669073,
+    "ci90": [
+     0.24341041991753623,
+     1.169995784930728
+    ],
+    "per_unit": 3.2788808939763276
+   }
+  }
+ },
+ "note": "coefficients are log-odds of use per standard deviation of the covariate (sd: velocity (m/s) 0.15, bank distance (m) 6.87, depth (m) 0.21); 20 available cells per nest at the nest's own stage; day-cluster bootstrap, 9 days"
+}
+saved 10
+literature prior: {
+ "velocity_per_m_s": {
+  "mean": -1.532,
+  "sd": 3.005,
+  "source": "Edwards et al. (1983) spawning SI curve 20110 fitted by exp(b v): -1.53 per m/s; sd set so the adult utilisation curve (-7.54 per m/s) is two sd away; a weak prior carrying sign and order of magnitude"
+ },
+ "bank_distance_per_m": {
+  "mean": 0.0,
+  "sd": 0.5,
+  "source": "no published curve; weak, zero-centred"
+ },
+ "depth_per_m": {
+  "mean": 4.952,
+  "sd": 5.0,
+  "source": "Edwards et al. (1983) spawning depth SI curve over 0.15 to 0.9 m fitted by exp(b h): 5.0 per m; sd 5 (weak)"
+ },
+ "intercept": {
+  "mean": 0.0,
+  "sd": 10.0
+ }
+}
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 2 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 2 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 2 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 2 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 2 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 3 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:445: ConvergenceWarning: The optimal value found for dimension 0 of parameter k2__noise_level is close to the specified lower bound 0.0001. Decreasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 3 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+/usr/local/lib/python3.13/site-packages/sklearn/gaussian_process/kernels.py:455: ConvergenceWarning: The optimal value found for dimension 5 of parameter k1__k2__length_scale is close to the specified upper bound 50.0. Increasing the bound and calling fit again may find a better value.
+  warnings.warn(
+{
+ "prior": {
+  "velocity_per_m_s": {
+   "mean": -1.5323981324331974,
+   "sd": 3.00498613466944,
+   "source": "Edwards et al. (1983) spawning SI curve 20110 fitted by exp(b v): -1.53 per m/s; sd set so the adult utilisation curve (-7.54 per m/s) is two sd away; a weak prior carrying sign and order of magnitude"
+  },
+  "bank_distance_per_m": {
+   "mean": 0.0,
+   "sd": 0.5,
+   "source": "no published curve; weak, zero-centred"
+  },
+  "depth_per_m": {
+   "mean": 4.951622169381817,
+   "sd": 5.0,
+   "source": "Edwards et al. (1983) spawning depth SI curve over 0.15 to 0.9 m fitted by exp(b h): 5.0 per m; sd 5 (weak)"
+  },
+  "intercept": {
+   "mean": 0.0,
+   "sd": 10.0
+  }
+ },
+ "n_used": 57,
+ "n_available": 1140,
+ "velocity_coef_per_m_s": {
+  "prior": [
+   -1.5323981324331974,
+   3.00498613466944
+  ],
+  "data_alone": [
+   -4.799407340018063,
+   2.1012181401746437
+  ],
+  "posterior": [
+   -3.805900142689396,
+   1.6819108427425424
+  ]
+ },
+ "bank_distance_coef_per_m": {
+  "data_alone": [
+   -0.15607311493723014,
+   0.042188416013659004
+  ],
+  "posterior": [
+   -0.1680149573954896,
+   0.03958502832929348
+  ]
+ },
+ "depth_coef_per_m": {
+  "data_alone": [
+   3.4049001749893337,
+   0.7686650507621654
+  ],
+  "posterior": [
+   3.2598870607306094,
+   0.7336272206315368
+  ]
+ },
+ "v50_m_s_posterior": {
+  "median": 0.18210641284246779,
+  "ci90": [
+   0.10627313447350215,
+   0.5608206616934572
+  ],
+  "share_of_draws_with_positive_velocity_effect": 0.011
+ },
+ "definition": "relative suitability S(v) = exp(beta_v v), the used/available odds at velocity v relative to still water, at the same bank distance and depth; the ecological number is the width- and length-weighted mean of S over the reach's wetted width",
+ "reach_mean_suitability": {
+  "2025": {
+   "median": 0.4709802234680744,
+   "share_of_hours_with_P(E>0.5)_over_0.9": 0.0
+  },
+  "2026": {
+   "median": 0.416358981237023,
+   "share_of_hours_with_P(E>0.5)_over_0.9": 0.0
+  },
+  "at_0.90_m": {
+   "median": 0.3743753333289572,
+   "lo": 0.23253572798356964,
+   "hi": 0.6814567582248183
+  }
+ }
+}
+saved 11
+saved 12
+saved 17
+saved F1_site_data_target
+saved F2_conveyance_field
+saved F3_stage_law
+saved F4_spatial_rating_curves
+saved F5_ecological_number
+# Tables for the paper (Middle reach with the stage sensor and the ADCP; 22 September 2026)
+
+Built by `32_paper_tables.py` from `data_clean/`. CSVs sit beside this file.
+
+## Table 1. The surveyed sections
+
+Twenty sections, eleven days. Velocity and share are width-weighted over the section's locations; the discharge is the sum of v h w over them; the last three columns are the chain's prediction for the section with its own day held out.
+
+| section | survey day | along (m) | locations | width (m) | stage (m) | mean velocity measured (m/s) | share below 0.2 m/s measured | discharge measured (m3/s) | mean velocity, day held out (m/s) | 90% lo | 90% hi |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| 0625-T05 | 2026-06-25 | -215.830 | 6 | 35.980 | 0.938 | 0.319 | 0.206 | 7.885 | 0.378 | 0.153 | 0.808 |
+| 0625-T04 | 2026-06-25 | -178.271 | 8 | 36.241 | 0.938 | 0.342 | 0.294 | 8.625 | 0.346 | 0.163 | 0.696 |
+| 0625-T03 | 2026-06-25 | -146.835 | 8 | 43.221 | 0.939 | 0.312 | 0.110 | 8.310 | 0.399 | 0.216 | 0.790 |
+| 0625-T02 | 2026-06-25 | -121.675 | 10 | 45.231 | 0.941 | 0.340 | 0.289 | 8.656 | 0.417 | 0.232 | 0.742 |
+| 0625-T01 | 2026-06-25 | -97.055 | 12 | 48.732 | 0.952 | 0.304 | 0.164 | 8.001 | 0.437 | 0.248 | 0.789 |
+| ACORNT01 | 2025-05-30 | -41.379 | 17 | 45.717 | 0.877 | 0.306 | 0.417 | 7.611 | 0.271 | 0.162 | 0.434 |
+| 0618-T01 | 2026-06-18 | -1.915 | 12 | 43.014 | 0.748 | 0.145 | 0.684 | 3.485 | 0.223 | 0.116 | 0.443 |
+| AT03 | 2025-06-03 | 24.645 | 18 | 48.414 | 0.894 | 0.301 | 0.254 | 6.724 | 0.432 | 0.249 | 0.730 |
+| AT05 | 2025-06-10 | 28.342 | 18 | 48.438 | 1.092 | 0.360 | 0.278 | 13.677 | 0.406 | 0.272 | 0.609 |
+| 0618-T02 | 2026-06-18 | 53.547 | 11 | 46.427 | 0.741 | 0.134 | 0.780 | 3.241 | 0.187 | 0.123 | 0.320 |
+| AT0401 | 2025-06-06 | 81.209 | 18 | 42.907 | 0.987 | 0.294 | 0.277 | 9.550 | 0.298 | 0.215 | 0.426 |
+| AT07 | 2025-07-09 | 130.726 | 14 | 40.218 | 0.925 | 0.313 | 0.323 | 7.877 | 0.307 | 0.222 | 0.434 |
+| AT06 | 2025-07-14 | 157.119 | 9 | 49.278 | 0.792 | 0.182 | 0.613 | 4.805 | 0.247 | 0.158 | 0.406 |
+| AT08 | 2025-07-14 | 174.534 | 12 | 51.444 | 0.795 | 0.222 | 0.427 | 4.394 | 0.199 | 0.126 | 0.320 |
+| AT09 | 2025-07-16 | 231.472 | 17 | 47.910 | 0.853 | 0.264 | 0.325 | 5.569 | 0.364 | 0.238 | 0.582 |
+| AT10 | 2025-07-21 | 275.193 | 13 | 44.017 | 0.827 | 0.234 | 0.528 | 5.903 | 0.169 | 0.111 | 0.266 |
+| AT11 | 2025-07-21 | 317.413 | 15 | 44.736 | 0.830 | 0.233 | 0.438 | 5.310 | 0.240 | 0.143 | 0.394 |
+| 0618-T03 | 2026-06-18 | 351.114 | 10 | 48.554 | 0.739 | 0.247 | 0.328 | 3.612 | 0.226 | 0.124 | 0.387 |
+| AT12 | 2025-07-23 | 383.877 | 13 | 53.464 | 0.811 | 0.260 | 0.278 | 5.063 | 0.267 | 0.144 | 0.509 |
+| AT13 | 2025-07-23 | 445.032 | 16 | 52.359 | 0.813 | 0.197 | 0.667 | 5.197 | 0.261 | 0.112 | 0.552 |
+
+## Table 2. Parameters and settings of the chain
+
+| block | item | value | how set |
+|---|---|---|---|
+| Readings to one number | vertical profile | v(z) = a ln(z / z0); readings at z >= 3 cm and v > 5 mm/s | fixed 
+saved /home/claude/egp_fixed/reach_velocity/paper/METHODS_AND_RESULTS.docx and .md
+                                        features   CRPS  CRPS_minus_full_per_section_mean  sections_better_than_full  wilcoxon_p_vs_full
+                              bank distance only 0.2912                           -0.0245                         11              0.1231
+geometry only (rel_across, dist_bank, rel_depth) 0.2968                           -0.0183                         13              0.2455
+                                        full (6) 0.3201                            0.0000                          0                 NaN
+                   position only (along, across) 0.3248                            0.0062                         11              0.9563
+                            position + rel_depth 0.3573                            0.0391                          8              0.1140
+                                no section depth 0.3597                            0.0416                          3              0.0153
+                                      reach mean 0.4363                            0.1188                          1              0.0000
+[   19s] Upper (ARB013): cleaned 25003 rows (0 implausible, 1 spikes), daily wobble 0.9 cm; tie on 18 transects: slope 5.8 cm/100 m, residual 1.8 cm, session offsets sd 24 cm; bed check RTK - rod 0 ± 18 cm; law: best [-0.2, 0.5] CRPS 0.439 vs none 0.458; set [[-0.2, 0.5], [-0.1, 0.5], [-0.0, 0.5], [-0.2, 0.75], [-0.1, 0.75], [0.1, 0.5], [-0.2, 1.0], [-0.0, 0.75], [-0.1, 1.0], [-0.2, 1.25], [0.2, 0.5], [0.1, 0.75], [-0.0, 1.0], [-0.1, 1.25]]; survey stages 0.35 to 0.61 m, record 0.25 to 1.25 m
+[   19s]    session offsets (m): 2026-06-03: 266.28, 2026-06-04: 266.28, 2026-06-11: 266.49, 2026-06-24: 266.47, 2026-07-13: 265.92, 2026-07-27: 265.99
+[   33s] Lower (ARB112): cleaned 30369 rows (897 implausible, 385 spikes), daily wobble 2.3 cm; tie on 13 transects: slope 2.2 cm/100 m, residual 2.3 cm, session offsets sd 28 cm; bed check RTK - rod 0 ± 10 cm; law: best [0.0, 0.75] CRPS 0.386 vs none 0.428; set [[0.0, 0.75], [-0.2, 1.0], [-0.3, 1.25], [-0.3, 1.0], [0.1, 1.0], [-0.1, 0.75]]; survey stages 0.27 to 0.80 m, record 0.14 to 1.97 m
+[   33s]    session offsets (m): 2026-06-05: 175.55, 2026-06-10: 175.67, 2026-06-15: 175.94, 2026-06-17: 175.84, 2026-06-22: 175.45, 2026-08-05: 175.21, 2026-08-06: 175.25
+[   33s] saved 14
+[   13s] Middle: transect-out CRPS 0.346 vs reach mean 0.465, coverage 0.91; velocity MAE 0.085 vs 0.114 m/s; hit rate below 0.2: 0.76 vs reach mean 0.64 (base 0.55); day offsets sd 0.32, vs local stage rho 0.79 (n 11, 2.8 per m), vs ln Q rho 0.63; amp_sd 0.95, nugget_sd 0.19, along_m 1.5e+02, rel_across 2.8, dist_bank_m 26, rel_depth 0.7, section_mean_depth_m 0.11, lateral_bed_slope_abs 0.58
+[   18s] Upper: transect-out CRPS 0.440 vs reach mean 0.398, coverage 0.88; velocity MAE 0.113 vs 0.089 m/s; hit rate below 0.2: 0.63 vs reach mean 0.56 (base 0.56); day offsets sd 0.36, vs local stage rho 0.14 (n 6, 0.3 per m), vs ln Q rho 0.32; amp_sd 0.72, nugget_sd 0.0075, along_m 8.3e+02, rel_across 2.7, dist_bank_m 4.1, rel_depth 0.41, section_mean_depth_m 0.033, lateral_bed_slope_abs 0.1
+[   20s] Lower: transect-out CRPS 0.358 vs reach mean 0.536, coverage 0.92; velocity MAE 0.092 vs 0.176 m/s; hit rate below 0.2: 0.85 vs reach mean 0.68 (base 0.64); day offsets sd 0.21, vs local stage rho 0.64 (n 7, 0.4 per m), vs ln Q rho 0.68; amp_sd 1.1, nugget_sd 0.009, along_m 6.4e+02, rel_across 1.8, dist_bank_m 22, rel_depth 0.93, section_mean_depth_m 0.48, lateral_bed_slope_abs 0.059
+reach        A        B  gap_m  n  bed_A_minus_B_m  mad_m  wse_A_minus_B_m   Q_A   Q_B
+Upper 0713-T03 0604-T01  1.782  6           -0.125  0.121           -0.102 169.0 169.0
+Upper 0611-T03 0624-T02  1.648  7            0.013  0.042           -0.176 154.0 213.0
+Lower 0615-T03 0605-T02  0.116  5            0.016  0.027            0.622 318.0 261.0
+Lower 0610-T01 0615-T02  3.229  1           -0.020  0.000           -0.519 360.0 318.0
+Lower 0615-T02 0605-T03  4.907  2            0.113  0.079            0.641 318.0 261.0
+[   21s] saved 08
+                                      0        1        2
+reach                            Middle    Upper    Lower
+points                              257      162      111
+transects                            20       21       15
+days                                 11        7        7
+z0_mm                             11.22    7.079    5.623
+a_median                          0.082    0.049    0.081
+share_below_thr_measured          0.451    0.562     0.36
+CRPS_model                        0.346     0.44    0.358
+CRPS_reach_mean                   0.465    0.398    0.536
+MAE_log_model                      0.47    0.595    0.471
+MAE_log_reach_mean                0.632    0.583    0.779
+coverage95_model                  0.911    0.883    0.919
+MAE_v_model_m_s                   0.085    0.113    0.092
+MAE_v_reach_mean_m_s              0.114    0.089    0.176
+hit_rate_below_thr_model          0.759     0.63    0.847
+hit_rate_reach_mean               0.642    0.562    0.685
+base_rate                         0.549    0.562     0.64
+sd_day_offsets                    0.322    0.356    0.211
+n_days_tied                          11        6        7
+spearman_offset_vs_local_stage    0.791    0.143    0.643
+spearman_offset_vs_lnQ            0.627    0.319    0.679
+dlog_a_per_m_of_stage             2.806    0.332    0.352
+sd_logA_total                     0.817    0.641    0.962
+scale_amp_sd                      0.955    0.724    1.086
+scale_nugget_sd                   0.187    0.007    0.009
+scale_along_m                   151.913  826.864  640.005
+scale_rel_across                   2.79    2.733    1.825
+scale_dist_bank_m                26.191    4.126   21.737
+scale_rel_depth                   0.696    0.414    0.927
+scale_section_mean_depth_m        0.114    0.033    0.482
+scale_lateral_bed_slope_abs       0.579    0.104    0.059
+[    0s] Lower: sections' level L = 174.78 + 2.34 s (n 7 days, scatter 6 cm); z0 5.6 mm; slope 2.2 cm/100 m
+[   12s]    law in L: best (174.71, 0.5) CRPS 0.358 vs none 0.363; set of 14
+[  224s]    transect-out CRPS 0.344 vs reach mean 0.517 (cov 0.90); discrepancy common 0.17 independent 0.48; sections on held-out days in band 100% of 15 (MAE 0.129 m/s, median rel err 24%)
+[  224s]    continuity: Q = 5.4 (L - 174.71)^1.38 m3/s, scatter 40%; same-day sections max/min {'2026-06-05': 1.03, '2026-06-15': 3.12, '2026-06-17': 1.23, '2026-06-22': 1.01, '2026-08-06': 1.38}
+[  239s]    season: {"2025": {"share_median": 0.33253341202991465, "share_median_in_range": 0.29540377540602625, "fraction_hours_in_range": 0.6950105411103303, "band_halfwidth_points_in_range": 14.721514008036044, "E_median": 0.3420762619068767}, "2026": {"share_median": 0.20762911667537726, "share_median_in_range": 0.23989788233244538, "fraction_hours_in_range": 0.7295539033457249, "band_halfwidth_points_in_range": 12.597593129175944, "E_median": 0.28390389550904066}}
+[  240s]    saved 15_Lower
+[  240s] Upper: sections' level L = 262.50 + 0.32 s (n 6 days, scatter 25 cm); z0 7.1 mm; slope 5.8 cm/100 m
+[  271s]    law in L: best (262.08, 0.5) CRPS 0.407 vs none 0.407; set of 21
+[ 1002s]    transect-out CRPS 0.404 vs reach mean 0.400 (cov 0.89); discrepancy common 0.19 independent 0.52; sections on held-out days in band 100% of 21 (MAE 0.130 m/s, median rel err 58%)
+[ 1002s]    continuity: Q = 2.8 (L - 262.08)^0.20 m3/s, scatter 46%; same-day sections max/min {'2026-06-03': 1.14, '2026-06-04': 1.2, '2026-06-11': 1.17, '2026-06-24': 1.03, '2026-07-13': 1.27, '2026-07-27': 1.78}
+[ 1018s]    season: {"2026": {"share_median": 0.6763755650642838, "share_median_in_range": 0.6805677842402809, "fraction_hours_in_range": 0.6140675613142064, "band_halfwidth_points_in_range": 39.76803172114544, "E_median": 0.5392762499273398}}
+[ 1019s]    saved 15_Upper
+{
+ "Lower": {
+  "law": {
+   "primary": [
+    174.71,
+    0.5
+   ],
+   "set": [
+    [
+     174.71,
+     0.5
+    ],
+    [
+     174.61,
+     0.5
+    ],
+    [
+     174.81,
+     0.5
+    ],
+    [
+     174.91,
+     0.5
+    ],
+    [
+     175.01,
+     0.5
+    ],
+    [
+     174.61,
+     0.75
+    ],
+    [
+     174.71,
+     0.75
+    ],
+    [
+     175.11,
+     0.5
+    ],
+    [
+     174.81,
+     0.75
+    ],
+    [
+     174.91,
+     0.75
+    ],
+    [
+     174.61,
+     1.0
+    ],
+    [
+     174.71,
+     1.0
+    ],
+    [
+     175.01,
+     0.75
+    ],
+    [
+     174.81,
+     1.0
+    ]
+   ],
+   "CRPS_best": 0.3580333533313578,
+   "CRPS_none": 0.3634152279426518,
+   "L_range_survey": [
+    175.41714572810739,
+    176.65631586296007
+   ],
+   "L_range_record": [
+    175.1107459373994,
+    179.3926215921962
+   ]
+  },
+  "transect_out": {
+   "CRPS_model": 0.3436342073575105,
+   "CRPS_reach_mean": 0.5166745758552854,
+   "coverage95": 0.9009009009009009,
+   "n": 111
+  },
+  "section_day_out": {
+   "n": 15,
+   "in_band": 1.0,
+   "MAE_m_s": 0.12885386771241022,
+   "median_relative_error": 0.24442205355732088
+  },
+  "continuity": {
+   "rating": "Q = 5.4 (L - 174.71)^1.38",
+   "scatter_pct": 40.22543801211532,
+   "same_day_max_over_min": {
+    "2026-06-05": 1.0273851044306404,
+    "2026-06-15": 3.123866364869446,
+    "2026-06-17": 1.2347826852749602,
+    "2026-06-22": 1.0065833487676275,
+    "2026-08-06": 1.3752398108752775
+   }
+  },
+  "season": {
+   "2025": {
+    "share_median": 0.33253341202991465,
+    "share_median_in_range": 0.29540377540602625,
+    "fraction_hours_in_range": 0.6950105411103303,
+    "band_halfwidth_points_in_range": 14.721514008036044,
+    "E_median": 0.3420762619068767
+   },
+   "2026": {
+    "share_median": 0.20762911667537726,
+    "share_median_in_range": 0.23989788233244538,
+    "fraction_hours_in_range": 0.7295539033457249,
+    "band_halfwidth_points_in_range": 12.597593129175944,
+    "E_median": 0.28390389550904066
+   }
+  }
+ },
+ "Upper": {
+  "law": {
+   "primary": [
+    262.08,
+    0.5
+   ],
+   "set": [
+    [
+     262.08,
+     0.5
+    ],
+    [
+     262.18,
+     0.5
+    ],
+    [
+     262.08,
+     0.75
+    ],
+    [
+     262.28,
+     0.5
+    ],
+    [
+     262.18,
+     0.75
+    ],
+    [
+     262.08,
+     1.0
+    ],
+    [
+     262.38,
+     0.5
+    ],
+    [
+     262.28,
+     0.75
+    ],
+    [
+     262.18,
+     1.0
+    ],
+    [
+     262.08,
+     1.25
+    ],
+    [
+     262.18,
+     1.25
+    ],
+    [
+     262.28,
+     1.0
+    ],
+    [
+     262.38,
+     0.75
+    ],
+    [
+     262.48,
+     0.5
+    ],
+    [
+     262.28,
+     1.25
+    ],
+    [
+     262.38,
+     1.0
+    ],
+    [
+     262.48,
+     0.75
+    ],
+    [
+     262.38,
+     1.25
+    ],
+    [
+     262.48,
+     1.0
+    ],
+    [
+     262.48,
+     1.25
+    ],
+    [
+     262.58,
+     0.5
+    ]
+   ],
+   "CRPS_best": 0.4069654270582392,
+   "CRPS_none": 0.4068985514473989,
+   "L_range_survey": [
+    262.60689717474514,
+    262.688678352502
+   ],
+   "L_range_record": [
+    262.57504923844033,
+    262.89432321067795
+   ]
+  },
+  "transect_out": {
+   "CRPS_model": 0.4041953355355841,
+   "CRPS_reach_mean": 0.4004835191695752,
+   "coverage95": 0.8888888888888888,
+   "n": 162
+  },
+  "section_day_out": {
+   "n": 21,
+   "in_band": 1.0,
+   "MAE_m_s": 0.12970891136062834,
+   "median_relative_error": 0.5806774231211426
+  },
+  "continuity": {
+   "rating": "Q = 2.8 (L - 262.08)^0.20",
+   "scatter_pct": 45.92641989638517,
+   "same_day_max_over_min": {
+    "2026-06-03": 1.141894176015003,
+    "2026-06-04": 1.2005404133032558,
+    "2026-06-11": 1.1728918528385637,
+    "2026-06-24": 1.0264830460176155,
+    "2026-07-13": 1.2668443139889123,
+    "2026-07-27": 1.775904744150214
+   }
+  },
+  "season": {
+   "2026": {
+    "share_median": 0.6763755650642838,
+    "share_median_in_range": 0.6805677842402809,
+    "fraction_hours_in_range": 0.6140675613142064,
+    "band_halfwidth_points_in_range": 39.76803172114544,
+    "E_median": 0.5392762499273398
+   }
+  }
+ }
+}
+                                                                        item                     set_A_before                      set_C_after    unit
+                 Middle: section held out: CRPS of log A, model / reach mean                    0.307 / 0.414                    0.317 / 0.414        
+            Middle: day held out: CRPS of log a, stage law / no law / oracle              0.309 / 0.394 / nan              0.323 / 0.382 / nan        
+Middle: readings on held-out days: MAE / their mean absolute deviation (m/s)                    0.082 / 0.119                    0.086 / 0.119        
+        Middle: sections on held-out days: mean velocity inside the 90% band                       100% of 20                       100% of 20        
+             Middle: ADCP through 2025: shape of the stage law, level fitted          0.110 (sd of log ratio)          0.159 (sd of log ratio)        
+          Middle: continuity: same-day sections' measured discharge, max/min     1.11, 1.12, 1.03, 1.11, 1.10     1.09, 1.11, 1.03, 1.11, 1.10        
+      Middle: continuity at common stage: sd of log Q across the 20 sections 0.092 at 0.90 m, 0.140 at 1.30 m 0.089 at 0.90 m, 0.142 at 1.30 m        
+              Middle: continuity: measured section discharge / gauge, median                             0.77                             0.78        
+                 Middle: reach share below 0.2 m/s at 0.90 m: map / sections                    0.378 / 0.342                    0.417 / 0.359        
+                      Middle: reach share below 0.2 m/s at 0.90 m (sections)             0.342 [0.260, 0.423]             0.359 [0.294, 0.420]        
+                                        Middle: mean suitability E at 0.90 m             0.331 [0.205, 0.567]             0.374 [0.233, 0.681]        
+                                         Middle: velocity effect on nest use                   -4.59 +/- 1.49                   -3.81 +/- 1.68 per m/s
+                                       Middle: E median over the 2025 record                            0.397                            0.471        
+                                       Middle: E median over the 2026 record                            0.343                            0.416        
+                                   Middle: ADCP level ratio (record / field)                            0.908                            0.992        
+                                         Middle: chain calibration inflation                            1.056                            1.217        
+                            Upper: section held out CRPS, model / reach mean                    0.451 / 0.400                    0.404 / 0.400        
+                            Upper: sections on held-out days inside the band             1.00 (MAE 0.137 m/s)             1.00 (MAE 0.130 m/s)        
+                                     Upper: 2026 share below 0.2 m/s, median                            0.618                            0.676        
+                                                        Upper: 2026 E median                            0.495                            0.539        
+                            Lower: section held out CRPS, model / reach mean                    0.352 / 0.514                    0.344 / 0.517        
+                            Lower: sections on held-out days inside the band             0.87 (MAE 0.133 m/s)             1.00 (MAE 0.129 m/s)        
+                                     Lower: 2025 share below 0.2 m/s, median                            0.302                            0.333        
+                                                        Lower: 2025 E median                            0.289                            0.342        
+                                     Lower: 2026 share below 0.2 m/s, median                            0.195                            0.208        
+                                                        Lower: 2026 E median                            0.232                            0.284        
+saved 19
+ALLDONE

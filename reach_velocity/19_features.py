@@ -2,8 +2,8 @@
 Coordinates: along, across. Hydraulic and geometric: relative position across the channel, distance to the nearest bank,
 local width, bed elevation, depth at a reference stage, relative depth within the section, lateral bed slope, section mean
 depth and width (pool/riffle), channel curvature and inner/outer bank, substrate class and a wake flag from the notes.
-Bank lines: set C (logbook entry 30) at each point's survey-day water level, from banklines_3dep.StageFeatures; centreline from 44_.
-Outputs: data_clean/features.csv, data_clean/banks_c/C_Middle_*.geojson, C_outline_Middle.geojson, C_Middle_reference.geojson, figures/00v_features.png"""
+Bank lines: set C fixed at the median survey-day level (logbook entry 31), from banklines_3dep.StageFeatures; centreline from 44_.
+Outputs: data_clean/features.csv, data_clean/banks_c/C_Middle.geojson, C_outline_Middle.geojson, figures/00v_features.png"""
 import json, re
 from pathlib import Path
 import numpy as np, pandas as pd, geopandas as gpd
@@ -15,11 +15,10 @@ ROOT = Path(__file__).resolve().parents[1]; HERE = ROOT / Path(__file__).resolve
 FT = 0.3048; ADCP_E, ADCP_N = 13244857.0, 319995.5; STAGE_REF = 0.90
 loc = pd.read_csv(D / "locations.csv"); loc = loc[loc.a > 0].copy(); loc["A"] = loc.a / np.sqrt(loc.water_depth_m)
 loc["bed_m"] = loc.bed_rtk_sensor_datum_m.fillna(loc.bed_elev_m)
-# ---- banks: set C (logbook entry 30) at each point's own survey-day water level: distance to each bank line, local width, relative position.
+# ---- banks: set C fixed at the median survey-day level (logbook entry 31; StageFeatures reads every stage at that level): distance to each bank line, local width, relative position.
 # The lines on disk (C at each survey day, at the highest stage of the record, and that outline) are written here.
 import banklines_3dep as B
 SF = B.StageFeatures("Middle"); SF.write(D / "banks_c")
-SF.lines(STAGE_REF).to_file(D / "banks_c" / "C_Middle_reference.geojson", driver="GeoJSON")   # C at the reference stage 0.90 m: the lines drawn on the overview and paper maps
 loc = SF.training(loc)
 for side in ("left", "right"):
     loc[f"dist_{side}_bank_m"] = np.nan   # filled below from the day's lines

@@ -49,4 +49,4 @@ $PY 40_methods_docx.py             # paper/METHODS_AND_RESULTS.docx and .md
 # --- paused: the other two reaches (entries 21 and 24). Run by hand once their sensor records are cleaned and the sensor placement is settled:
 #   $PY 27_step8_prep.py; $PY 39_other_sensors_diagnose.py; $PY 37_other_reaches_prep.py; $PY 28_step8_chain.py; $PY 38_other_reaches_chain.py
 #   (37_ builds bank set C for the Upper and Lower, so 28_ now runs after it; entry 30)
-# --- the bank-line comparison as recorded (entries 27 and 28): $PY 43_bankline_comparison.py build; $PY 43_bankline_comparison.py score
+# --- the bank-line comparison as recorded (entries 27, 28 and 31): $PY 43_bankline_comparison.py build; $PY 43_bankline_comparison.py score; $PY 43_bankline_comparison.py score_fixed; then $PY 46_bank_methods_comparison.py (figure 20)

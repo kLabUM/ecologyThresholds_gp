@@ -1,0 +1,83 @@
+{
+ "prior": {
+  "velocity_per_m_s": {
+   "mean": -1.5323981324331974,
+   "sd": 3.00498613466944,
+   "source": "Edwards et al. (1983) spawning SI curve 20110 fitted by exp(b v): -1.53 per m/s; sd set so the adult utilisation curve (-7.54 per m/s) is two sd away; a weak prior carrying sign and order of magnitude"
+  },
+  "bank_distance_per_m": {
+   "mean": 0.0,
+   "sd": 0.5,
+   "source": "no published curve; weak, zero-centred"
+  },
+  "depth_per_m": {
+   "mean": 4.951622169381817,
+   "sd": 5.0,
+   "source": "Edwards et al. (1983) spawning depth SI curve over 0.15 to 0.9 m fitted by exp(b h): 5.0 per m; sd 5 (weak)"
+  },
+  "intercept": {
+   "mean": 0.0,
+   "sd": 10.0
+  }
+ },
+ "n_used": 57,
+ "n_available": 1140,
+ "velocity_coef_per_m_s": {
+  "prior": [
+   -1.5323981324331974,
+   3.00498613466944
+  ],
+  "data_alone": [
+   -4.155561321723135,
+   2.381458837561718
+  ],
+  "posterior": [
+   -3.197970748531841,
+   1.8438945391603314
+  ]
+ },
+ "bank_distance_coef_per_m": {
+  "data_alone": [
+   -0.16489799828617818,
+   0.04571105016823869
+  ],
+  "posterior": [
+   -0.1770947240111335,
+   0.041443366979186165
+  ]
+ },
+ "depth_coef_per_m": {
+  "data_alone": [
+   4.495915227227793,
+   0.8067149792051086
+  ],
+  "posterior": [
+   4.353833809621726,
+   0.765067844073622
+  ]
+ },
+ "v50_m_s_posterior": {
+  "median": 0.21011920823708746,
+  "ci90": [
+   0.11129245101136755,
+   0.9808985704905293
+  ],
+  "share_of_draws_with_positive_velocity_effect": 0.04
+ },
+ "definition": "relative suitability S(v) = exp(beta_v v), the used/available odds at velocity v relative to still water, at the same bank distance and depth; the ecological number is the width- and length-weighted mean of S over the reach's wetted width",
+ "reach_mean_suitability": {
+  "2025": {
+   "median": 0.5447112403261037,
+   "share_of_hours_with_P(E>0.5)_over_0.9": 0.14186851211072665
+  },
+  "2026": {
+   "median": 0.4833490464517256,
+   "share_of_hours_with_P(E>0.5)_over_0.9": 0.12101143889223359
+  },
+  "at_0.90_m": {
+   "median": 0.4312115524317067,
+   "lo": 0.24016314506970116,
+   "hi": 0.856967032207615
+  }
+ }
+}

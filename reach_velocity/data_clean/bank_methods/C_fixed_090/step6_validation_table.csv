@@ -1,0 +1,10 @@
+test,value,note
+"section held out: CRPS of log A, model / reach mean",0.317 / 0.414,"20 sections, 257 points; 95% band covers 0.93"
+"day held out: CRPS of log a, stage law / no law / oracle",0.323 / 0.382 / nan,"11 days; six days hold out a single section, so this fold set overlaps the one above"
+readings on held-out days: MAE / their mean absolute deviation (m/s),0.086 / 0.119,"1,208 readings, adopted law; 95% band covers 0.84; below/above 0.2 m/s called right 74% (base rate 58%)"
+sections on held-out days: mean velocity inside the 90% band,100% of 20,MAE 0.053 m/s; share below 0.2 inside its band 95%
+"ADCP through 2025: shape of the stage law, level fitted",0.159 (sd of log ratio),point reading; the level is not predicted by the field; under a column reading the shape is depth^0.46 (instrument model open)
+"continuity: same-day sections' measured discharge, max/min","1.09, 1.11, 1.03, 1.11, 1.10","a consistency check on the measurements, not on the model"
+continuity at common stage: sd of log Q across the 20 sections,"0.089 at 0.90 m, 0.142 at 1.30 m",modelled discharge of every section at the same stage; the spread is the model's between-section inconsistency
+"continuity: measured section discharge / gauge, median",0.78,USGS Ann Arbor 18 km downstream; two tributary-storm days at 0.4 to 0.5
+reach share below 0.2 m/s at 0.90 m: map / sections,0.417 / 0.359,the map carries the margins to the bank line; the sections stop at their outermost points

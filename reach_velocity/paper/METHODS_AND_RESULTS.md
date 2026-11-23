@@ -5,7 +5,7 @@
 
 ## 1. The claim
 
-In an era in which a stage sensor costs less than a day of field work and reports every ten minutes, velocity, the quantity on which habitat and most operating decisions actually depend, is still measured by hand on a handful of days a year. This raises the question: how far can one stage record and one survey campaign be pushed? On a 0.7 km reach we contend that they can be pushed to the depth-averaged velocity of every surveyed cross-section at every hour of two seasons, with a band that holds up when whole sections and whole days are held out (CRPS 0.31 against 0.41 for the reach mean, and 20 of 20 section means on held-out days inside the band), when a fixed acoustic instrument is compared through a season (level ratio 0.87, 37 mm/s), and when discharge is checked between sections (20 discharges on one rating, 6% scatter). From that record follows an ecological number, the reach's mean nesting suitability, with the rule learned from the fish rather than assumed and with its own band. The stage sensor is effectively turned into a velocity sensor for the whole reach.
+In an era in which a stage sensor costs less than a day of field work and reports every ten minutes, velocity, the quantity on which habitat and most operating decisions actually depend, is still measured by hand on a handful of days a year. This raises the question: how far can one stage record and one survey campaign be pushed? On a 0.7 km reach we contend that they can be pushed to the depth-averaged velocity of every surveyed cross-section at every hour of two seasons, with a band that holds up when whole sections and whole days are held out (CRPS 0.31 against 0.41 for the reach mean, and 20 of 20 section means on held-out days inside the band), when a fixed acoustic instrument is compared through a season (level ratio 0.86, 41 mm/s), and when discharge is checked between sections (20 discharges on one rating, 6% scatter). From that record follows an ecological number, the reach's mean nesting suitability, with the rule learned from the fish rather than assumed and with its own band. The stage sensor is effectively turned into a velocity sensor for the whole reach.
 
 
 ## 2. Where this comes from, and why it looks different from the notebooks
@@ -58,12 +58,12 @@ On each survey day the amplitudes rise with stage. Divided by (stage − 0.45 m)
 
 ### 3.3 The Gaussian process on A
 
-The target is log A. The inputs are six measured features (position along and across the reach, distance to the nearer bank, relative depth in the section, section mean depth, lateral bed slope). The mean is a weighted least squares on the substrate classes and a wake flag from the field notes. The kernel is an ARD Matérn 3/2 with a white nugget, the per-point noise is fixed from the readings' spread, and the hyperparameters come from the marginal likelihood (stable across restarts). Bank distance alone predicts a held-out section better than all six features (CRPS 0.29 against 0.32, better on 14 of 20 sections, p = 0.03). The chain keeps the six because it was built on them, and the paper says what the field is.
+The target is log A. The inputs are six measured features (position along and across the reach, distance to the nearer bank, relative depth in the section, section mean depth, lateral bed slope). The mean is a weighted least squares on the substrate classes and a wake flag from the field notes. The kernel is an ARD Matérn 3/2 with a white nugget, the per-point noise is fixed from the readings' spread, and the hyperparameters come from the marginal likelihood (stable across restarts). Bank distance alone predicts a held-out section better than all six features (CRPS 0.29 against 0.32, better on 12 of 20 sections, p = 0.05). The chain keeps the six because it was built on them, and the paper says what the field is.
 
 
 ### 3.4 The uncertainty chain
 
-Each sample draws the whole reach at once. The GP posterior over every point of every section is one joint draw. A discrepancy term, split into a reach-level part (0.07 in log, the residual day level after the law) and a point-level part (0.30), is calibrated so that 95% of held-out points fall in the 95% band (inflation 1.159). The bed (6 cm per point), the stage (1.5 cm, one draw per time for the whole reach), the roughness scale (7 to 16 mm) and the law (drawn uniformly from its set) complete the sample. Shares are width-weighted within a section and length-weighted over the sections. Every number in the results carries a 90% band from this chain.
+Each sample draws the whole reach at once. The GP posterior over every point of every section is one joint draw. A discrepancy term, split into a reach-level part (0.06 in log, the residual day level after the law) and a point-level part (0.39), is calibrated so that 95% of held-out points fall in the 95% band (inflation 1.241). The bed (6 cm per point), the stage (1.5 cm, one draw per time for the whole reach), the roughness scale (7 to 16 mm) and the law (drawn uniformly from its set) complete the sample. Shares are width-weighted within a section and length-weighted over the sections. Every number in the results carries a 90% band from this chain.
 
 
 ### 3.5 The deliverables
@@ -73,9 +73,9 @@ The first deliverable is the set of spatial rating curves: the section mean velo
 
 ### 3.6 The nest model and the posterior update
 
-Each nest is one 'used' 2 m cell, with the velocity, depth and bank distance the chain gives it on the day the nest was found, and 20 'available' cells are drawn from the wet channel at the same stage. A logistic model then asks what makes a cell used rather than available, each variable with the others held fixed. Bank distance is the strong selector (nests at 4.4 m from the bank against 13.0 m for the channel, partly where the crews searched). Velocity adds nothing until depth is in the model: near the bank the deeper cells are faster, and the nests take the deep-but-slow ones. With depth in, velocity leans against use (the 57 nests alone: -4.2 ± 2.4 log-odds per m/s) and depth for (+4.5 per m). In plain terms, the fish nest in deep water near the bank; with the bank lines at each nest's own stage (bank set C, logbook entry 30) the velocity effect is about 1.7 standard errors from zero, so its sign is suggested rather than shown.
+Each nest is one 'used' 2 m cell, with the velocity, depth and bank distance the chain gives it on the day the nest was found, and 20 'available' cells are drawn from the wet channel at the same stage. A logistic model then asks what makes a cell used rather than available, each variable with the others held fixed. Bank distance is the strong selector (nests at 4.4 m from the bank against 12.0 m for the channel, partly where the crews searched). Velocity adds nothing until depth is in the model: near the bank the deeper cells are faster, and the nests take the deep-but-slow ones. With depth in, velocity leans against use (the 57 nests alone: -4.5 ± 2.2 log-odds per m/s) and depth for (+3.4 per m). In plain terms, the fish nest in deep water near the bank; with bank set C (logbook entries 30 and 31) the velocity effect is about 2.1 standard errors from zero, so its sign is suggested rather than shown.
 
-The prior is the USFWS habitat suitability curve for smallmouth bass spawning (Edwards, Gebhart and Maughan 1983, curve 20110), digitised from the scanned report and fitted by an exponential (-1.5 per m/s), with its sd set so that the same report's steep adult utilisation curve sits two sd away (3.0). It is weak by design: it carries the sign and the order of magnitude and lets 59 nests move it. The posterior is -3.2 ± 1.8 per m/s, half use at 0.21 m/s [0.11, 0.98]. E is the width-weighted mean of the relative use exp(b_v v) over the reach: 1 if the whole reach were still water, 0 if all of it were too fast for a nest. Its band combines the curve's posterior with the velocity chain. The 0.2 m/s convention sits at the 61st percentile of the nests, so it was not far off. The difference is that the rule is now estimated, with a band, and can be updated as nests accumulate.
+The prior is the USFWS habitat suitability curve for smallmouth bass spawning (Edwards, Gebhart and Maughan 1983, curve 20110), digitised from the scanned report and fitted by an exponential (-1.5 per m/s), with its sd set so that the same report's steep adult utilisation curve sits two sd away (3.0). It is weak by design: it carries the sign and the order of magnitude and lets 59 nests move it. The posterior is -3.5 ± 1.7 per m/s, half use at 0.19 m/s [0.11, 0.71]. E is the width-weighted mean of the relative use exp(b_v v) over the reach: 1 if the whole reach were still water, 0 if all of it were too fast for a nest. Its band combines the curve's posterior with the velocity chain. The 0.2 m/s convention sits at the 61st percentile of the nests, so it was not far off. The difference is that the rule is now estimated, with a band, and can be updated as nests accumulate.
 
 
 ## 4. The data, and what was done to it before any model
@@ -106,12 +106,12 @@ Takeaway: one number per place, with its error, is the whole spatial problem. Th
 
 *Figure 2. What is learned. (a) A against bank distance for every location. (b) One section held out and predicted from the other nineteen, with its band. (c) The held-out score by model, sections held out against random folds. (d) The field on a 2 m grid, as illustration.*
 
-Takeaway: the field beats the reach mean on 17 of 20 held-out sections (CRPS 0.31 against 0.41; the 95% band covers 93%), and it is mostly at-a-station geometry: bank distance alone does better. Random folds flatter every model, which is why the paper scores sections and days held out.
+Takeaway: the field beats the reach mean on 16 of 20 held-out sections (CRPS 0.31 against 0.41; the 95% band covers 93%), and it is mostly at-a-station geometry: bank distance alone does better. Random folds flatter every model, which is why the paper scores sections and days held out.
 
 
 ![Figure 3](F3_stage_law.png)
 
-*Figure 3. One sensor carries the field through time. (a) Day levels before and after the law. (b) The ADCP through 2025, never used in the fit, read as a single 25° beam, against the chain at its own cell: level ratio 1.07, MAE 23 mm/s, the band covers every two-hour mean to 1.20 m of stage. (c) The 1,208 readings on held-out days predicted at their own height. (d) Continuity: every section's modelled discharge at common stages, the measured discharges on the survey days, and the rating through them.*
+*Figure 3. One sensor carries the field through time. (a) Day levels before and after the law. (b) The ADCP through 2025, never used in the fit, read as a single 25° beam, against the chain at its own cell: level ratio 0.86, MAE 41 mm/s, the band covers every two-hour mean to 1.20 m of stage. (c) The 1,208 readings on held-out days predicted at their own height. (d) Continuity: every section's modelled discharge at common stages, the measured discharges on the survey days, and the rating through them.*
 
 Takeaway: the day effect is stage. The readings on held-out days come back to 0.082 m/s against a deviation of 0.119, the section means on held-out days fall inside the band 20 of 20 times, the 20 measured discharges lie on one rating with 6% scatter, and the ADCP validates field and law continuously at one point (reading Vb as a beam, which the instrument's configuration has to confirm).
 
@@ -127,7 +127,7 @@ Takeaway: this is the deliverable. Bands are about ±28% inside the surveyed ran
 
 *Figure 5. The ecological number, learned from the nests. (a, b) The reach's mean nesting suitability E and the share below 0.2 m/s every two hours, both seasons, with bands. (c) The ecological rating curve: habitat against stage, E with its band and the share below four thresholds; the surveyed range is shaded and the extrapolation hatched. (d) The velocity effect: the published curve as a weak prior, the nests alone, and the posterior.*
 
-Takeaway: the ecological rating curve is the number the sensor delivers. Every 10 cm of stage removes about 8 points of slow water from the reach inside the surveyed range, and E falls from about 60% at 0.65 m to 20% at 1.30 m. E has median 54% in 2025 and 48% in 2026 (the share below 0.2 m/s: 45% and 35%). The rule is estimated with a band rather than assumed; what the nests select on (deep, slow water near the bank) is in the supplementary figure 12.
+Takeaway: the ecological rating curve is the number the sensor delivers. Every 10 cm of stage removes about 8 points of slow water from the reach inside the surveyed range, and E falls from about 67% at 0.65 m to 21% at 1.30 m. E has median 49% in 2025 and 44% in 2026 (the share below 0.2 m/s: 43% and 36%). The rule is estimated with a band rather than assumed; what the nests select on (deep, slow water near the bank) is in the supplementary figure 12.
 
 
 ### 5.1 Validation scores (Table 3)
@@ -135,31 +135,31 @@ Takeaway: the ecological rating curve is the number the sensor delivers. Every 1
 
 | test | quantity | value |
 |---|---|---|
-| Section held out (20 folds, 257 points) | CRPS of log A: six features + notes / bank distance alone / reach mean | 0.311 / 0.316 / 0.414 |
-|  | MAE of log A: six features + notes / reach mean | 0.425 / 0.567 |
+| Section held out (20 folds, 257 points) | CRPS of log A: six features + notes / bank distance alone / reach mean | 0.319 / 0.321 / 0.414 |
+|  | MAE of log A: six features + notes / reach mean | 0.437 / 0.567 |
 |  | 95% band coverage, six features + notes | 0.93 |
-|  | random ten-fold CRPS for the same three models (the cautionary comparison) | 0.283 / 0.314 / 0.412 |
-| Day held out (11 folds, 257 points) | CRPS of log a: stage law (0.45, 0.75) / local depth^0.5 / no law | 0.321 / 0.328 / 0.373 |
-|  | CRPS across the law set (8 pairs) | 0.321 to 0.325 |
+|  | random ten-fold CRPS for the same three models (the cautionary comparison) | 0.285 / 0.318 / 0.412 |
+| Day held out (11 folds, 257 points) | CRPS of log a: stage law (0.35, 1.0) / local depth^0.5 / no law | 0.325 / 0.337 / 0.383 |
+|  | CRPS across the law set (8 pairs) | 0.325 to 0.332 |
 |  | day level: sd of the held-out day means before / after the law (log) | 0.34 / 0.17 |
-| Readings on held-out days (1,208 readings) | MAE / mean absolute deviation of the readings (m/s) | 0.084 / 0.119 |
-|  | 95% band coverage | 0.85 |
-|  | below or above 0.2 m/s called right / base rate | 74% / 58% |
-| Sections on held-out days (20) | measured section mean velocity inside the 90% band | 100% (MAE 0.055 m/s, median relative error 24%) |
-|  | measured share below 0.2 m/s inside the 90% band | 95% (MAE 12 points) |
-| ADCP through 2025 (shape check, level fitted) | MAE of the law c (stage - 0.45)^0.75 against the 10-min record | 14 mm/s |
-|  | sd of the log ratio over the season | 0.169 |
+| Readings on held-out days (1,208 readings) | MAE / mean absolute deviation of the readings (m/s) | 0.087 / 0.119 |
+|  | 95% band coverage | 0.84 |
+|  | below or above 0.2 m/s called right / base rate | 73% / 58% |
+| Sections on held-out days (20) | measured section mean velocity inside the 90% band | 100% (MAE 0.055 m/s, median relative error 23%) |
+|  | measured share below 0.2 m/s inside the 90% band | 95% (MAE 11 points) |
+| ADCP through 2025 (shape check, level fitted) | MAE of the law c (stage - 0.35)^1.0 against the 10-min record | 12 mm/s |
+|  | sd of the log ratio over the season | 0.159 |
 |  | its own exponent on (stage - 0.45) at the surveyed depth: point / column reading | 1.25 / 1.12 |
-| Continuity (measured) | 20 section discharges from 11 days on one rating | Q = 28 (stage - 0.45)^1.70 m3/s, 6% scatter |
-|  | same-day sections, max/min of the measured discharge | 1.10, 1.11, 1.01, 1.11, 1.10 |
-| Continuity (modelled, common stage) | sd of log Q across the 20 sections at 0.70 / 0.90 / 1.30 m | 0.143 / 0.113 / 0.137 |
-| Reach share below 0.2 m/s at 0.90 m | sections (width- and length-weighted) / map with margins to the bank line | 0.362 / 0.454 |
-|  | 90% band half-width inside the surveyed range (points) | 7.7 |
-| Season medians | 2025 record / hours inside the surveyed range | 45% / 39% (65% of hours) |
-|  | 2026 record / hours inside the surveyed range | 35% / 35% (50% of hours) |
-|  | May 2026 (extrapolated: 24% of its hours above the range) | 23% [18, 30] |
-| Nests (59 in wet cells) | AUC of nests against the wet channel: field velocity / bank distance / place factor / depth | 0.69 / 0.72 / 0.71 / 0.47 |
-|  | field velocity within bank-distance strata (+-2 m) | 0.46 (p = 0.00) |
+| Continuity (measured) | 20 section discharges from 11 days on one rating | Q = 25 (stage - 0.45)^2.10 m3/s, 6% scatter |
+|  | same-day sections, max/min of the measured discharge | 1.10, 1.11, 1.02, 1.11, 1.10 |
+| Continuity (modelled, common stage) | sd of log Q across the 20 sections at 0.70 / 0.90 / 1.30 m | 0.133 / 0.090 / 0.143 |
+| Reach share below 0.2 m/s at 0.90 m | sections (width- and length-weighted) / map with margins to the bank line | 0.361 / 0.419 |
+|  | 90% band half-width inside the surveyed range (points) | 6.6 |
+| Season medians | 2025 record / hours inside the surveyed range | 43% / 38% (65% of hours) |
+|  | 2026 record / hours inside the surveyed range | 36% / 36% (50% of hours) |
+|  | May 2026 (extrapolated: 24% of its hours above the range) | 27% [21, 34] |
+| Nests (59 in wet cells) | AUC of nests against the wet channel: field velocity / bank distance / place factor / depth | 0.71 / 0.75 / 0.73 / 0.50 |
+|  | field velocity within bank-distance strata (+-2 m) | 0.49 (p = 0.10) |
 
 
 ### 5.2 Parameters and settings (Table 2)
@@ -173,15 +173,15 @@ Takeaway: the ecological rating curve is the number the sensor delivers. Every 1
 | Stage record | sensor | ultrasonic range every 10 min; daytime sensor pattern removed against the night line, median filtered; 2 h means for the series | processing |
 |  | stage error in the chain | 1.5 cm, one draw per time shared by every section | assumed |
 | Stage law | form | a = A (stage - h0)^gamma, one law for the reach | fixed form |
-|  | primary pair | h0 = 0.45 m, gamma = 0.75 (best day-out CRPS) | chosen on a grid |
-|  | law set drawn in the chain | every grid pair within 0.01 CRPS of the best with h0 below 0.66 m: (0.45, 0.75), (0.35, 1.0), (0.55, 0.5), (0.35, 0.75), (0.55, 0.75), (0.45, 1.0), (0.65, 0.5), (0.35, 1.25) | uniform over the set |
+|  | primary pair | h0 = 0.35 m, gamma = 1.0 (best day-out CRPS) | chosen on a grid |
+|  | law set drawn in the chain | every grid pair within 0.01 CRPS of the best with h0 below 0.66 m: (0.35, 1.0), (0.55, 0.75), (0.45, 0.75), (0.35, 1.25), (0.45, 1.0), (0.65, 0.5), (0.55, 0.5), (0.35, 0.75) | uniform over the set |
 | Spatial model | target | log A, A = a / (stage - h0)^gamma |  |
 |  | inputs | along the reach, relative position across, distance to the nearer bank, relative depth in the section, section mean depth, lateral bed slope | measured |
 |  | mean | weighted least squares on an intercept, six substrate classes from the notes and a wake flag | fitted |
 |  | kernel | ARD Matern 3/2 plus a white nugget; per-point noise fixed from the readings' spread | fitted by marginal likelihood, 2 to 3 restarts |
-|  | fitted scales | amplitude sd 0.84, nugget sd 0.14 (log); length scales: along 197 m, relative across 2.1, bank distance 17 m, relative depth 0.40, section mean depth 0.17 m, lateral slope 1.54 | fitted |
+|  | fitted scales | amplitude sd 0.87, nugget sd 0.16 (log); length scales: along 198 m, relative across 1.9, bank distance 19 m, relative depth 0.42, section mean depth 0.18 m, lateral slope 1.54 | fitted |
 | Uncertainty chain | field | one joint Gaussian process draw over every point of every section | posterior |
-|  | discrepancy | inflation 1.159 from held-out days (95% coverage before inflation 0.911, n 257); total 0.312 in log, split into a reach-level part 0.070 (one draw per reach) and a point-level part 0.304 | calibrated |
+|  | discrepancy | inflation 1.241 from held-out days (95% coverage before inflation 0.899, n 257); total 0.390 in log, split into a reach-level part 0.057 (one draw per reach) and a point-level part 0.386 | calibrated |
 |  | bed | RTK cross-sections on the sensor datum through per-session offsets (one water-surface slope of 5 cm per 100 m, residual 1.3 cm, 11 sessions); 6 cm per point in the chain | measured; error assumed |
 |  | roughness | z0 drawn between 7 and 16 mm, one per draw; a rescaled through the readings' typical height (0.25 m) | assumed range |
 |  | draws | 100 per two-hourly stage for the series (3,106 stages), 300 for the rating curves | setting |
@@ -194,12 +194,12 @@ Takeaway: the ecological rating curve is the number the sensor delivers. Every 1
 
 | kind | variant | CRPS | sections_better_than_full | wilcoxon_p_vs_full |
 |---|---|---|---|---|
-| features | bank distance only | 0.291 | 14.000 | 0.027 |
-| features | geometry only (rel_across, dist_bank, rel_depth) | 0.294 | 14.000 | 0.070 |
-| features | full (6) | 0.320 | 0.000 |  |
-| features | position only (along, across) | 0.325 | 10.000 | 1.000 |
-| features | no section depth | 0.351 | 6.000 | 0.097 |
-| features | position + rel_depth | 0.357 | 7.000 | 0.090 |
+| features | bank distance only | 0.291 | 12.000 | 0.053 |
+| features | geometry only (rel_across, dist_bank, rel_depth) | 0.295 | 13.000 | 0.165 |
+| features | full (6) | 0.324 | 0.000 |  |
+| features | position only (along, across) | 0.325 | 12.000 | 0.985 |
+| features | position + rel_depth | 0.357 | 8.000 | 0.189 |
+| features | no section depth | 0.365 | 3.000 | 0.011 |
 | features | reach mean | 0.436 | 2.000 | 0.000 |
 | kernel | Matern 3/2, 1 restarts | 0.320 |  |  |
 | kernel | Matern 3/2, 3 restarts | 0.320 |  |  |

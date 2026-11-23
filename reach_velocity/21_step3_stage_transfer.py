@@ -44,7 +44,7 @@ for lname in ["none", best]:
 law_b = LAWS[best]
 near = df.iloc[(df.x_m ** 2 + df.y_m ** 2).argmin()]; feat_adcp = {f: float(near[f]) for f in FULL}; feat_adcp["along_m"] = 0.0
 import banklines_3dep as B
-SF = B.StageFeatures("Middle"); df = SF.training(df); d_all = with_target(df, law_b); m_all = Model().fit(d_all)   # bank set C (entry 30): the bank features at the ADCP follow its stage
+SF = B.StageFeatures("Middle"); df = SF.training(df); d_all = with_target(df, law_b); m_all = Model().fit(d_all)   # bank set C (entries 30 and 31): fixed lines, so the bank features at the ADCP are the same at every stage
 ad = pd.read_csv(D / "adcp_amplitude_2h.csv", parse_dates=["time_utc"]); h0 = json.load(open(D / "amplitude_inputs.json"))["h0_adcp_m_column_fit"]; ad["h"] = ad.stage_m - h0; ad = ad[ad.h > Z0 * 3].copy()
 LV = SF.grid(float(ad.stage_m.min()), float(ad.stage_m.max())); MUs, SDs = [], []
 for lv in LV:

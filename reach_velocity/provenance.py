@@ -1,4 +1,4 @@
-"""Every line or polygon file in this folder and the script that writes it (logbook entry 30). 00_load.py runs check() first and stops if a
+"""Every line or polygon file in this folder and the script that writes it (logbook entries 30 and 31). 00_load.py runs check() first and stops if a
 line or polygon file has no script here: no bank line, channel outline or centreline is used unless the folder can make it again.
     python provenance.py      # lists the files and their scripts"""
 import fnmatch
@@ -10,10 +10,10 @@ WRITERS = {   # pattern (relative to this folder) -> the script that writes it
     "data_clean/banklines_survey/centerline_union_*.geojson": "44_banklines_survey.py (the main stem from the river network)",
     "data_clean/bankcmp/banks_B_*.geojson": "43_bankline_comparison.py build (set B)",
     "data_clean/bankcmp/banks_C_*.geojson": "43_bankline_comparison.py build (set C as scored in entry 28)",
-    "data_clean/banks_c/C_Middle_*.geojson": "19_features.py via banklines_3dep.StageFeatures.write (set C in the model)",
+    "data_clean/banks_c/C_Middle.geojson": "19_features.py via banklines_3dep.StageFeatures.write (set C in the model, fixed at the median survey-day level, entry 31)",
     "data_clean/banks_c/C_outline_Middle.geojson": "19_features.py via banklines_3dep.StageFeatures.write",
-    "data_clean/banks_c/C_Upper_*.geojson": "37_other_reaches_prep.py via banklines_3dep.StageFeatures.write",
-    "data_clean/banks_c/C_Lower_*.geojson": "37_other_reaches_prep.py via banklines_3dep.StageFeatures.write",
+    "data_clean/banks_c/C_Upper.geojson": "37_other_reaches_prep.py via banklines_3dep.StageFeatures.write (entry 31)",
+    "data_clean/banks_c/C_Lower.geojson": "37_other_reaches_prep.py via banklines_3dep.StageFeatures.write (entry 31)",
     "data_clean/banks_c/C_outline_*.geojson": "37_other_reaches_prep.py via banklines_3dep.StageFeatures.write",
 }
 EXTERNAL = {  # inputs that are not lines the analysis draws: where they come from

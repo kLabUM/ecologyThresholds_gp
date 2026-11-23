@@ -1,67 +1,67 @@
 {
   "season": {
     "2025": {
-      "median_share": 0.4520211064045317,
-      "median_share_in_range_hours": 0.3863953374830754,
+      "median_share": 0.43097582617258956,
+      "median_share_in_range_hours": 0.3796880670008165,
       "fraction_of_hours_outside_surveyed_range": 0.3543252595155709,
       "fraction_of_hours_above_range": 0.07404844290657439,
-      "band_halfwidth_points_in_range": 7.749929079526249,
-      "band_halfwidth_points_above_range": 5.091034170560408
+      "band_halfwidth_points_in_range": 6.577206840257754,
+      "band_halfwidth_points_above_range": 5.842282579456856
     },
     "2026": {
-      "median_share": 0.3519967801195225,
-      "median_share_in_range_hours": 0.3519967801195225,
+      "median_share": 0.35690458506883765,
+      "median_share_in_range_hours": 0.35763386001582187,
       "fraction_of_hours_outside_surveyed_range": 0.49849488260084285,
       "fraction_of_hours_above_range": 0.25285972305839854,
-      "band_halfwidth_points_in_range": 7.118974546248164,
-      "band_halfwidth_points_above_range": 3.9420098639941283
+      "band_halfwidth_points_in_range": 6.443212280884364,
+      "band_halfwidth_points_above_range": 5.237972149846201
     },
     "May_2026": {
-      "share_median": 0.234763816903772,
-      "lo": 0.17809457098689002,
-      "hi": 0.302029136950862,
+      "share_median": 0.27153997272307817,
+      "lo": 0.21062035933290424,
+      "hi": 0.3383443540427656,
       "fraction_above_range": 0.23652694610778444
     }
   },
   "nests": {
-    "n_nests": 60,
+    "n_nests": 58,
     "n_in_wet_cells": 57,
-    "median_percentile_in_reach": 0.2207309766327142,
-    "AUC_available_vs_used": 0.6929405018639121,
-    "ks_p_vs_uniform": 1.4639644779953639e-07,
-    "AUC_restricted_to_30m_of_nests": 0.6941786032660748,
-    "ks_p_restricted": 2.3412197243362236e-07,
-    "share_of_nests_below_thr_predicted": 0.5964912280701754,
-    "share_of_reach_below_thr_at_median_nest_stage": 0.30213810024535576,
-    "measured_nest_velocity_median": 0.027432,
-    "predicted_at_nests_depth_averaged_median": 0.13983970042305965,
-    "predicted_at_nests_at_reading_height_median": 0.149277726470289,
-    "nest_reading_height_median_m": 0.240792,
+    "median_percentile_in_reach": 0.1881918819188192,
+    "AUC_available_vs_used": 0.711466214104225,
+    "ks_p_vs_uniform": 4.8494878553796e-08,
+    "AUC_restricted_to_30m_of_nests": 0.7132694503994389,
+    "ks_p_restricted": 8.024606918846871e-08,
+    "share_of_nests_below_thr_predicted": 0.6842105263157895,
+    "share_of_reach_below_thr_at_median_nest_stage": 0.27292218438642957,
+    "measured_nest_velocity_median": 0.024384,
+    "predicted_at_nests_depth_averaged_median": 0.15311333991429651,
+    "predicted_at_nests_at_reading_height_median": 0.1478633489845466,
+    "nest_reading_height_median_m": 0.24384,
     "baselines": {
       "bank distance": {
-        "AUC": 0.7244234627382456,
-        "ks_p": 1.6177143952195598e-09
+        "AUC": 0.7540124191526076,
+        "ks_p": 2.4159033164212284e-10
       },
       "conveyance A (no stage)": {
-        "AUC": 0.7121130660312751,
-        "ks_p": 7.328122400129343e-08
+        "AUC": 0.7264905189509703,
+        "ks_p": 6.479501230187044e-08
       },
       "depth": {
-        "AUC": 0.4746273429146147,
-        "ks_p": 0.2774117882837245
+        "AUC": 0.5026103777160374,
+        "ks_p": 0.36832525817670336
       },
       "velocity within bank-distance strata (\u00b12 m)": {
-        "AUC": 0.4625358994830048,
-        "ks_p": 0.004235476622365897
+        "AUC": 0.49316682369997467,
+        "ks_p": 0.10084259636860604
       }
     },
     "day_cluster_inference": {
       "n_days": 9,
-      "mean_of_day_means": 0.40309304173943045,
-      "t_p_vs_0.5": 0.2402652335603842,
-      "wilcoxon_p": 0.203125
+      "mean_of_day_means": 0.34859091986158314,
+      "t_p_vs_0.5": 0.06743479398473899,
+      "wilcoxon_p": 0.09765625
     },
-    "nest_bank_distance_median_m": 4.43824208054019,
-    "wet_cell_bank_distance_median_m": 13.007571780339013
+    "nest_bank_distance_median_m": 4.407581331551817,
+    "wet_cell_bank_distance_median_m": 11.970595723178764
   }
 }

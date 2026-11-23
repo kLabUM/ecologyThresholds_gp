@@ -1,11 +1,11 @@
 kind,variant,CRPS,sections_better_than_full,wilcoxon_p_vs_full
-features,bank distance only,0.2914,14.0,0.0266
-features,"geometry only (rel_across, dist_bank, rel_depth)",0.2944,14.0,0.0696
-features,full (6),0.3198,0.0,
-features,"position only (along, across)",0.3248,10.0,1.0
-features,no section depth,0.3509,6.0,0.0973
-features,position + rel_depth,0.3573,7.0,0.0897
-features,reach mean,0.4363,2.0,0.0
+features,bank distance only,0.2914,12.0,0.0532
+features,"geometry only (rel_across, dist_bank, rel_depth)",0.2947,13.0,0.165
+features,full (6),0.3237,0.0,
+features,"position only (along, across)",0.3248,12.0,0.9854
+features,position + rel_depth,0.3573,8.0,0.1893
+features,no section depth,0.3646,3.0,0.0107
+features,reach mean,0.4363,2.0,0.0001
 kernel,"Matern 3/2, 1 restarts",0.3198,,
 kernel,"Matern 3/2, 3 restarts",0.3198,,
 kernel,"Matern 3/2, 6 restarts",0.3198,,

@@ -108,15 +108,19 @@ def figure_sets(R):
 
 
 # ---------------------------------------------------------------- scoring (after sign-off) ---
+# The stage law each reach was scored with in entry 28 (its primary law at the time), pinned so that the scores stay comparable after
+# later changes of the primary law (entries 30 and 31 re-derived it on the new bank lines).
+ENTRY28_LAW = {"Middle": (0.45, 1.0), "Upper": (262.08, 0.5), "Lower": (174.61, 0.75)}   # (h0, gamma)
+
+
 def model_points(reach):
-    """The GP's point table with each reach's primary stage law applied (as in 20_/38_)."""
+    """The GP's point table with the reach's entry-28 stage law applied (as in 20_/38_)."""
     from gpcore import load_points, with_target
     if reach == "Middle":
-        import uncertainty as U
-        df = load_points().merge(pd.read_csv(D / "locations.csv")[["location_id", "Easting", "Northing"]], on="location_id")
-        h0, gam = U.LAW_RIDGE[0]
+        df = load_points().merge(pd.read_csv(D / "locations.csv")[["location_id", "Easting", "Northing"]], on="location_id", suffixes=("", "_loc"))
     else:
-        df = pd.read_csv(D / f"reach_{reach}_chain_points.csv"); h0, gam = json.load(open(D / f"reach_{reach}_chain_summary.json"))["law"]["primary"]
+        df = pd.read_csv(D / f"reach_{reach}_chain_points.csv")
+    h0, gam = ENTRY28_LAW[reach]
     return with_target(df, ("stage", gam, h0)).reset_index(drop=True)
 
 
@@ -171,6 +175,26 @@ def score_reach(reach, log):
     return pd.concat(rows)
 
 
+FIXED_ARMS = {"Cfix_median": "median", "Cfix_090": 0.90}   # entry 31: C as one fixed line set per reach; 0.90 m is the Middle's reference stage (Middle only)
+
+
+def score_fixed(reach, log):
+    """Entry 31: the fixed-line versions of C under the entry-27 rule (sections held out, the 20 draws scored as one mixture)."""
+    d = model_points(reach); rows = []
+    for arm, lev in FIXED_ARMS.items():
+        if lev != "median" and reach != "Middle":
+            continue
+        SF = B.StageFeatures(reach, fixed="default" if lev == "median" else lev); dd0 = d.drop(columns=[c for c in ("dist_bank_m", "rel_across", "width_m") if c in d], errors="ignore")
+        if lev == "median":
+            SF.fixed = float(np.median(list(SF.day_stage.values())))
+        MU, SD = [], []
+        for k in range(B.N_DRAWS):
+            mu, sd = section_out(SF.training(dd0, k)); MU.append(mu); SD.append(sd); log(f"  {reach} {arm} (level {SF.fixed:.3f}) draw {k + 1}/{B.N_DRAWS}")
+        crps, pit = mixture_scores(d.y.to_numpy(), np.array(MU), np.array(SD))
+        rows.append(pd.DataFrame({"reach": reach, "set": arm, "location_id": d.location_id, "transect": d.transect, "crps": crps, "pit": pit, "in90": (pit >= 0.05) & (pit <= 0.95), "level": SF.fixed}))
+    return pd.concat(rows)
+
+
 def decide(P):
     S = P.groupby(["reach", "set", "transect"]).agg(crps=("crps", "mean"), in90=("in90", "mean"), n=("crps", "size")).reset_index()
     S.to_csv(OUT / "scores_sections.csv", index=False)
@@ -210,6 +234,16 @@ if __name__ == "__main__":
     if mode == "build":
         R = {r: build(r) for r in REACHES}
         print(json.dumps(figure_sets(R), indent=1))
+    elif mode == "score_fixed":
+        import time
+        T0 = time.time(); log = lambda m: print(f"[{time.time() - T0:6.0f}s] {m}", flush=True)
+        for r in (sys.argv[2:] or REACHES):
+            f = OUT / f"scores_points_fixed_{r}.csv"
+            if not f.exists(): score_fixed(r, log).to_csv(f, index=False)
+    elif mode == "check_pin":   # entry 28's A scores reproduced with the pinned law (one reach, set A only)
+        r = sys.argv[2]; d = model_points(r); dd = d.copy(); dd[["dist_bank_m", "width_m", "rel_across"]] = B.bank_features(dd, B.set_A(r))[["dist_bank_m", "width_m", "rel_across"]]
+        mu, sd = section_out(dd); zz = (dd.y.to_numpy() - mu) / sd; crps = sd * (zz * (2 * norm.cdf(zz) - 1) + 2 * norm.pdf(zz) - 1 / np.sqrt(np.pi))
+        old = pd.read_csv(OUT / f"scores_points_{r}.csv"); old = old[old.set == "A"]; print(r, "A now", round(crps.mean(), 4), "entry 28", round(old.crps.mean(), 4))
     elif mode == "score":
         import time
         T0 = time.time(); log = lambda m: print(f"[{time.time() - T0:6.0f}s] {m}", flush=True)

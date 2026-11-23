@@ -624,7 +624,7 @@ Paired differences over all 56 sections: C minus A -0.024 +/- 0.008 (C better in
 
 **The stage law, re-derived (rule 4).** With C the day-out grid of 22_ ranks (0.45, 0.75) first (CRPS 0.321). The previous primary (0.45, 1.00) scores 0.325, 0.004 behind, inside the optimiser noise of 0.007. The rule of entries 16 and 22 (every pair within 0.01 of the best with h0 below 0.66 m) gives eight pairs: the previous seven plus (0.35, 0.75). `uncertainty.law_set()` now applies the rule to the saved grid, so the law set is no longer a list copied by hand, and 29_, 31_, 32_, 33_, 35_, 36_ and 41_ read the primary law from it. 33_, 35_ and 36_ had γ = 1 built into their velocity function; they now use the primary law's γ.
 
-**Before and after** (figure 19_bank_set_c_switch; `data_clean/banks_c/before_after.csv`; the set-A outputs of commit 4298715 are kept in `data_clean/banks_c/before_set_A/`):
+**Before and after** (figure 19_bank_set_c_switch; `data_clean/banks_c/before_after.csv`; the set-A outputs of commit 4298715 are kept in `data_clean/banks_c/before_set_A/`): [Entry 31: figure 19, `before_after.csv` and these folders are in commit 5f876e4 on branch reach-velocity-method; on the later branch the tables the comparison needs are in `data_clean/bank_methods/` and figure 20 replaces figure 19.]
 
 | Middle | set A | set C |
 |---|---|---|
@@ -671,7 +671,7 @@ The no-sensor test (28_, sections held out, log a without a day term), CRPS mode
 | bank distance, nests / wet cells (median) | 3.4 / 11.4 m | 4.9 / 12.3 m | 4.4 / 13.0 m |
 | E at 0.90 m | 0.33 [0.21, 0.57] | 0.52 [0.30, 1.30] | 0.43 [0.24, 0.86] |
 
-The record-high outline put 3,775 cells outside the old channel; at the nests' stages 1,600 to 1,800 of them came out wet from the bed map's extrapolation and joined the available pool, and 17 nests were matched to them. With the survey outline, roughly half of the change in the velocity effect goes away and E's band stays below 1 at every stage (its upper edge falls from 0.97 at 0.65 m to 0.71 at 1.35 m). The rest of the change comes from C itself at each nest's own stage: the nests sit further from C's edge (4.4 m against 3.4 m from A's), and the velocity effect is weaker and less certain than with A (1.8 standard errors from zero for the nests alone). The threshold-based share of slow water hardly changes. The map's share at 0.90 m is 0.45 against 0.38 with A; the map is illustration (rule 1). The record-high run's nest outputs are kept in `data_clean/banks_c/c_record_max_outline/`.
+The record-high outline put 3,775 cells outside the old channel; at the nests' stages 1,600 to 1,800 of them came out wet from the bed map's extrapolation and joined the available pool, and 17 nests were matched to them. With the survey outline, roughly half of the change in the velocity effect goes away and E's band stays below 1 at every stage (its upper edge falls from 0.97 at 0.65 m to 0.71 at 1.35 m). The rest of the change comes from C itself at each nest's own stage: the nests sit further from C's edge (4.4 m against 3.4 m from A's), and the velocity effect is weaker and less certain than with A (1.8 standard errors from zero for the nests alone). The threshold-based share of slow water hardly changes. The map's share at 0.90 m is 0.45 against 0.38 with A; the map is illustration (rule 1). The record-high run's nest outputs are kept in `data_clean/banks_c/c_record_max_outline/` (from entry 31: `data_clean/bank_methods/C_stage_record_outline/`).
 
 **Not the same run as entry 28.** C in the model uses the lower-water-days rule for the push-out; the C scored in entry 28 used each day's own points. 43_ keeps the scored version as the record. Its Lower scores were made on the earlier Lower 3DEP cache (stations 3.5 m along); rerun now, 43_ would read the new cache and its Lower numbers would move slightly.
 
@@ -680,6 +680,49 @@ The record-high outline put 3,775 cells outside the old channel; at the nests' s
 **Numbers to quote now (Middle).** Section held out CRPS 0.31 against 0.41 (coverage 0.93, better on 17 of 20 sections); bank distance alone 0.29 (better than all six features on 14 of 20, p = 0.03); readings on held-out days MAE 0.084 m/s against 0.119, coverage 0.85, below/above 0.2 m/s right 74% against 58%; sections on held-out days in the band 20 of 20 (MAE 0.055 m/s); measured discharges on one rating with 6% scatter, common-stage spread 11% at 0.90 m; reach share below 0.2 m/s at 0.90 m 0.36 [0.29, 0.44]; 2025 median 45%, 2026 35%; nest velocity effect -3.2 +/- 1.8 per m/s; E at 0.90 m 0.43 [0.24, 0.86]; ADCP level ratio 0.87.
 
 **Environment.** These reruns used Python 3.13 with the pinned package versions. Tables the bank lines do not touch (for example `adcp.csv`) differ from the committed ones only in the last printed digit.
+
+## Entry 31. 19 to 23 November 2026. Bank set C with fixed lines: one line set per reach at its median survey-day level (`banklines_3dep.C_FIXED`, `43_ score_fixed`, `46_`)
+
+**Why.** Entry 30 made the bank lines move with the sensor's water level. The Middle's velocity model barely moved, but the ecological number did: E at 0.90 m rose from 0.33 to 0.43 and its band widened to 0.86, and the nests' velocity effect weakened from -4.6 to -3.2 per m/s. Half of that came from the map's outline at the record high and was undone in entry 30. The PI asked what the rest came from, and whether one fixed set of lines would serve the model better: the lines that the survey saw most of the time, without the bank distance changing with stage.
+
+**Decisions (the PI's).** First a test with the Middle's lines fixed at its reference stage, 0.90 m (the stage every result is quoted at; the Upper and Lower took the median survey-day level). Then one rule for every reach: the lines fixed at the median of the reach's survey-day levels, "to emulate the bank lines present at the majority of the conditions surveyed". The levels: Upper 262.62 m NAVD88 (survey days 262.61 to 262.69), Middle 0.877 m on the sensor (0.74 to 1.09), Lower 176.06 m NAVD88 (175.42 to 176.65). The method behind the lines is C's: the surveyed edges first, the 3DEP lidar edge where the survey has none (and above the lidar's water line), interpolated between them by water level. At the fixed level the lines are pushed out so that every surveyed point, from every day, is inside. Stage-dependent C (entry 30) stays on branch reach-velocity-method as the record; this version is on branch reach-velocity-bank-c-fixed.
+
+**What changed in the code.** `banklines_3dep.C_FIXED = "median"`: `StageFeatures` reads every stage, every training point and every prediction at the one level; the 20 draws keep the lidar, gap and substitute errors of the edges (the tie's day error no longer enters the features, since no day's level is used). `StageFeatures.grid` returns one level, so the chain fits one GP per law and draw, not one per 5 cm. `write` saves one line file per reach (`data_clean/banks_c/C_<reach>.geojson`) and its channel polygon as the map's outline; the per-day files and `C_Middle_reference.geojson` are gone (01_ and 29_ draw `C_Middle.geojson`). `C_FIXED = None` restores entry 30. `43_bankline_comparison.py score_fixed` scores the fixed versions under the entry-27 rule; `ENTRY28_LAW` pins the stage law each reach was scored with in entry 28 (the Middle's A score reproduces to four digits, 0.3168), so later changes of the primary law do not move the recorded scores. `46_bank_methods_comparison.py` draws figure 20 and writes `data_clean/bank_methods/comparison_table.md` and `.csv`; `45_` and figure 19 are retired (the comparison of entry 30 is part of figure 20). The tables the comparison needs from the earlier runs are kept in `data_clean/bank_methods/` (about 100 kB); the full run folders of entry 30 are not carried over.
+
+**The rule's scores** (entry 27: each section held out, the 20 draws as one mixture; CRPS of ln A, share of points in the 90% band):
+
+| reach | A old | B hybrid | C moving with stage | C fixed at 0.90 m | C fixed at the median |
+|---|---|---|---|---|---|
+| Upper | 0.450 (0.79) | 0.421 (0.83) | 0.405 (0.86) | | 0.407 (0.84) |
+| Middle | 0.314 (0.88) | 0.331 (0.85) | 0.310 (0.88) | 0.311 (0.89) | 0.312 (0.89) |
+| Lower | 0.357 (0.83) | 0.365 (0.79) | 0.335 (0.84) | | 0.339 (0.85) |
+| all 56 sections | 0.376 (0.83) | 0.374 (0.83) | 0.352 (0.86) | | 0.355 (0.86) |
+
+Paired over the 56 sections: fixed at the median minus A -0.021 +/- 0.009 (better in 39), minus B -0.019 +/- 0.005, minus C moving with stage +0.003 +/- 0.002 (a tie by the rule). Fixing the lines costs the velocity model nothing measurable.
+
+**The Middle through the whole model** (figure 20; `data_clean/bank_methods/comparison_table.md`):
+
+| Middle | A | C moving with stage | C fixed at 0.90 m | C fixed at the median |
+|---|---|---|---|---|
+| section held out, CRPS of log A, model / reach mean | 0.307 / 0.414 | 0.311 / 0.414 | 0.317 / 0.414 | 0.319 / 0.414 |
+| readings on held-out days, MAE (m/s) | 0.082 | 0.084 | 0.086 | 0.087 |
+| share below 0.2 m/s at 0.90 m (sections) | 0.342 [0.26, 0.42] | 0.362 [0.29, 0.44] | 0.359 [0.29, 0.42] | 0.361 [0.30, 0.43] |
+| E at 0.90 m | 0.331 [0.21, 0.57] | 0.431 [0.24, 0.86] | 0.374 [0.23, 0.68] | 0.398 [0.24, 0.74] |
+| E median 2025 / 2026 | 0.40 / 0.34 | 0.55 / 0.48 | 0.47 / 0.42 | 0.49 / 0.44 |
+| velocity effect on nest use, posterior (per m/s) | -4.6 +/- 1.5 | -3.2 +/- 1.8 | -3.8 +/- 1.7 | -3.5 +/- 1.7 |
+| share of posterior draws above zero | below 0.001 | 0.040 | 0.011 | 0.017 |
+| chain calibration inflation | 1.06 | 1.16 | 1.22 | 1.24 |
+| ADCP level ratio (record / field at its cell) | | 1.07 | 0.99 | 0.86 |
+
+Other reaches, E median per season: Upper 2026 0.50 (A), 0.59 (moving), 0.56 (fixed at the median); Lower 2025 / 2026 0.29 / 0.23, 0.38 / 0.32, 0.36 / 0.30. Lower sections on held-out days inside the band: 0.87, 0.93, 1.00.
+
+**What this says.** With fixed lines the ecological number sits between A's and the moving lines', and its band narrows (upper edge at 0.90 m 0.74 against 0.86); the nests' velocity effect is clearer than with the moving lines (1.7% of draws above zero against 4%). So about half of what entry 30 left after the outline fix came from the bank distance changing with stage, and half from the new line geometry itself. The median level gives numbers close to the 0.90 m test, as expected for a level 2 cm lower. The stage-law rule picks the same eight laws as in entry 30, but the first is now (h0 0.35, γ 1.0) rather than (0.45, 0.75) (on this run's grid the two are 0.0014 apart in CRPS, well inside the 0.007 optimiser noise, so the order flipped); steps 4 to 7 and the paper scripts were rerun with it (rule 4). The ADCP's level ratio is a single cell read against the field's level and moves between 0.86 and 1.07 across the bank versions; its shape over the season (sd of the log ratio 0.08 to 0.11) is the stable part and is what the paper uses. The model now beats the reach mean on 16 of 20 held-out sections (17 before); bank distance alone scores 0.29 (better than all six features on 12 of 20, p = 0.05).
+
+**Texts updated.** `README.md`, `RERUN.md`, `paper/STORY.md` (item 5 keeps the note for the PI's wording), `paper/FIGURES.md` (F2 and F5 captions), the prose of `40_methods_docx.py`, the F2 title in `29_paper_figures.py`, `CLAUDE.md` (pipeline table, rule 9, where to go), `provenance.py`, `run_all.sh`.
+
+**Numbers to quote now (Middle).** Section held out CRPS 0.32 against 0.41 (coverage 0.93, better on 16 of 20 sections); readings on held-out days MAE 0.087 m/s against 0.119, coverage 0.84, below/above 0.2 m/s right 73% against 58%; sections on held-out days in the band 20 of 20 (MAE 0.055 m/s); common-stage spread of section discharge 9% at 0.90 m; reach share below 0.2 m/s at 0.90 m 0.36 [0.30, 0.43]; 2025 median 43%, 2026 36%; nest velocity effect -3.5 +/- 1.7 per m/s, half use at 0.19 m/s [0.11, 0.71]; nests AUC 0.71 against bank distance 0.75; E at 0.90 m 0.40 [0.24, 0.74], medians 0.49 over 2025 and 0.44 over 2026.
+
+**Run logs.** `data_clean/bank_methods/run_logs/` (the 0.90 m test, the median run, and the fixed-line scoring). Python 3.13 with the pinned package versions, as in entry 30.
 
 ## Where we stand, and how this differs from the original approach (21 September 2026)
 

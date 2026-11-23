@@ -20,7 +20,7 @@ def to_local(gdf):
     if gdf.crs is None or gdf.crs.is_geographic: gdf = gdf.set_crs("EPSG:4269", allow_override=True).to_crs("ESRI:102690") if gdf.crs is None else gdf.to_crs("ESRI:102690")
     return gdf.translate(xoff=-ADCP_E, yoff=-ADCP_N).scale(FT, FT, origin=(0, 0))
 RAW = HERE / "data_raw"
-cl = to_local(gpd.read_file(D / "banklines_survey" / "centerline_union_Middle.geojson")); bk = to_local(gpd.read_file(D / "banks_c" / "C_Middle_reference.geojson"))   # 44_ and 19_ (bank set C at 0.90 m)
+cl = to_local(gpd.read_file(D / "banklines_survey" / "centerline_union_Middle.geojson")); bk = to_local(gpd.read_file(D / "banks_c" / "C_Middle.geojson"))   # 44_ and 19_ (bank set C, fixed at the median survey-day level, entry 31)
 fig, ax = plt.subplots(figsize=(8.5, 6.5))
 pad = 120; xlo, xhi, ylo, yhi = loc.x.min() - pad, loc.x.max() + pad, loc.y.min() - pad, loc.y.max() + pad
 bk.plot(ax=ax, color="#b9b8b0", lw=0.8); cl.plot(ax=ax, color="#6f6e68", lw=1.0, linestyle="--")

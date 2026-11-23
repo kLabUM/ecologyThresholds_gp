@@ -18,17 +18,17 @@
   "spearman": {
     "along_m": 0.006,
     "across_m": 0.133,
-    "rel_across": 0.152,
-    "dist_bank_m": 0.595,
-    "width_m": 0.154,
+    "rel_across": 0.143,
+    "dist_bank_m": 0.581,
+    "width_m": 0.177,
     "bed_m": -0.103,
     "h_ref_m": 0.103,
     "rel_depth": 0.3,
     "lateral_bed_slope_abs": -0.194,
     "section_mean_depth_m": -0.372,
-    "section_width_m": 0.148,
+    "section_width_m": 0.178,
     "curvature_1_per_m": 0.015,
-    "outer_bank_score": -0.227,
+    "outer_bank_score": -0.232,
     "wake_flag": -0.279
   },
   "A_by_substrate": {

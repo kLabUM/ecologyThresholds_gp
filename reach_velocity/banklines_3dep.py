@@ -348,6 +348,7 @@ def sample_3dep(pts, batch=500):
 # ---------------------------------------------------------------- set C in the model (logbook entry 30) ---
 LEVEL_STEP_M = 0.05     # the chain's stage grid for the bank features (decision in entry 30)
 C_SEED = 30
+C_FIXED = "median"   # one fixed C line set per reach (entry 31), the same rule at every reach: the median of the survey-day levels (the conditions most of the survey saw). None for stage-dependent C.
 
 
 class StageFeatures:
@@ -360,7 +361,7 @@ class StageFeatures:
     per draw, and for the survey days also the day's tie error; away from survey days the tie error enters through the chain's stage
     source, which moves the stage at which the features are read."""
 
-    def __init__(self, reach, n_draws=N_DRAWS, seed=C_SEED):
+    def __init__(self, reach, n_draws=N_DRAWS, seed=C_SEED, fixed="default"):
         self.reach, self.n_draws = reach, n_draws
         t = load_transects(reach); self.st = stations(reach, t); e = flat_edges(t); an = survey_anchors(reach, self.st)
         self.C = StageBanks(reach, t, self.st, e, an); self.old = set_A(reach); self.k = tie(reach)
@@ -371,6 +372,9 @@ class StageFeatures:
         self.zn = [correlated_normals(n, rng) for _ in range(n_draws)]; self.zp = [correlated_normals(n, rng) for _ in range(n_draws)]
         self.ztie = [{d: float(rng.standard_normal()) for d in sorted(self.day_stage)} for _ in range(n_draws)]
         self._cache = {}
+        if fixed == "default":
+            fixed = float(np.median(list(self.day_stage.values()))) if C_FIXED == "median" else None
+        self.fixed = fixed   # a stage: one line set at that stage for every day and every prediction, holding every surveyed point
 
     def from_sensor(self, s):
         return s if self.reach == "Middle" else self.k["a"] + self.k["b"] * s
@@ -381,6 +385,8 @@ class StageFeatures:
         return stage - self.k["slope"] * (self.along - self.k["along_ref"])
 
     def offsets(self, stage, j=None, day=None):
+        if self.fixed is not None:
+            stage, day = self.fixed, None
         key = (round(float(stage), 4), j, day)
         if key in self._cache:
             return self._cache[key]
@@ -389,7 +395,7 @@ class StageFeatures:
             ed = self.C.edges(lev); neg, pos = ed["neg"][0].copy(), ed["pos"][0].copy()
         else:
             neg, pos = self.C.draw(lev, self.zn[j], self.zp[j])
-        lower = [d for d, s in self.day_stage.items() if s <= float(stage) + 1e-9]
+        lower = list(self.day_stage) if self.fixed is not None else [d for d, s in self.day_stage.items() if s <= float(stage) + 1e-9]   # fixed lines hold every surveyed point
         neg, pos = push_out(self.st, neg, pos, self.reach, self.p[self.p.date.isin(lower)])
         self._cache[key] = (neg, pos); return neg, pos
 
@@ -411,7 +417,9 @@ class StageFeatures:
         d["dist_bank_m"], d["rel_across"], d["width_m"] = dist, rel, wid; return d
 
     def grid(self, lo, hi):
-        """The stage grid covering [lo, hi] at LEVEL_STEP_M."""
+        """The stage grid covering [lo, hi] at LEVEL_STEP_M (one level when the lines are fixed: the features do not change with stage)."""
+        if self.fixed is not None:
+            return np.array([round(float(self.fixed), 4)])
         return np.round(np.arange(np.floor(lo / LEVEL_STEP_M) * LEVEL_STEP_M, np.ceil(hi / LEVEL_STEP_M) * LEVEL_STEP_M + 1e-9, LEVEL_STEP_M), 4)
 
     def top_survey_stage(self):
@@ -423,8 +431,13 @@ class StageFeatures:
         return polygon(self.lines(stage))
 
     def write(self, out_dir):
-        """The lines on disk: C at each survey day and the outline at the highest survey-day stage."""
+        """The lines on disk. Fixed lines (entry 31): the one line set, C_<reach>.geojson, and its channel polygon as the outline. Lines that
+        move with stage (entry 30): C at each survey day and the outline at the highest survey-day stage."""
         out_dir.mkdir(parents=True, exist_ok=True)
+        if self.fixed is not None:
+            bk = self.lines(self.fixed); bk["stage"] = self.fixed; bk.to_file(out_dir / f"C_{self.reach}.geojson", driver="GeoJSON")
+            gpd.GeoDataFrame({"reach": [self.reach], "stage": [self.fixed]}, geometry=[polygon(bk)], crs=CRS_FT).to_file(out_dir / f"C_outline_{self.reach}.geojson", driver="GeoJSON")
+            return
         for day, s in self.day_stage.items():
             self.lines(s).to_file(out_dir / f"C_{self.reach}_{day}.geojson", driver="GeoJSON")
         top = self.top_survey_stage()

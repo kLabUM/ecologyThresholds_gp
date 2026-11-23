@@ -20,8 +20,8 @@ df = load_points(); df["bed_m"] = df.bed_rtk_sensor_datum_m.fillna(df.bed_elev_m
 cl = gpd.read_file(D / "banklines_survey" / "centerline_union_Middle.geojson"); cl = cl.to_crs("ESRI:102690") if (cl.crs is None or cl.crs.is_geographic) else cl
 u = cl.geometry.union_all() if hasattr(cl.geometry, "union_all") else cl.geometry.unary_union; line = u if u.geom_type == "LineString" else linemerge(u)
 SF = banks_for("Middle"); REC = pd.read_csv(D / "series_10min.csv").stage_m; REC_MAX = float(REC.max())   # bank set C (entry 30)
-bk = SF.lines(STAGE_REF); left, right = bk[bk.bank == "left"].geometry.iloc[0], bk[bk.bank == "right"].geometry.iloc[0]   # drawn on the maps: C at the reference stage
-poly = SF.outline(SF.top_survey_stage())   # the grid covers C's channel at the highest survey-day stage (1.09 m; 19_ writes it as banks_c/C_outline_Middle.geojson), not above what the survey supports; cells dry at lower water drop out by the wet test
+bk = SF.lines(STAGE_REF); left, right = bk[bk.bank == "left"].geometry.iloc[0], bk[bk.bank == "right"].geometry.iloc[0]   # drawn on the maps: C (fixed at the median survey-day level, entry 31, whatever stage is asked)
+poly = SF.outline(SF.top_survey_stage())   # the grid covers C's channel (fixed lines, entry 31: the channel at the median survey-day level; 19_ writes it as banks_c/C_outline_Middle.geojson); cells dry at lower water drop out by the wet test
 d_adcp = line.project(Point(ADCP_E, ADCP_N))
 def proj(e, n):
     pt = Point(e, n); d = line.project(pt); q = line.interpolate(d); d1, d2 = max(d - 5, 0), min(d + 5, line.length); t = np.array(line.interpolate(d2).coords[0]) - np.array(line.interpolate(d1).coords[0]); t /= np.linalg.norm(t); off = np.array([e - q.x, n - q.y])
